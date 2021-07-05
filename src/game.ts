@@ -85,14 +85,9 @@ export function newGame(init: GameArgs): Game {
   const engine = newPhysics()
 
   animationFrames()
-    .pipe(
-      mapDelta,
-      tap(({ delta }) => {
-        Engine.update(engine, delta)
-      })
-    )
-    .pipe(withLatestFrom(pointer$, resize$))
+    .pipe(mapDelta, withLatestFrom(pointer$, resize$))
     .subscribe(([{ delta }, pointer, size]) => {
+      Engine.update(engine, delta)
       render({ engine, context, pointer, size })
     })
 
