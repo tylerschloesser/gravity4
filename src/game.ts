@@ -1,9 +1,5 @@
-import {
-  animationFrameScheduler,
-  combineLatest,
-  Observable,
-  scheduled,
-} from 'rxjs'
+import { animationFrames, Observable } from 'rxjs'
+import { withLatestFrom } from 'rxjs/operators'
 
 interface Game {}
 
@@ -50,12 +46,11 @@ function render(args: RenderArgs) {
 export function newGame(init: GameArgs): Game {
   const { context, resize$, pointer$ } = init
 
-  scheduled(
-    combineLatest([pointer$, resize$]),
-    animationFrameScheduler
-  ).subscribe(([pointer, size]) => {
-    render({ context, pointer, size })
-  })
+  animationFrames()
+    .pipe(withLatestFrom(pointer$, resize$))
+    .subscribe(([{ elapsed }, pointer, size]) => {
+      render({ context, pointer, size })
+    })
 
   return {}
 }
