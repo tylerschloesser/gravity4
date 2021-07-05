@@ -12,8 +12,6 @@ export interface CanvasSize {
 export interface Pointer {
   x: number
   y: number
-  dx: number
-  dy: number
   down: boolean
 }
 
@@ -103,10 +101,21 @@ export function newGame(init: GameArgs): Game {
     platform: { x: 0, y: 50, size: 100, angle: (20 * Math.PI) / 180 },
   })
 
+  let lastPointer: Pointer | null = null
+
   animationFrames()
     .pipe(mapDelta, withLatestFrom(pointer$, resize$))
     .subscribe(([{ delta }, pointer, size]) => {
-      const state = physics.update({ delta, pointer, size })
+      let drag: { x: number; y: number } | null = null
+      if (lastPointer?.down && pointer?.down) {
+        drag = {
+          x: pointer.x - lastPointer.x,
+          y: pointer.y - lastPointer.y,
+        }
+      }
+      lastPointer = pointer
+
+      const state = physics.update({ delta, drag, size })
       render({ state, context, pointer, size })
     })
 

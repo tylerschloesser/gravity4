@@ -43,15 +43,15 @@ export function newPhysics(state: GameState) {
   return {
     update: ({
       delta,
-      pointer,
+      drag,
       size,
     }: {
       delta: number
-      pointer: { dx: number; dy: number; down: boolean } | null
+      drag: { x: number; y: number } | null
       size: { w: number; h: number }
     }) => {
-      if (pointer?.down) {
-        const dx = pointer.dx / size.w
+      if (drag) {
+        const dx = drag.x / size.w
         Body.rotate(platformBody, 10 * dx * (Math.PI / 180) * delta)
         Body.setAngularVelocity(platformBody, 10 * dx * (Math.PI / 180) * delta)
       }

@@ -32,21 +32,11 @@ function main() {
       fromEvent<PointerEvent>(canvas, 'pointerdown'),
       fromEvent<PointerEvent>(canvas, 'pointerenter')
     ).pipe(
-      map(
-        ({
-          offsetX: x,
-          offsetY: y,
-          movementX: dx,
-          movementY: dy,
-          pressure,
-        }) => ({
-          x,
-          y,
-          dx,
-          dy,
-          down: pressure > 0,
-        })
-      )
+      map(({ offsetX: x, offsetY: y, pressure }) => ({
+        x,
+        y,
+        down: pressure > 0,
+      }))
     )
   ).pipe(startWith(null))
 
