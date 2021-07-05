@@ -99,7 +99,7 @@ export function newGame(init: GameArgs): Game {
   const { context, resize$, pointer$ } = init
 
   const physics = newPhysics({
-    ball: { x: 50, y: 20, r: 10, angle: 0 },
+    ball: { x: 50, y: 20, r: 5, angle: 0 },
     platform: { x: 0, y: 50, size: 100, angle: (20 * Math.PI) / 180 },
   })
 
