@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs'
+import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
+import { map, mapTo, mergeWith, startWith } from 'rxjs/operators'
 import { newGame, CanvasSize } from './game'
 
 function main() {
@@ -16,9 +17,26 @@ function main() {
     }).observe(document.body)
   })
 
+  const pointer$ = merge(
+    fromEvent<PointerEvent>(canvas, 'pointerleave').pipe(mapTo(null)),
+    merge(
+      fromEvent<PointerEvent>(canvas, 'pointermove'),
+      fromEvent<PointerEvent>(canvas, 'pointerup'),
+      fromEvent<PointerEvent>(canvas, 'pointerdown'),
+      fromEvent<PointerEvent>(canvas, 'pointerenter')
+    ).pipe(
+      map(({ clientX: x, clientY: y, pressure }) => ({
+        x,
+        y,
+        down: pressure > 0,
+      }))
+    )
+  ).pipe(startWith(null))
+
   newGame({
     context,
     resize$,
+    pointer$,
   })
 }
 

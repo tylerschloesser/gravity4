@@ -1,4 +1,9 @@
-import { animationFrameScheduler, Observable, scheduled } from 'rxjs'
+import {
+  animationFrameScheduler,
+  combineLatest,
+  Observable,
+  scheduled,
+} from 'rxjs'
 
 interface Game {}
 
@@ -7,21 +12,38 @@ export interface CanvasSize {
   h: number
 }
 
+export interface Pointer {
+  x: number
+  y: number
+  down: boolean
+}
+
 export interface InitGame {
   context: CanvasRenderingContext2D
   resize$: Observable<CanvasSize>
+  pointer$: Observable<Pointer | null>
 }
 
 export function newGame(init: InitGame): Game {
-  const { context, resize$ } = init
+  const { context, resize$, pointer$ } = init
 
-  // context.fillStyle = '#444'
-  // context.fillRect(0, 0, w, h)
-
-  scheduled(resize$, animationFrameScheduler).subscribe((canvasSize) => {
+  scheduled(
+    combineLatest([pointer$, resize$]),
+    animationFrameScheduler
+  ).subscribe(([pointer, canvasSize]) => {
     const { w, h } = canvasSize
     context.fillStyle = '#444'
     context.fillRect(0, 0, w, h)
+
+    if (pointer) {
+      context.strokeStyle = 'white'
+      if (pointer.down) {
+        context.strokeStyle = 'blue'
+      }
+      context.beginPath()
+      context.arc(pointer.x, pointer.y, 50, 0, 2 * Math.PI)
+      context.stroke()
+    }
   })
 
   return {}
