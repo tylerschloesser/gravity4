@@ -26,6 +26,8 @@ export interface RenderArgs {
   context: CanvasRenderingContext2D
   pointer: Pointer | null
   size: CanvasSize
+
+  engine: ReturnType<typeof newPhysics>
 }
 
 function render(args: RenderArgs) {
@@ -43,16 +45,21 @@ function render(args: RenderArgs) {
     context.arc(pointer.x, pointer.y, 50, 0, 2 * Math.PI)
     context.stroke()
   }
+
+  args.engine.world.bodies.forEach((body) => {
+    const w = Math.abs(body.bounds.max.x - body.bounds.min.x)
+    const h = Math.abs(body.bounds.max.y - body.bounds.min.y)
+
+    context.strokeStyle = 'white'
+    context.beginPath()
+    context.rect(body.position.x, body.position.y, w, h)
+    context.stroke()
+  })
 }
 
 interface GameState {
   boxA: { x: number; y: number }
   boxB: { x: number; y: number }
-}
-
-const INITIAL_STATE: GameState = {
-  boxA: { x: 10, y: 90 },
-  boxB: { x: 80, y: 90 },
 }
 
 const mapDelta = scan<{ elapsed: number }, { delta: number; prev: number }>(
@@ -77,7 +84,7 @@ export function newGame(init: GameArgs): Game {
     )
     .pipe(withLatestFrom(pointer$, resize$))
     .subscribe(([{ delta }, pointer, size]) => {
-      render({ context, pointer, size })
+      render({ engine, context, pointer, size })
     })
 
   return {}
