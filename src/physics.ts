@@ -9,7 +9,7 @@ export function newPhysics(state: GameState) {
   const engine = Engine.create()
   engine.gravity = {
     x: 0,
-    y: 1,
+    y: 2,
     scale: 1 / 1000 / 10,
   }
   // engine.gravity = {
@@ -21,7 +21,7 @@ export function newPhysics(state: GameState) {
   const { ball, platform } = state
 
   const ballBody = Bodies.circle(ball.x, ball.y, ball.r, {
-    density: 1,
+    density: 2,
     friction: 0.1,
     //restitution: 1,
     //force: { y: 0.1, x: 0 },
@@ -40,6 +40,27 @@ export function newPhysics(state: GameState) {
   Composite.add(engine.world, ballBody)
   Composite.add(engine.world, platformBody)
 
+  // top
+  Composite.add(
+    engine.world,
+    Bodies.rectangle(50, -5, 120, 10, { isStatic: true })
+  )
+  // right
+  Composite.add(
+    engine.world,
+    Bodies.rectangle(105, 50, 10, 120, { isStatic: true })
+  )
+  // left
+  Composite.add(
+    engine.world,
+    Bodies.rectangle(-5, 50, 10, 120, { isStatic: true })
+  )
+  // bottom
+  Composite.add(
+    engine.world,
+    Bodies.rectangle(50, 105, 120, 10, { isStatic: true })
+  )
+
   return {
     update: ({
       delta,
@@ -52,8 +73,8 @@ export function newPhysics(state: GameState) {
     }) => {
       if (drag) {
         const dx = drag.x / size.w
-        Body.rotate(platformBody, 10 * dx * (Math.PI / 180) * delta)
-        Body.setAngularVelocity(platformBody, 10 * dx * (Math.PI / 180) * delta)
+        Body.rotate(platformBody, 5 * dx * (Math.PI / 180) * delta)
+        Body.setAngularVelocity(platformBody, 5 * dx * (Math.PI / 180) * delta)
       }
 
       Engine.update(engine, delta)
