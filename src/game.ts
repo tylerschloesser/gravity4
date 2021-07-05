@@ -9,6 +9,10 @@ interface InitGame {
   context: CanvasRenderingContext2D
 }
 
-export function newGame(init: InitGame): Game {
+export function newGame({ context, w, h }: InitGame): Game {
+
+  context.fillStyle = '#444'
+  context.fillRect(0, 0, w, h)
+
   return {}
 }
