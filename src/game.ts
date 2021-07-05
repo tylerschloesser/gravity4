@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs'
+import { animationFrameScheduler, Observable, scheduled } from 'rxjs'
 
 interface Game {}
 
@@ -17,6 +17,12 @@ export function newGame(init: InitGame): Game {
 
   // context.fillStyle = '#444'
   // context.fillRect(0, 0, w, h)
+
+  scheduled(resize$, animationFrameScheduler).subscribe((canvasSize) => {
+    const { w, h } = canvasSize
+    context.fillStyle = '#444'
+    context.fillRect(0, 0, w, h)
+  })
 
   return {}
 }

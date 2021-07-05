@@ -13,7 +13,7 @@ function main() {
       canvas.width = w
       canvas.height = h
       subscriber.next({ w, h })
-    }).observe(canvas)
+    }).observe(document.body)
   })
 
   newGame({
