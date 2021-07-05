@@ -12,6 +12,8 @@ export interface CanvasSize {
 export interface Pointer {
   x: number
   y: number
+  dx: number
+  dy: number
   down: boolean
 }
 
@@ -104,7 +106,7 @@ export function newGame(init: GameArgs): Game {
   animationFrames()
     .pipe(mapDelta, withLatestFrom(pointer$, resize$))
     .subscribe(([{ delta }, pointer, size]) => {
-      const state = physics.update({ delta })
+      const state = physics.update({ delta, pointer, size })
       render({ state, context, pointer, size })
     })
 
