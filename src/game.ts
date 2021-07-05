@@ -55,6 +55,14 @@ const INITIAL_STATE: GameState = {
   boxB: { x: 80, y: 90 },
 }
 
+const mapDelta = scan<{ elapsed: number }, { delta: number; prev: number }>(
+  (acc, { elapsed }) => ({
+    delta: elapsed - acc.prev,
+    prev: elapsed,
+  }),
+  { prev: 0, delta: 0 }
+)
+
 export function newGame(init: GameArgs): Game {
   const { context, resize$, pointer$ } = init
 
@@ -62,13 +70,7 @@ export function newGame(init: GameArgs): Game {
 
   animationFrames()
     .pipe(
-      scan(
-        (acc, { elapsed }) => ({
-          delta: elapsed - acc.prev,
-          prev: elapsed,
-        }),
-        { prev: 0, delta: 0 }
-      ),
+      mapDelta,
       tap(({ delta }) => {
         Engine.update(engine, delta)
       })
