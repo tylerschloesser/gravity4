@@ -1,5 +1,7 @@
+import { Engine } from 'matter-js'
 import { animationFrames, Observable } from 'rxjs'
-import { withLatestFrom } from 'rxjs/operators'
+import { scan, tap, withLatestFrom } from 'rxjs/operators'
+import { newPhysics } from './physics'
 
 interface Game {}
 
@@ -43,12 +45,36 @@ function render(args: RenderArgs) {
   }
 }
 
+interface GameState {
+  boxA: { x: number; y: number }
+  boxB: { x: number; y: number }
+}
+
+const INITIAL_STATE: GameState = {
+  boxA: { x: 10, y: 90 },
+  boxB: { x: 80, y: 90 },
+}
+
 export function newGame(init: GameArgs): Game {
   const { context, resize$, pointer$ } = init
 
+  const engine = newPhysics()
+
   animationFrames()
+    .pipe(
+      scan(
+        (acc, { elapsed }) => ({
+          delta: elapsed - acc.prev,
+          prev: elapsed,
+        }),
+        { prev: 0, delta: 0 }
+      ),
+      tap(({ delta }) => {
+        Engine.update(engine, delta)
+      })
+    )
     .pipe(withLatestFrom(pointer$, resize$))
-    .subscribe(([{ elapsed }, pointer, size]) => {
+    .subscribe(([{ delta }, pointer, size]) => {
       render({ context, pointer, size })
     })
 
