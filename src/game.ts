@@ -1,7 +1,6 @@
-import { Engine } from 'matter-js'
 import { animationFrames, Observable } from 'rxjs'
 import { scan, tap, withLatestFrom } from 'rxjs/operators'
-import { newPhysics } from './physics'
+import { GameState, newPhysics } from './physics'
 
 interface Game {}
 
@@ -26,13 +25,14 @@ export interface RenderArgs {
   context: CanvasRenderingContext2D
   pointer: Pointer | null
   size: CanvasSize
-
-  engine: ReturnType<typeof newPhysics>
+  state: GameState
 }
 
 function render(args: RenderArgs) {
-  const { context, pointer, size } = args
+  const { context, pointer, size, state } = args
   const { w, h } = size
+  context.clearRect(0, 0, w, h)
+
   context.fillStyle = '#444'
   context.fillRect(0, 0, w, h)
 
@@ -47,28 +47,25 @@ function render(args: RenderArgs) {
   }
 
   const scale = w / 100
-  args.engine.world.bodies.forEach((body) => {
-    // const w = Math.abs(body.bounds.max.x - body.bounds.min.x)
-    // const h = Math.abs(body.bounds.max.y - body.bounds.min.y)
-    let w = 10,
-      h = 10
-    if (body.isStatic) {
-      ;(w = 100), (h = 10)
-    }
 
-    context.strokeStyle = 'white'
-    context.beginPath()
-    context.translate(body.position.x * scale, body.position.y * scale)
-    context.rotate(body.angle)
-    context.rect((-w * scale) / 2, (-h * scale) / 2, w * scale, h * scale)
-    context.stroke()
-    context.resetTransform()
-  })
-}
+  context.strokeStyle = 'red'
+  context.strokeRect(
+    state.platform.x * scale,
+    state.platform.y * scale,
+    state.platform.size * scale,
+    state.platform.size * scale
+  )
 
-interface GameState {
-  boxA: { x: number; y: number }
-  boxB: { x: number; y: number }
+  context.strokeStyle = 'white'
+  context.beginPath()
+  context.arc(
+    state.ball.x * scale,
+    state.ball.y * scale,
+    state.ball.r * scale,
+    0,
+    2 * Math.PI
+  )
+  context.stroke()
 }
 
 const mapDelta = scan<{ elapsed: number }, { delta: number; prev: number }>(
@@ -82,13 +79,16 @@ const mapDelta = scan<{ elapsed: number }, { delta: number; prev: number }>(
 export function newGame(init: GameArgs): Game {
   const { context, resize$, pointer$ } = init
 
-  const engine = newPhysics()
+  const physics = newPhysics({
+    ball: { x: 50, y: 20, r: 10 },
+    platform: { x: 0, y: 50, size: 100 },
+  })
 
   animationFrames()
     .pipe(mapDelta, withLatestFrom(pointer$, resize$))
     .subscribe(([{ delta }, pointer, size]) => {
-      Engine.update(engine, delta)
-      render({ engine, context, pointer, size })
+      const state = physics.update({ delta })
+      render({ state, context, pointer, size })
     })
 
   return {}
