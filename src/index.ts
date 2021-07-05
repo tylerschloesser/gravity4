@@ -1,3 +1,5 @@
+import { newGame } from './game'
+
 const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
 
 let h = (canvas.height = window.innerHeight)
@@ -14,4 +16,10 @@ window.addEventListener('resize', () => {
 
   context.fillStyle = '#444'
   context.fillRect(0, 0, w, h)
+})
+
+const game = newGame({
+  w,
+  h,
+  context,
 })
