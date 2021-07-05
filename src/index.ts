@@ -17,7 +17,7 @@ function main() {
     }).observe(canvas)
   })
 
-  fromEvent<PointerEvent>(document, 'pointermove', {
+  fromEvent<PointerEvent>(document, 'touchmove', {
     passive: false,
   }).subscribe((e) => {
     // disable bounce on iOS (passive: false is required)
