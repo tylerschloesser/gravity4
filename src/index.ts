@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs'
-import { newGame, ResizeEvent } from './game'
+import { newGame, CanvasSize } from './game'
 
 function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
   const context = canvas.getContext('2d')!
 
-  const resize$ = new Observable<ResizeEvent>((subscriber) => {
+  const resize$ = new Observable<CanvasSize>((subscriber) => {
     new ResizeObserver((entries) => {
       const {
         contentRect: { width: w, height: h },
