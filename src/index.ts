@@ -17,15 +17,17 @@ function main() {
     }).observe(canvas)
   })
 
+  fromEvent<PointerEvent>(document, 'pointermove', {
+    passive: false,
+  }).subscribe((e) => {
+    // disable bounce on iOS (passive: false is required)
+    e.preventDefault()
+  })
+
   const pointer$ = merge(
     fromEvent<PointerEvent>(canvas, 'pointerleave').pipe(mapTo(null)),
     merge(
-      fromEvent<PointerEvent>(canvas, 'pointermove', { passive: false }).pipe(
-        // disable bounce on iOS (passive: false is required)
-        tap((e) => {
-          e.preventDefault()
-        })
-      ),
+      fromEvent<PointerEvent>(canvas, 'pointermove'),
       fromEvent<PointerEvent>(canvas, 'pointerup'),
       fromEvent<PointerEvent>(canvas, 'pointerdown'),
       fromEvent<PointerEvent>(canvas, 'pointerenter')
