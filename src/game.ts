@@ -18,7 +18,7 @@ export interface Pointer {
   down: boolean
 }
 
-export interface InitGame {
+export interface GameArgs {
   context: CanvasRenderingContext2D
   resize$: Observable<CanvasSize>
   pointer$: Observable<Pointer | null>
@@ -47,7 +47,7 @@ function render(args: RenderArgs) {
   }
 }
 
-export function newGame(init: InitGame): Game {
+export function newGame(init: GameArgs): Game {
   const { context, resize$, pointer$ } = init
 
   scheduled(
