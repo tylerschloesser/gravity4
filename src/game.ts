@@ -46,14 +46,23 @@ function render(args: RenderArgs) {
     context.stroke()
   }
 
+  const scale = w / 100
   args.engine.world.bodies.forEach((body) => {
-    const w = Math.abs(body.bounds.max.x - body.bounds.min.x)
-    const h = Math.abs(body.bounds.max.y - body.bounds.min.y)
+    // const w = Math.abs(body.bounds.max.x - body.bounds.min.x)
+    // const h = Math.abs(body.bounds.max.y - body.bounds.min.y)
+    let w = 10,
+      h = 10
+    if (body.isStatic) {
+      ;(w = 100), (h = 10)
+    }
 
     context.strokeStyle = 'white'
     context.beginPath()
-    context.rect(body.position.x, body.position.y, w, h)
+    context.translate(body.position.x * scale, body.position.y * scale)
+    context.rotate(body.angle)
+    context.rect((-w * scale) / 2, (-h * scale) / 2, w * scale, h * scale)
     context.stroke()
+    context.resetTransform()
   })
 }
 

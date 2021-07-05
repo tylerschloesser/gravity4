@@ -14,7 +14,7 @@ function main() {
       canvas.width = w
       canvas.height = h
       subscriber.next({ w, h })
-    }).observe(document.body)
+    }).observe(canvas)
   })
 
   const pointer$ = merge(
@@ -25,7 +25,7 @@ function main() {
       fromEvent<PointerEvent>(canvas, 'pointerdown'),
       fromEvent<PointerEvent>(canvas, 'pointerenter')
     ).pipe(
-      map(({ clientX: x, clientY: y, pressure }) => ({
+      map(({ offsetX: x, offsetY: y, pressure }) => ({
         x,
         y,
         down: pressure > 0,
