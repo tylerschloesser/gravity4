@@ -7,6 +7,7 @@ let w = (canvas.width = window.innerWidth)
 
 const context = canvas.getContext('2d')!
 
+// TODO move this to game
 window.addEventListener('resize', () => {
   h = canvas.height = window.innerHeight
   w = canvas.width = window.innerWidth
