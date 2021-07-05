@@ -48,13 +48,21 @@ function render(args: RenderArgs) {
 
   const scale = w / 100
 
+  context.translate(
+    state.platform.x * scale + (state.platform.size / 2) * scale,
+    state.platform.y * scale + (state.platform.size / 2) * scale
+  )
+  context.rotate(state.platform.angle)
+
   context.strokeStyle = 'red'
   context.strokeRect(
-    state.platform.x * scale,
-    state.platform.y * scale,
+    (-state.platform.size * scale) / 2,
+    (-state.platform.size * scale) / 2,
     state.platform.size * scale,
     state.platform.size * scale
   )
+
+  context.resetTransform()
 
   context.strokeStyle = 'white'
   context.beginPath()
@@ -81,7 +89,7 @@ export function newGame(init: GameArgs): Game {
 
   const physics = newPhysics({
     ball: { x: 50, y: 20, r: 10 },
-    platform: { x: 0, y: 50, size: 100 },
+    platform: { x: 0, y: 50, size: 100, angle: (20 * Math.PI) / 180 },
   })
 
   animationFrames()
