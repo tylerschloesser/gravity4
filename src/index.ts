@@ -1,5 +1,5 @@
 import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, mergeWith, startWith } from 'rxjs/operators'
+import { map, mapTo, mergeWith, startWith, tap } from 'rxjs/operators'
 import { newGame, CanvasSize } from './game'
 
 function main() {
@@ -20,7 +20,12 @@ function main() {
   const pointer$ = merge(
     fromEvent<PointerEvent>(canvas, 'pointerleave').pipe(mapTo(null)),
     merge(
-      fromEvent<PointerEvent>(canvas, 'pointermove'),
+      fromEvent<PointerEvent>(canvas, 'pointermove', { passive: false }).pipe(
+        // disable bounce on iOS (passive: false is required)
+        tap((e) => {
+          e.preventDefault()
+        })
+      ),
       fromEvent<PointerEvent>(canvas, 'pointerup'),
       fromEvent<PointerEvent>(canvas, 'pointerdown'),
       fromEvent<PointerEvent>(canvas, 'pointerenter')
