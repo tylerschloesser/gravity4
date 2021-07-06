@@ -22,8 +22,8 @@ export function newPhysics(state: GameState) {
 
   const ballBody = Bodies.circle(ball.x, ball.y, ball.r, {
     density: 2,
-    friction: 0.1,
-    //restitution: 1,
+    //friction: 0.1,
+    restitution: 0.1,
     //force: { y: 0.1, x: 0 },
   })
   const platformBody = Bodies.rectangle(

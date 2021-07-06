@@ -1,5 +1,5 @@
-import { animationFrames, Observable } from 'rxjs'
-import { scan, tap, withLatestFrom } from 'rxjs/operators'
+import { animationFrames, Observable, pipe } from 'rxjs'
+import { map, scan, withLatestFrom } from 'rxjs/operators'
 import { GameState, newPhysics } from './physics'
 
 interface Game {}
@@ -85,12 +85,17 @@ function render(args: RenderArgs) {
   context.resetTransform()
 }
 
-const mapDelta = scan<{ elapsed: number }, { delta: number; prev: number }>(
-  (acc, { elapsed }) => ({
-    delta: elapsed - acc.prev,
-    prev: elapsed,
-  }),
-  { prev: 0, delta: 0 }
+const mapDelta = pipe(
+  scan<{ elapsed: number }, { delta: number; prev: number }>(
+    (acc, { elapsed }) => ({
+      delta: elapsed - acc.prev,
+      prev: elapsed,
+    }),
+    { prev: 0, delta: 0 }
+  ),
+  map(({ delta }) => delta),
+  // don't jump in case of long frames, or perhaps alt/tab
+  map((delta) => Math.min(delta, (1 / 30) * 1000))
 )
 
 export function newGame(init: GameArgs): Game {
@@ -105,7 +110,7 @@ export function newGame(init: GameArgs): Game {
 
   animationFrames()
     .pipe(mapDelta, withLatestFrom(pointer$, resize$))
-    .subscribe(([{ delta }, pointer, size]) => {
+    .subscribe(([delta, pointer, size]) => {
       let drag: { x: number; y: number } | null = null
       if (lastPointer?.down && pointer?.down) {
         drag = {
