@@ -1,3 +1,4 @@
+import Matter from 'matter-js'
 import { Engine, Bodies, Composite, World, Constraint, Body } from 'matter-js'
 
 export interface GameState {
@@ -9,7 +10,7 @@ export function newPhysics(state: GameState) {
   const engine = Engine.create()
   engine.gravity = {
     x: 0,
-    y: 2,
+    y: 3,
     scale: 1 / 1000 / 10,
   }
   // engine.gravity = {
@@ -21,9 +22,11 @@ export function newPhysics(state: GameState) {
   const { ball, platform } = state
 
   const ballBody = Bodies.circle(ball.x, ball.y, ball.r, {
-    density: 2,
-    //friction: 0.1,
-    restitution: 0.1,
+    density: 1,
+    friction: 0,
+    frictionAir: 0,
+    frictionStatic: 0,
+    restitution: 0,
     //force: { y: 0.1, x: 0 },
   })
   const platformBody = Bodies.rectangle(
@@ -32,6 +35,9 @@ export function newPhysics(state: GameState) {
     platform.size,
     platform.size,
     {
+      friction: 0,
+      frictionAir: 0,
+      frictionStatic: 0,
       angle: platform.angle,
       isStatic: true,
     }
@@ -40,26 +46,21 @@ export function newPhysics(state: GameState) {
   Composite.add(engine.world, ballBody)
   Composite.add(engine.world, platformBody)
 
+  const sideProps: Matter.IChamferableBodyDefinition = {
+    isStatic: true,
+    friction: 0,
+    frictionAir: 0,
+    frictionStatic: 0,
+  }
+
   // top
-  Composite.add(
-    engine.world,
-    Bodies.rectangle(50, -5, 120, 10, { isStatic: true })
-  )
+  Composite.add(engine.world, Bodies.rectangle(50, -5, 120, 10, sideProps))
   // right
-  Composite.add(
-    engine.world,
-    Bodies.rectangle(105, 50, 10, 120, { isStatic: true })
-  )
+  Composite.add(engine.world, Bodies.rectangle(105, 50, 10, 120, sideProps))
   // left
-  Composite.add(
-    engine.world,
-    Bodies.rectangle(-5, 50, 10, 120, { isStatic: true })
-  )
+  Composite.add(engine.world, Bodies.rectangle(-5, 50, 10, 120, sideProps))
   // bottom
-  Composite.add(
-    engine.world,
-    Bodies.rectangle(50, 105, 120, 10, { isStatic: true })
-  )
+  Composite.add(engine.world, Bodies.rectangle(50, 105, 120, 10, sideProps))
 
   return {
     update: ({
@@ -77,6 +78,7 @@ export function newPhysics(state: GameState) {
         Body.setAngularVelocity(platformBody, 5 * dx * (Math.PI / 180) * delta)
       }
 
+      Matter.Body.setAngularVelocity(ballBody, 0)
       Engine.update(engine, delta)
       return {
         ball: {
