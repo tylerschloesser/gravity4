@@ -22,6 +22,10 @@ const config: webpack.Configuration = {
   },
   plugins: [
     new HtmlWebpackPlugin({ template: './src/index.html', hash: true }),
+    new webpack.IgnorePlugin({
+      // ignore node imports made by box2d. these code paths aren't hit in web
+      resourceRegExp: /^(fs|path)$/,
+    }),
   ],
 }
 

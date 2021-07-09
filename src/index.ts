@@ -2,7 +2,7 @@ import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
 import { map, mapTo, mergeWith, startWith, tap } from 'rxjs/operators'
 import { newGame, CanvasSize } from './game'
 
-function main() {
+async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
   const context = canvas.getContext('2d')!
 
@@ -40,11 +40,13 @@ function main() {
     )
   ).pipe(startWith(null))
 
-  newGame({
+  await newGame({
     context,
     resize$,
     pointer$,
   })
+
+  console.log('game over')
 }
 
 try {

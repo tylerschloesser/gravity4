@@ -98,10 +98,10 @@ const mapDelta = pipe(
   map((delta) => Math.min(delta, (1 / 30) * 1000))
 )
 
-export function newGame(init: GameArgs): Game {
+export async function newGame(init: GameArgs): Promise<Game> {
   const { context, resize$, pointer$ } = init
 
-  const physics = newPhysics({
+  const physics = await newPhysics({
     ball: { x: 50, y: 20, r: 5, angle: 0 },
     platform: { x: 0, y: 50, size: 100, angle: (20 * Math.PI) / 180 },
   })
@@ -124,5 +124,6 @@ export function newGame(init: GameArgs): Game {
       render({ state, context, pointer, size })
     })
 
-  return {}
+  // game is never over
+  return new Promise(() => {})
 }
