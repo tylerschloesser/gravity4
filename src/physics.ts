@@ -125,18 +125,19 @@ async function newPhysicsBox2d(state: GameState) {
     bd.position.Set(state.ball.x, state.ball.y)
 
     ballBody = world.CreateBody(bd)
-    const fixture = ballBody.CreateFixture(square, 1)
+    ballBody.CreateFixture(square, 10)
 
     //ballBody.SetTransform(zero, 0)
-    ballBody.SetLinearVelocity(zero)
+    //ballBody.SetLinearVelocity(zero)
     //ballBody.SetAwake(true)
     //ballBody.SetEnabled(true)
   }
 
   let groundBody: Box2D.b2Body
+  let groundBodyDef: Box2D.b2BodyDef
   {
     console.log(state.platform)
-    const groundBodyDef = new box2d.b2BodyDef()
+    groundBodyDef = new box2d.b2BodyDef()
     const halfSize = state.platform.size / 2
     groundBodyDef.position.Set(
       state.platform.x + halfSize,
@@ -144,7 +145,9 @@ async function newPhysicsBox2d(state: GameState) {
     )
     //groundBodyDef.position.Set(-4, 0)
 
+    groundBodyDef.set_type(b2_dynamicBody)
     groundBody = world.CreateBody(groundBodyDef)
+    //groundBody.SetAngularVelocity(2)
     const groundBox = new b2PolygonShape()
     groundBox.SetAsBox(halfSize, halfSize)
     groundBody.CreateFixture(groundBox, 0)
@@ -163,6 +166,18 @@ async function newPhysicsBox2d(state: GameState) {
       drag: { x: number; y: number } | null
       size: { w: number; h: number }
     }) => {
+      if (drag) {
+        const dx = drag.x / size.w
+        const av = 1000 * dx * (Math.PI / 180) * delta
+        console.log({ av })
+        groundBody.SetAngularVelocity(av)
+        //groundBody.SetTransform(
+        //  groundBody.GetPosition(),
+        //  groundBody.GetAngle() +
+        //)
+        //console.log(groundBodyDef.get_angle())
+      }
+
       world.Step(delta / 1000, velocityIterations, positionIterations)
 
       const ballPosition = ballBody.GetPosition()
@@ -180,6 +195,7 @@ async function newPhysicsBox2d(state: GameState) {
           ...state.platform,
           x: platPosition.x - halfSize,
           y: platPosition.y - halfSize,
+          angle: groundBody.GetAngle(),
         },
       }
     },
