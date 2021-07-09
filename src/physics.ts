@@ -115,22 +115,43 @@ async function newPhysicsBox2d(state: GameState) {
   {
     const sideLengthMetres = 1
     const square = new b2PolygonShape()
-    square.SetAsBox(sideLengthMetres / 2, sideLengthMetres / 2)
+    square.SetAsBox(state.ball.r, state.ball.r)
 
     const zero = new b2Vec2(0, 0)
 
     const bd = new b2BodyDef()
     bd.set_type(b2_dynamicBody)
     console.log(state.ball)
-    bd.set_position(new b2Vec2(state.ball.x, state.ball.y))
+    bd.position.Set(state.ball.x, state.ball.y)
 
     ballBody = world.CreateBody(bd)
-    ballBody.CreateFixture(square, 1)
-    ballBody.SetTransform(zero, 0)
+    const fixture = ballBody.CreateFixture(square, 1)
+
+    //ballBody.SetTransform(zero, 0)
     ballBody.SetLinearVelocity(zero)
-    ballBody.SetAwake(true)
-    ballBody.SetEnabled(true)
+    //ballBody.SetAwake(true)
+    //ballBody.SetEnabled(true)
   }
+
+  let groundBody: Box2D.b2Body
+  {
+    console.log(state.platform)
+    const groundBodyDef = new box2d.b2BodyDef()
+    const halfSize = state.platform.size / 2
+    groundBodyDef.position.Set(
+      state.platform.x + halfSize,
+      state.platform.y + halfSize
+    )
+    //groundBodyDef.position.Set(-4, 0)
+
+    groundBody = world.CreateBody(groundBodyDef)
+    const groundBox = new b2PolygonShape()
+    groundBox.SetAsBox(halfSize, halfSize)
+    groundBody.CreateFixture(groundBox, 0)
+  }
+
+  const velocityIterations = 8
+  const positionIterations = 3
 
   return {
     update: ({
@@ -142,15 +163,23 @@ async function newPhysicsBox2d(state: GameState) {
       drag: { x: number; y: number } | null
       size: { w: number; h: number }
     }) => {
-      world.Step(delta / 1000, 1, 1)
+      world.Step(delta / 1000, velocityIterations, positionIterations)
 
-      const { x, y } = ballBody.GetPosition()
+      const ballPosition = ballBody.GetPosition()
+      const platPosition = groundBody.GetPosition()
+      const halfSize = state.platform.size / 2
+
       return {
         ...state,
         ball: {
           ...state.ball,
-          x,
-          y,
+          x: ballPosition.x,
+          y: ballPosition.y,
+        },
+        platform: {
+          ...state.platform,
+          x: platPosition.x - halfSize,
+          y: platPosition.y - halfSize,
         },
       }
     },
