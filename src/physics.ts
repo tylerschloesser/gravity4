@@ -107,15 +107,17 @@ async function newPhysicsBox2d(state: GameState) {
   const { b2BodyDef, b2_dynamicBody, b2PolygonShape, b2Vec2, b2World } = box2d
 
   // in metres per second squared
-  const gravity = new b2Vec2(0, 10)
+  const gravity = new b2Vec2(0, 100)
   const world = new b2World(gravity)
 
   let ballBody: Box2D.b2Body
 
   {
     const sideLengthMetres = 1
-    const square = new b2PolygonShape()
-    square.SetAsBox(state.ball.r, state.ball.r)
+    const circle = new box2d.b2CircleShape()
+    circle.set_m_radius(state.ball.r)
+
+    //circle.SetAsBox(state.ball.r, state.ball.r)
 
     const zero = new b2Vec2(0, 0)
 
@@ -125,7 +127,7 @@ async function newPhysicsBox2d(state: GameState) {
     bd.position.Set(state.ball.x, state.ball.y)
 
     ballBody = world.CreateBody(bd)
-    ballBody.CreateFixture(square, 10)
+    ballBody.CreateFixture(circle, 10)
 
     //ballBody.SetTransform(zero, 0)
     //ballBody.SetLinearVelocity(zero)
