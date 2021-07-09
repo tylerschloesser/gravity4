@@ -110,22 +110,27 @@ async function newPhysicsBox2d(state: GameState) {
   const gravity = new b2Vec2(0, 10)
   const world = new b2World(gravity)
 
-  const sideLengthMetres = 1
-  const square = new b2PolygonShape()
-  square.SetAsBox(sideLengthMetres / 2, sideLengthMetres / 2)
+  let ballBody: Box2D.b2Body
 
-  const zero = new b2Vec2(0, 0)
+  {
+    const sideLengthMetres = 1
+    const square = new b2PolygonShape()
+    square.SetAsBox(sideLengthMetres / 2, sideLengthMetres / 2)
 
-  const bd = new b2BodyDef()
-  bd.set_type(b2_dynamicBody)
-  bd.set_position(zero)
+    const zero = new b2Vec2(0, 0)
 
-  const body = world.CreateBody(bd)
-  body.CreateFixture(square, 1)
-  body.SetTransform(zero, 0)
-  body.SetLinearVelocity(zero)
-  body.SetAwake(true)
-  body.SetEnabled(true)
+    const bd = new b2BodyDef()
+    bd.set_type(b2_dynamicBody)
+    console.log(state.ball)
+    bd.set_position(new b2Vec2(state.ball.x, state.ball.y))
+
+    ballBody = world.CreateBody(bd)
+    ballBody.CreateFixture(square, 1)
+    ballBody.SetTransform(zero, 0)
+    ballBody.SetLinearVelocity(zero)
+    ballBody.SetAwake(true)
+    ballBody.SetEnabled(true)
+  }
 
   return {
     update: ({
@@ -139,7 +144,7 @@ async function newPhysicsBox2d(state: GameState) {
     }) => {
       world.Step(delta / 1000, 1, 1)
 
-      const { x, y } = body.GetPosition()
+      const { x, y } = ballBody.GetPosition()
       return {
         ...state,
         ball: {
