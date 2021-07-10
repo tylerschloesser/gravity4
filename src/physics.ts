@@ -7,7 +7,8 @@ export async function newPhysics(state: GameState) {
   const { b2BodyDef, b2_dynamicBody, b2PolygonShape, b2Vec2, b2World } = box2d
 
   // in metres per second squared
-  const gravity = new b2Vec2(0, 300)
+  //const gravity = new b2Vec2(300, 300)
+  const gravity = new box2d.b2Vec2(0, 0)
   const world = new b2World(gravity)
 
   let ballBody: Box2D.b2Body
@@ -88,6 +89,11 @@ export async function newPhysics(state: GameState) {
       } else {
         groundBody.SetAngularVelocity(groundBody.GetAngularVelocity() * 0.9)
       }
+
+      const gravX = 0
+      const grav = new b2Vec2(gravX, 300)
+      grav.op_mul(ballBody.GetMass())
+      ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
 
       world.Step(delta / 1000, velocityIterations, positionIterations)
 
