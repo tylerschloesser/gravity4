@@ -26,6 +26,7 @@ export function render(args: RenderArgs) {
   )
   context.rotate(state.platform.angle)
 
+  context.lineWidth = 3
   context.strokeStyle = 'red'
   context.strokeRect(
     (-state.platform.size * scale) / 2,
