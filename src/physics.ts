@@ -43,31 +43,31 @@ export async function newPhysics(state: GameState) {
     groundBody.CreateFixture(groundBox, 0)
   }
 
-  for (let { x, y } of [
-    {
-      x: -5,
-      y: 50,
-    },
-    {
-      x: 105,
-      y: 50,
-    },
-  ]) {
-    const bd = new box2d.b2BodyDef()
-    bd.position.Set(x, y)
-    const body = world.CreateBody(bd)
-    const shape = new b2PolygonShape()
-    shape.SetAsBox(5, 50)
-    body.CreateFixture(shape, 1)
-  }
-  {
-    const bd = new box2d.b2BodyDef()
-    bd.position.Set(50, -5)
-    const body = world.CreateBody(bd)
-    const shape = new b2PolygonShape()
-    shape.SetAsBox(50, 5)
-    body.CreateFixture(shape, 1)
-  }
+  // for (let { x, y } of [
+  //   {
+  //     x: -5,
+  //     y: 50,
+  //   },
+  //   {
+  //     x: 105,
+  //     y: 50,
+  //   },
+  // ]) {
+  //   const bd = new box2d.b2BodyDef()
+  //   bd.position.Set(x, y)
+  //   const body = world.CreateBody(bd)
+  //   const shape = new b2PolygonShape()
+  //   shape.SetAsBox(5, 50)
+  //   body.CreateFixture(shape, 1)
+  // }
+  // {
+  //   const bd = new box2d.b2BodyDef()
+  //   bd.position.Set(50, -5)
+  //   const body = world.CreateBody(bd)
+  //   const shape = new b2PolygonShape()
+  //   shape.SetAsBox(50, 5)
+  //   body.CreateFixture(shape, 1)
+  // }
 
   const velocityIterations = 40
   const positionIterations = 40
@@ -90,10 +90,19 @@ export async function newPhysics(state: GameState) {
         groundBody.SetAngularVelocity(groundBody.GetAngularVelocity() * 0.9)
       }
 
-      const gravX = 0
-      const grav = new b2Vec2(gravX, 300)
-      grav.op_mul(ballBody.GetMass())
-      ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
+      //const gravX = 0
+      //const grav = new b2Vec2(gravX, 300)
+
+      const grav2 = new b2Vec2(
+        groundBody.GetPosition().x,
+        groundBody.GetPosition().y
+      )
+      grav2.op_sub(ballBody.GetPosition())
+      grav2.Normalize()
+      grav2.op_mul(300)
+
+      grav2.op_mul(ballBody.GetMass())
+      ballBody.ApplyForce(grav2, ballBody.GetPosition(), true)
 
       world.Step(delta / 1000, velocityIterations, positionIterations)
 

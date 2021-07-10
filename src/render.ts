@@ -10,8 +10,16 @@ function renderPlatform(args: RenderArgs) {
     state.platform.x * scale + (state.platform.size / 2) * scale,
     state.platform.y * scale + (state.platform.size / 2) * scale
   )
+
+  context.translate(
+    -state.ball.x * scale + w / 2,
+    -state.ball.y * scale + h / 2
+  )
+
   context.rotate(state.platform.angle)
+
   context.strokeStyle = 'red'
+
   context.strokeRect(
     (-state.platform.size * scale) / 2,
     (-state.platform.size * scale) / 2,
@@ -40,19 +48,13 @@ function renderBall(args: RenderArgs) {
   const { context, pointer, size, state } = args
   const { w, h } = size
 
+  context.translate(w / 2, h / 2)
   const scale = w / 100
   context.strokeStyle = 'white'
   context.beginPath()
-  context.arc(
-    state.ball.x * scale,
-    state.ball.y * scale,
-    state.ball.r * scale,
-    0,
-    2 * Math.PI
-  )
+  context.arc(0, 0, state.ball.r * scale, 0, 2 * Math.PI)
   context.stroke()
 
-  context.translate(state.ball.x * scale, state.ball.y * scale)
   context.rotate(state.ball.angle)
   context.strokeStyle = 'green'
   context.beginPath()
