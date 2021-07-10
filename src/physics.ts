@@ -155,8 +155,36 @@ async function newPhysicsBox2d(state: GameState) {
     groundBody.CreateFixture(groundBox, 0)
   }
 
-  const velocityIterations = 8
-  const positionIterations = 3
+  for (let { x, y } of [
+    {
+      x: -5,
+      y: 50,
+    },
+    {
+      x: 105,
+      y: 50,
+    },
+  ]) {
+    const bd = new box2d.b2BodyDef()
+    bd.position.Set(x, y)
+    const body = world.CreateBody(bd)
+    //body.SetTransform(new b2Vec2(x, y), angle)
+    const shape = new b2PolygonShape()
+    shape.SetAsBox(5, 50)
+    body.CreateFixture(shape, 1)
+  }
+  {
+    const bd = new box2d.b2BodyDef()
+    bd.position.Set(50, -5)
+    const body = world.CreateBody(bd)
+    //body.SetTransform(new b2Vec2(x, y), angle)
+    const shape = new b2PolygonShape()
+    shape.SetAsBox(50, 5)
+    body.CreateFixture(shape, 1)
+  }
+
+  const velocityIterations = 40
+  const positionIterations = 40
 
   return {
     update: ({
@@ -171,13 +199,7 @@ async function newPhysicsBox2d(state: GameState) {
       if (drag) {
         const dx = drag.x / size.w
         const av = 1000 * dx * (Math.PI / 180) * delta
-        console.log({ av })
         groundBody.SetAngularVelocity(av)
-        //groundBody.SetTransform(
-        //  groundBody.GetPosition(),
-        //  groundBody.GetAngle() +
-        //)
-        //console.log(groundBodyDef.get_angle())
       }
 
       world.Step(delta / 1000, velocityIterations, positionIterations)
