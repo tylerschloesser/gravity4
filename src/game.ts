@@ -28,6 +28,9 @@ export async function newGame(init: GameArgs): Promise<Game> {
 
   let lastPointer: Pointer | null = null
 
+  let av = 0
+  let angle = 0
+
   animationFrames()
     .pipe(mapDelta, withLatestFrom(pointer$, resize$))
     .subscribe(([delta, pointer, size]) => {
@@ -40,8 +43,19 @@ export async function newGame(init: GameArgs): Promise<Game> {
       }
       lastPointer = pointer
 
-      const state = physics.update({ delta, drag, size })
-      render({ state, context, pointer, size })
+      if (drag) {
+        const dx =
+          (Math.pow(Math.abs(drag.x), 1.25) * Math.sign(drag.x)) / size.w
+
+        av = dx * (Math.PI / 180)
+      } else {
+        av *= 0.9
+      }
+
+      angle += -av * delta
+
+      const state = physics.update({ delta, angle, size })
+      render({ state, context, pointer, size, angle })
     })
 
   // game is never over

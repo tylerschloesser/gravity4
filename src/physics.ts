@@ -73,28 +73,17 @@ export async function newPhysics(state: GameState) {
   return {
     update: ({
       delta,
-      drag,
+      angle,
       size,
     }: {
       delta: number
-      drag: { x: number; y: number } | null
+      angle: number
       size: { w: number; h: number }
     }) => {
-      if (drag) {
-        const dx =
-          (Math.pow(Math.abs(drag.x), 1.75) * Math.sign(drag.x)) / size.w
+      //const grav = new box2d.b2Transform(new b2Vec2(0, 1), angle).p
+      const grav = new b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
 
-        const av = 10 * dx * (Math.PI / 180) * delta
-        groundBody.SetAngularVelocity(av)
-      } else {
-        groundBody.SetAngularVelocity(groundBody.GetAngularVelocity() * 0.9)
-      }
-
-      const grav = new b2Vec2(
-        groundBody.GetPosition().x,
-        groundBody.GetPosition().y
-      )
-      grav.op_sub(ballBody.GetPosition())
+      //grav.op_sub(ballBody.GetPosition())
       grav.Normalize()
       grav.op_mul(500)
 
@@ -119,7 +108,7 @@ export async function newPhysics(state: GameState) {
           ...state.platform,
           x: platPosition.x - halfSize,
           y: platPosition.y - halfSize,
-          angle: groundBody.GetAngle(),
+          //angle: groundBody.GetAngle(),
         },
       }
     },

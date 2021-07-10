@@ -6,17 +6,14 @@ function renderPlatform(args: RenderArgs) {
 
   const scale = w / 100
 
+  context.translate(w / 2, h / 2)
+  context.rotate(-args.angle)
+
   context.translate(
     state.platform.x * scale + (state.platform.size / 2) * scale,
     state.platform.y * scale + (state.platform.size / 2) * scale
   )
-
-  context.translate(
-    -state.ball.x * scale + w / 2,
-    -state.ball.y * scale + h / 2
-  )
-
-  context.rotate(state.platform.angle)
+  context.translate(-state.ball.x * scale, -state.ball.y * scale)
 
   context.strokeStyle = 'red'
 

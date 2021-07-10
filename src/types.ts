@@ -24,6 +24,7 @@ export interface RenderArgs {
   pointer: Pointer | null
   size: CanvasSize
   state: GameState
+  angle: number
 }
 
 export interface GameState {
