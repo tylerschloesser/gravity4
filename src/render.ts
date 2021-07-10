@@ -1,5 +1,27 @@
 import { RenderArgs } from './types'
 
+function renderPlatform(args: RenderArgs) {
+  const { context, pointer, size, state } = args
+  const { w, h } = size
+
+  const scale = w / 100
+
+  context.translate(
+    state.platform.x * scale + (state.platform.size / 2) * scale,
+    state.platform.y * scale + (state.platform.size / 2) * scale
+  )
+  context.rotate(state.platform.angle)
+  context.strokeStyle = 'red'
+  context.strokeRect(
+    (-state.platform.size * scale) / 2,
+    (-state.platform.size * scale) / 2,
+    state.platform.size * scale,
+    state.platform.size * scale
+  )
+
+  context.resetTransform()
+}
+
 export function render(args: RenderArgs) {
   const { context, pointer, size, state } = args
   const { w, h } = size
@@ -21,21 +43,7 @@ export function render(args: RenderArgs) {
   }
 
   const scale = w / 100
-
-  context.translate(
-    state.platform.x * scale + (state.platform.size / 2) * scale,
-    state.platform.y * scale + (state.platform.size / 2) * scale
-  )
-  context.rotate(state.platform.angle)
-  context.strokeStyle = 'red'
-  context.strokeRect(
-    (-state.platform.size * scale) / 2,
-    (-state.platform.size * scale) / 2,
-    state.platform.size * scale,
-    state.platform.size * scale
-  )
-
-  context.resetTransform()
+  renderPlatform(args)
 
   context.strokeStyle = 'white'
   context.beginPath()
