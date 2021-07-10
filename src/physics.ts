@@ -147,7 +147,7 @@ async function newPhysicsBox2d(state: GameState) {
     )
     //groundBodyDef.position.Set(-4, 0)
 
-    groundBodyDef.set_type(b2_dynamicBody)
+    groundBodyDef.set_type(box2d.b2_kinematicBody)
     groundBody = world.CreateBody(groundBodyDef)
     //groundBody.SetAngularVelocity(2)
     const groundBox = new b2PolygonShape()
