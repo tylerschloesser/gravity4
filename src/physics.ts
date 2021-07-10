@@ -83,8 +83,10 @@ export async function newPhysics(state: GameState) {
     }) => {
       if (drag) {
         const dx = drag.x / size.w
-        const av = 1000 * dx * (Math.PI / 180) * delta
+        const av = 400 * dx * (Math.PI / 180) * delta
         groundBody.SetAngularVelocity(av)
+      } else {
+        groundBody.SetAngularVelocity(groundBody.GetAngularVelocity() * 0.9)
       }
 
       world.Step(delta / 1000, velocityIterations, positionIterations)
