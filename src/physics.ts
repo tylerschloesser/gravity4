@@ -1,9 +1,5 @@
 import Box2DFactory from 'box2d-wasm'
-
-export interface GameState {
-  ball: { x: number; y: number; r: number; angle: number }
-  platform: { x: number; y: number; size: number; angle: number }
-}
+import { GameState } from './types'
 
 export async function newPhysics(state: GameState) {
   const box2d = await Box2DFactory()

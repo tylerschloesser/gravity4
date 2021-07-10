@@ -1,32 +1,7 @@
-import { animationFrames, Observable, pipe } from 'rxjs'
+import { animationFrames, pipe } from 'rxjs'
 import { map, scan, withLatestFrom } from 'rxjs/operators'
-import { GameState, newPhysics } from './physics'
-
-interface Game {}
-
-export interface CanvasSize {
-  w: number
-  h: number
-}
-
-export interface Pointer {
-  x: number
-  y: number
-  down: boolean
-}
-
-export interface GameArgs {
-  context: CanvasRenderingContext2D
-  resize$: Observable<CanvasSize>
-  pointer$: Observable<Pointer | null>
-}
-
-export interface RenderArgs {
-  context: CanvasRenderingContext2D
-  pointer: Pointer | null
-  size: CanvasSize
-  state: GameState
-}
+import { newPhysics } from './physics'
+import { Game, GameArgs, Pointer, RenderArgs } from './types'
 
 function render(args: RenderArgs) {
   const { context, pointer, size, state } = args

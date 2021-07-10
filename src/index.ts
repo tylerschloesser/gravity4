@@ -1,6 +1,7 @@
-import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, mergeWith, startWith, tap } from 'rxjs/operators'
-import { newGame, CanvasSize } from './game'
+import { fromEvent, merge, Observable } from 'rxjs'
+import { map, mapTo, startWith } from 'rxjs/operators'
+import { newGame } from './game'
+import { CanvasSize } from './types'
 
 async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
