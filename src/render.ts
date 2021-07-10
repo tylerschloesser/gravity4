@@ -8,6 +8,8 @@ export function render(args: RenderArgs) {
   context.fillStyle = '#444'
   context.fillRect(0, 0, w, h)
 
+  context.lineWidth = 3
+
   if (pointer) {
     context.strokeStyle = 'white'
     if (pointer.down) {
@@ -25,8 +27,6 @@ export function render(args: RenderArgs) {
     state.platform.y * scale + (state.platform.size / 2) * scale
   )
   context.rotate(state.platform.angle)
-
-  context.lineWidth = 3
   context.strokeStyle = 'red'
   context.strokeRect(
     (-state.platform.size * scale) / 2,
