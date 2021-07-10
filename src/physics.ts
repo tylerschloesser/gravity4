@@ -107,7 +107,7 @@ async function newPhysicsBox2d(state: GameState) {
   const { b2BodyDef, b2_dynamicBody, b2PolygonShape, b2Vec2, b2World } = box2d
 
   // in metres per second squared
-  const gravity = new b2Vec2(0, 100)
+  const gravity = new b2Vec2(0, 200)
   const world = new b2World(gravity)
 
   let ballBody: Box2D.b2Body
