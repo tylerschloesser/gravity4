@@ -36,23 +36,37 @@ export async function newGame(init: GameArgs): Promise<Game> {
     .subscribe(([delta, pointer, size]) => {
       let drag: { x: number; y: number } | null = null
       if (lastPointer?.down && pointer?.down) {
-        drag = {
-          x: pointer.x - lastPointer.x,
-          y: pointer.y - lastPointer.y,
+        if (pointer.x - lastPointer.x !== 0) {
+          drag = {
+            x: pointer.x - lastPointer.x,
+            y: pointer.y - lastPointer.y,
+          }
         }
       }
       lastPointer = pointer
 
       if (drag) {
-        const dx =
-          (Math.pow(Math.abs(drag.x), 1.25) * Math.sign(drag.x)) / size.w
+        const POW = 1.8
+        const SCALE = 200
 
-        av = dx * (Math.PI / 180)
+        const dx =
+          ((Math.sign(drag.x) * Math.pow(Math.abs(drag.x), POW)) / size.w) *
+          (delta / 1000) *
+          (Math.PI / 180)
+        console.log(dx)
+        av = dx * SCALE
       } else {
-        av *= 0.9
+        //av = Math.sign(av) * Math.max(Math.abs(av) - Math.sqrt(delta / 5000), 0)
+        av =
+          Math.sign(av) *
+          (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
       }
 
-      angle += -av * delta
+      av =
+        Math.sign(av) *
+        Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 3)
+
+      angle += -av
 
       const state = physics.update({ delta, angle, size })
       render({ state, context, pointer, size, angle })
