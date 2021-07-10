@@ -1,8 +1,9 @@
 import { RenderArgs } from './types'
 
-function renderPlatform(args: RenderArgs) {
+function renderBox(args: RenderArgs, i: number) {
   const { context, pointer, size, state } = args
   const { w, h } = size
+  const box = state.boxes[i]
 
   const scale = w / 100
 
@@ -10,18 +11,18 @@ function renderPlatform(args: RenderArgs) {
   context.rotate(-args.angle)
 
   context.translate(
-    state.platform.x * scale + (state.platform.size / 2) * scale,
-    state.platform.y * scale + (state.platform.size / 2) * scale
+    box.x * scale + (box.size / 2) * scale,
+    box.y * scale + (box.size / 2) * scale
   )
   context.translate(-state.ball.x * scale, -state.ball.y * scale)
 
   context.strokeStyle = 'red'
 
   context.strokeRect(
-    (-state.platform.size * scale) / 2,
-    (-state.platform.size * scale) / 2,
-    state.platform.size * scale,
-    state.platform.size * scale
+    (-box.size * scale) / 2,
+    (-box.size * scale) / 2,
+    box.size * scale,
+    box.size * scale
   )
 
   context.resetTransform()
@@ -71,7 +72,9 @@ export function render(args: RenderArgs) {
 
   context.lineWidth = 3
 
-  renderPlatform(args)
+  args.state.boxes.forEach((_, i) => {
+    renderBox(args, i)
+  })
   renderBall(args)
   renderPointer(args)
 }

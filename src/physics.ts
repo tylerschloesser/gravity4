@@ -23,23 +23,19 @@ export async function newPhysics(state: GameState) {
     ballBody.CreateFixture(circle, 10)
   }
 
-  let groundBody: Box2D.b2Body
-  let groundBodyDef: Box2D.b2BodyDef
-  {
-    console.log(state.platform)
-    groundBodyDef = new box2d.b2BodyDef()
-    const halfSize = state.platform.size / 2
-    groundBodyDef.position.Set(
-      state.platform.x + halfSize,
-      state.platform.y + halfSize
-    )
+  state.boxes.forEach((box) => {
+    let def: Box2D.b2BodyDef = new box2d.b2BodyDef()
 
-    groundBodyDef.set_type(box2d.b2_kinematicBody)
-    groundBody = world.CreateBody(groundBodyDef)
-    const groundBox = new b2PolygonShape()
-    groundBox.SetAsBox(halfSize, halfSize)
-    groundBody.CreateFixture(groundBox, 0)
-  }
+    const halfSize = box.size / 2
+    def.position.Set(box.x + halfSize, box.y + halfSize)
+
+    def.set_type(box2d.b2_kinematicBody)
+    const shape = new b2PolygonShape()
+    shape.SetAsBox(halfSize, halfSize)
+
+    let body: Box2D.b2Body = world.CreateBody(def)
+    body.CreateFixture(shape, 0)
+  })
 
   // for (let { x, y } of [
   //   {
@@ -93,8 +89,6 @@ export async function newPhysics(state: GameState) {
       world.Step(delta / 1000, velocityIterations, positionIterations)
 
       const ballPosition = ballBody.GetPosition()
-      const platPosition = groundBody.GetPosition()
-      const halfSize = state.platform.size / 2
 
       return {
         ...state,
@@ -103,12 +97,6 @@ export async function newPhysics(state: GameState) {
           x: ballPosition.x,
           y: ballPosition.y,
           angle: ballBody.GetAngle(),
-        },
-        platform: {
-          ...state.platform,
-          x: platPosition.x - halfSize,
-          y: platPosition.y - halfSize,
-          //angle: groundBody.GetAngle(),
         },
       }
     },
