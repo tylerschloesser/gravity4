@@ -36,19 +36,11 @@ function renderPointer(args: RenderArgs) {
   }
 }
 
-export function render(args: RenderArgs) {
+function renderBall(args: RenderArgs) {
   const { context, pointer, size, state } = args
   const { w, h } = size
-  context.clearRect(0, 0, w, h)
-
-  context.fillStyle = '#444'
-  context.fillRect(0, 0, w, h)
-
-  context.lineWidth = 3
 
   const scale = w / 100
-  renderPlatform(args)
-
   context.strokeStyle = 'white'
   context.beginPath()
   context.arc(
@@ -68,6 +60,19 @@ export function render(args: RenderArgs) {
   context.lineTo(state.ball.r * scale, 0)
   context.stroke()
   context.resetTransform()
+}
 
+export function render(args: RenderArgs) {
+  const { context, pointer, size, state } = args
+  const { w, h } = size
+  context.clearRect(0, 0, w, h)
+
+  context.fillStyle = '#444'
+  context.fillRect(0, 0, w, h)
+
+  context.lineWidth = 3
+
+  renderPlatform(args)
+  renderBall(args)
   renderPointer(args)
 }
