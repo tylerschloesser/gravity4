@@ -7,7 +7,6 @@ export interface GameState {
 
 export async function newPhysics(state: GameState) {
   const box2d = await Box2DFactory()
-  console.log(box2d)
 
   const { b2BodyDef, b2_dynamicBody, b2PolygonShape, b2Vec2, b2World } = box2d
 
@@ -18,12 +17,8 @@ export async function newPhysics(state: GameState) {
   let ballBody: Box2D.b2Body
 
   {
-    const sideLengthMetres = 1
     const circle = new box2d.b2CircleShape()
     circle.set_m_radius(state.ball.r)
-
-    const zero = new b2Vec2(0, 0)
-
     const bd = new b2BodyDef()
     bd.set_type(b2_dynamicBody)
     console.log(state.ball)
