@@ -1,7 +1,5 @@
-import Matter from 'matter-js'
-import { Engine, Bodies, Composite, World, Constraint, Body } from 'matter-js'
-
 import Box2DFactory from 'box2d-wasm'
+import Matter, { Bodies, Body, Composite, Engine } from 'matter-js'
 
 export interface GameState {
   ball: { x: number; y: number; r: number; angle: number }
@@ -15,11 +13,6 @@ async function newPhysicsMatterJs(state: GameState) {
     y: 3,
     scale: 1 / 1000 / 10,
   }
-  // engine.gravity = {
-  //   x: 0,
-  //   y: 0,
-  //   scale: 1,
-  // }
 
   const { ball, platform } = state
 
@@ -29,7 +22,6 @@ async function newPhysicsMatterJs(state: GameState) {
     frictionAir: 0,
     frictionStatic: 0,
     restitution: 0,
-    //force: { y: 0.1, x: 0 },
   })
   const platformBody = Bodies.rectangle(
     platform.x + platform.size / 2,
@@ -117,8 +109,6 @@ async function newPhysicsBox2d(state: GameState) {
     const circle = new box2d.b2CircleShape()
     circle.set_m_radius(state.ball.r)
 
-    //circle.SetAsBox(state.ball.r, state.ball.r)
-
     const zero = new b2Vec2(0, 0)
 
     const bd = new b2BodyDef()
@@ -128,11 +118,6 @@ async function newPhysicsBox2d(state: GameState) {
 
     ballBody = world.CreateBody(bd)
     ballBody.CreateFixture(circle, 10)
-
-    //ballBody.SetTransform(zero, 0)
-    //ballBody.SetLinearVelocity(zero)
-    //ballBody.SetAwake(true)
-    //ballBody.SetEnabled(true)
   }
 
   let groundBody: Box2D.b2Body
@@ -145,11 +130,9 @@ async function newPhysicsBox2d(state: GameState) {
       state.platform.x + halfSize,
       state.platform.y + halfSize
     )
-    //groundBodyDef.position.Set(-4, 0)
 
     groundBodyDef.set_type(box2d.b2_kinematicBody)
     groundBody = world.CreateBody(groundBodyDef)
-    //groundBody.SetAngularVelocity(2)
     const groundBox = new b2PolygonShape()
     groundBox.SetAsBox(halfSize, halfSize)
     groundBody.CreateFixture(groundBox, 0)
@@ -168,7 +151,6 @@ async function newPhysicsBox2d(state: GameState) {
     const bd = new box2d.b2BodyDef()
     bd.position.Set(x, y)
     const body = world.CreateBody(bd)
-    //body.SetTransform(new b2Vec2(x, y), angle)
     const shape = new b2PolygonShape()
     shape.SetAsBox(5, 50)
     body.CreateFixture(shape, 1)
@@ -177,7 +159,6 @@ async function newPhysicsBox2d(state: GameState) {
     const bd = new box2d.b2BodyDef()
     bd.position.Set(50, -5)
     const body = world.CreateBody(bd)
-    //body.SetTransform(new b2Vec2(x, y), angle)
     const shape = new b2PolygonShape()
     shape.SetAsBox(50, 5)
     body.CreateFixture(shape, 1)
