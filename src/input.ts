@@ -1,6 +1,12 @@
 import { fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, mergeMap, startWith, withLatestFrom } from 'rxjs/operators'
+import { map, mapTo, scan, startWith, withLatestFrom } from 'rxjs/operators'
 import { Input } from './types'
+
+interface Pointer {
+  x: number
+  y: number
+  down: boolean
+}
 
 export async function newInput(): Promise<Observable<Input>> {
   const pointer$ = merge(
@@ -18,7 +24,16 @@ export async function newInput(): Promise<Observable<Input>> {
       }))
     )
   ).pipe(
-    startWith(null),
+    startWith<Pointer | null>(null),
+    scan<Pointer | null, { prev: Pointer | null; next: Pointer | null }>(
+      (acc, next) => ({
+        prev: acc?.next ?? null,
+        next,
+      }),
+      { prev: null, next: null }
+    ),
+    // TODO move drag logic here
+    map(({ next }) => next)
   )
 
   const key$ = merge(
@@ -33,8 +48,11 @@ export async function newInput(): Promise<Observable<Input>> {
     map(({ down }) => down)
   )
 
-  return pointer$.pipe(withLatestFrom(key$), map(([pointer, key]) => ({
-    pos: pointer ? { x: pointer.x, y: pointer.y } : null,
-    down: pointer?.down || key,
-  })))
+  return pointer$.pipe(
+    withLatestFrom(key$),
+    map(([pointer, key]) => ({
+      pos: pointer ? { x: pointer.x, y: pointer.y } : null,
+      down: pointer?.down || key,
+    }))
+  )
 }
