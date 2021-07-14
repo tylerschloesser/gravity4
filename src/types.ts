@@ -11,6 +11,11 @@ export interface Pointer {
   down: boolean
 }
 
+export interface Input {
+  pos: { x: number, y: number } | null
+  down: boolean
+}
+
 export interface Key {
   key: string
   down: boolean
