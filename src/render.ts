@@ -1,7 +1,7 @@
 import { RenderArgs } from './types'
 
 function renderBox(args: RenderArgs, i: number) {
-  const { context, pointer, size, state } = args
+  const { context, input, size, state } = args
   const { w, h } = size
   const box = state.boxes[i]
 
@@ -29,21 +29,21 @@ function renderBox(args: RenderArgs, i: number) {
 }
 
 function renderPointer(args: RenderArgs) {
-  const { context, pointer, size, state } = args
+  const { context, input, size, state } = args
   const { w, h } = size
-  if (pointer) {
+  if (input.pos) {
     context.strokeStyle = 'white'
-    if (pointer.down) {
+    if (input.down) {
       context.strokeStyle = 'blue'
     }
     context.beginPath()
-    context.arc(pointer.x, pointer.y, 50, 0, 2 * Math.PI)
+    context.arc(input.pos.x, input.pos.y, 50, 0, 2 * Math.PI)
     context.stroke()
   }
 }
 
 function renderBall(args: RenderArgs) {
-  const { context, pointer, size, state } = args
+  const { context, size, state } = args
   const { w, h } = size
 
   context.translate(w / 2, h / 2)
@@ -63,7 +63,7 @@ function renderBall(args: RenderArgs) {
 }
 
 export function render(args: RenderArgs) {
-  const { context, pointer, size, state } = args
+  const { context, size } = args
   const { w, h } = size
   context.clearRect(0, 0, w, h)
 

@@ -1,7 +1,8 @@
-import { fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, startWith } from 'rxjs/operators'
-import { newGame } from './game'
-import { CanvasSize, Key } from './types'
+import {fromEvent, merge, Observable} from 'rxjs'
+import {map, mapTo, startWith} from 'rxjs/operators'
+import {newGame} from './game'
+import {CanvasSize, Key} from './types'
+import { newInput } from './input'
 
 async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
@@ -36,26 +37,12 @@ async function main() {
 
   key$.subscribe((v) => console.log(v))
 
-  const pointer$ = merge(
-    fromEvent<PointerEvent>(canvas, 'pointerleave').pipe(mapTo(null)),
-    merge(
-      fromEvent<PointerEvent>(canvas, 'pointermove'),
-      fromEvent<PointerEvent>(canvas, 'pointerup'),
-      fromEvent<PointerEvent>(canvas, 'pointerdown'),
-      fromEvent<PointerEvent>(canvas, 'pointerenter')
-    ).pipe(
-      map(({ offsetX: x, offsetY: y, pressure }) => ({
-        x,
-        y,
-        down: pressure > 0,
-      }))
-    )
-  ).pipe(startWith(null))
+  const input$ = await newInput()
 
   await newGame({
     context,
     size$,
-    pointer$,
+    input$,
     key$,
   })
 

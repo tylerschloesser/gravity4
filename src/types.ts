@@ -5,12 +5,6 @@ export interface CanvasSize {
   h: number
 }
 
-export interface Pointer {
-  x: number
-  y: number
-  down: boolean
-}
-
 export interface Input {
   pos: { x: number, y: number } | null
   down: boolean
@@ -26,13 +20,13 @@ export interface Game {}
 export interface GameArgs {
   context: CanvasRenderingContext2D
   size$: Observable<CanvasSize>
-  pointer$: Observable<Pointer | null>
+  input$: Observable<Input>
   key$: Observable<Key>
 }
 
 export interface RenderArgs {
   context: CanvasRenderingContext2D
-  pointer: Pointer | null
+  input: Input
   size: CanvasSize
   state: GameState
   angle: number

@@ -1,8 +1,8 @@
-import { animationFrames, pipe } from 'rxjs'
-import { map, scan, withLatestFrom } from 'rxjs/operators'
-import { newPhysics } from './physics'
-import { render } from './render'
-import { Game, GameArgs, GameState, Pointer } from './types'
+import {animationFrames, pipe} from 'rxjs'
+import {map, scan, withLatestFrom} from 'rxjs/operators'
+import {newPhysics} from './physics'
+import {render} from './render'
+import {Game, GameArgs, GameState, Input} from './types'
 
 const mapDelta = pipe(
   scan<{ elapsed: number }, { delta: number; prev: number }>(
@@ -18,7 +18,7 @@ const mapDelta = pipe(
 )
 
 export async function newGame(init: GameArgs): Promise<Game> {
-  const { context, size$, pointer$, key$ } = init
+  const { context, size$, input$, key$ } = init
 
   const boxes: GameState['boxes'] = []
 
@@ -39,24 +39,24 @@ export async function newGame(init: GameArgs): Promise<Game> {
     boxes,
   })
 
-  let lastPointer: Pointer | null = null
+  let lastInput: Input | null = null
 
   let av = 0
   let angle = 0
 
   animationFrames()
-    .pipe(mapDelta, withLatestFrom(pointer$, size$))
-    .subscribe(([delta, pointer, size]) => {
+    .pipe(mapDelta, withLatestFrom(input$, size$))
+    .subscribe(([delta, input, size]) => {
       let drag: { x: number; y: number } | null = null
-      if (lastPointer?.down && pointer?.down) {
-        if (pointer.x - lastPointer.x !== 0) {
+      if (lastInput?.pos && lastInput?.down && input.pos && input?.down) {
+        if (input.pos.x - lastInput.pos.x !== 0) {
           drag = {
-            x: pointer.x - lastPointer.x,
-            y: pointer.y - lastPointer.y,
+            x: input.pos.x - lastInput.pos.x,
+            y: input.pos.y - lastInput.pos.y,
           }
         }
       }
-      lastPointer = pointer
+      lastInput = input
 
       if (drag) {
         const POW = 1.8
@@ -81,7 +81,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
       angle += -av
 
       const state = physics.update({ delta, angle, size })
-      render({ state, context, pointer, size, angle })
+      render({ state, context, input, size, angle })
     })
 
   // game is never over
