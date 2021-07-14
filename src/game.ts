@@ -47,6 +47,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
   animationFrames()
     .pipe(mapDelta, withLatestFrom(input$, size$))
     .subscribe(([delta, input, size]) => {
+      // TODO move this to input.ts
       let drag: { x: number; y: number } | null = null
       if (lastInput?.pos && lastInput?.down && input.pos && input?.down) {
         if (input.pos.x - lastInput.pos.x !== 0) {
