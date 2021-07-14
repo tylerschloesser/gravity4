@@ -18,7 +18,7 @@ const mapDelta = pipe(
 )
 
 export async function newGame(init: GameArgs): Promise<Game> {
-  const { context, size$, input$, key$ } = init
+  const { context, size$, input$, } = init
 
   const boxes: GameState['boxes'] = []
 

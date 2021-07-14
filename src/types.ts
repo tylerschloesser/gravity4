@@ -21,7 +21,6 @@ export interface GameArgs {
   context: CanvasRenderingContext2D
   size$: Observable<CanvasSize>
   input$: Observable<Input>
-  key$: Observable<Key>
 }
 
 export interface RenderArgs {

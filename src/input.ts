@@ -1,9 +1,9 @@
 import { fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, startWith } from 'rxjs/operators'
+import { map, mapTo, mergeMap, startWith, withLatestFrom } from 'rxjs/operators'
 import { Input } from './types'
 
 export async function newInput(): Promise<Observable<Input>> {
-  return merge(
+  const pointer$ = merge(
     fromEvent<PointerEvent>(window, 'pointerleave').pipe(mapTo(null)),
     merge(
       fromEvent<PointerEvent>(window, 'pointermove'),
@@ -19,9 +19,22 @@ export async function newInput(): Promise<Observable<Input>> {
     )
   ).pipe(
     startWith(null),
-    map((pointer) => ({
-      pos: pointer,
-      down: pointer?.down ?? false,
-    }))
   )
+
+  const key$ = merge(
+    fromEvent<KeyboardEvent>(window, 'keydown').pipe(
+      map(({ key }) => ({ key, down: true }))
+    ),
+    fromEvent<KeyboardEvent>(window, 'keyup').pipe(
+      map(({ key }) => ({ key, down: false }))
+    )
+  ).pipe(
+    startWith({ key: ' ', down: false }),
+    map(({ down }) => down)
+  )
+
+  return pointer$.pipe(withLatestFrom(key$), map(([pointer, key]) => ({
+    pos: pointer ? { x: pointer.x, y: pointer.y } : null,
+    down: pointer?.down || key,
+  })))
 }
