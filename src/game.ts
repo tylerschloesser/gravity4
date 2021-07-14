@@ -37,13 +37,6 @@ export async function newGame(init: GameArgs): Promise<Game> {
   const physics = await newPhysics({
     ball: { x: 50, y: 20, r: 7, angle: 0 },
     boxes,
-    // boxes: [
-    //   {
-    //     x: 10,
-    //     y: 50,
-    //     size: 80,
-    //   },
-    // ],
   })
 
   let lastPointer: Pointer | null = null
@@ -73,7 +66,6 @@ export async function newGame(init: GameArgs): Promise<Game> {
           ((Math.sign(drag.x) * Math.pow(Math.abs(drag.x), POW)) / size.w) *
           (delta / 1000) *
           (Math.PI / 180)
-        console.log(dx)
         av = dx * SCALE
       } else {
         //av = Math.sign(av) * Math.max(Math.abs(av) - Math.sqrt(delta / 5000), 0)
