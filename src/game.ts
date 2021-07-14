@@ -18,7 +18,7 @@ const mapDelta = pipe(
 )
 
 export async function newGame(init: GameArgs): Promise<Game> {
-  const { context, resize$, pointer$ } = init
+  const { context, size$, pointer$ } = init
 
   const boxes: GameState['boxes'] = []
 
@@ -45,7 +45,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
   let angle = 0
 
   animationFrames()
-    .pipe(mapDelta, withLatestFrom(pointer$, resize$))
+    .pipe(mapDelta, withLatestFrom(pointer$, size$))
     .subscribe(([delta, pointer, size]) => {
       let drag: { x: number; y: number } | null = null
       if (lastPointer?.down && pointer?.down) {

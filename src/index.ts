@@ -7,7 +7,7 @@ async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
   const context = canvas.getContext('2d')!
 
-  const resize$ = new Observable<CanvasSize>((subscriber) => {
+  const size$ = new Observable<CanvasSize>((subscriber) => {
     new ResizeObserver((entries) => {
       const {
         contentRect: { width: w, height: h },
@@ -43,7 +43,7 @@ async function main() {
 
   await newGame({
     context,
-    resize$,
+    size$,
     pointer$,
   })
 

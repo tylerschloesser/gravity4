@@ -15,7 +15,7 @@ export interface Game {}
 
 export interface GameArgs {
   context: CanvasRenderingContext2D
-  resize$: Observable<CanvasSize>
+  size$: Observable<CanvasSize>
   pointer$: Observable<Pointer | null>
 }
 
