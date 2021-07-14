@@ -1,7 +1,7 @@
 import { fromEvent, merge, Observable } from 'rxjs'
 import { map, mapTo, startWith } from 'rxjs/operators'
 import { newGame } from './game'
-import { CanvasSize } from './types'
+import { CanvasSize, Key } from './types'
 
 async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
@@ -25,6 +25,17 @@ async function main() {
     e.preventDefault()
   })
 
+  const key$: Observable<Key> = merge(
+    fromEvent<KeyboardEvent>(window, 'keydown').pipe(
+      map(({ key }) => ({ key, down: true }))
+    ),
+    fromEvent<KeyboardEvent>(window, 'keyup').pipe(
+      map(({ key }) => ({ key, down: false }))
+    )
+  ).pipe(startWith({ key: ' ', down: false }))
+
+  key$.subscribe((v) => console.log(v))
+
   const pointer$ = merge(
     fromEvent<PointerEvent>(canvas, 'pointerleave').pipe(mapTo(null)),
     merge(
@@ -45,6 +56,7 @@ async function main() {
     context,
     size$,
     pointer$,
+    key$,
   })
 
   console.log('game over')

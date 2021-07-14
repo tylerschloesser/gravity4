@@ -11,12 +11,18 @@ export interface Pointer {
   down: boolean
 }
 
+export interface Key {
+  key: string
+  down: boolean
+}
+
 export interface Game {}
 
 export interface GameArgs {
   context: CanvasRenderingContext2D
   size$: Observable<CanvasSize>
   pointer$: Observable<Pointer | null>
+  key$: Observable<Key>
 }
 
 export interface RenderArgs {
