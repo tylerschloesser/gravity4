@@ -32,9 +32,9 @@ export async function newInput(): Promise<Observable<Input>> {
       }),
       { prev: null, next: null }
     ),
-    // TODO move drag logic here
-    map(({ next }) => next)
   )
+
+  // TODO move drag to obvservable here
 
   const key$ = merge(
     fromEvent<KeyboardEvent>(window, 'keydown').pipe(
@@ -51,8 +51,8 @@ export async function newInput(): Promise<Observable<Input>> {
   return pointer$.pipe(
     withLatestFrom(key$),
     map(([pointer, key]) => ({
-      pos: pointer ? { x: pointer.x, y: pointer.y } : null,
-      down: pointer?.down || key,
+      pos: pointer.next ? { x: pointer.next.x, y: pointer.next.y } : null,
+      down: pointer.next?.down || key,
     }))
   )
 }
