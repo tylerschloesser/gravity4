@@ -16,8 +16,8 @@ function calculateAngle({
   let angle = state.angle
   let av = state.angularVelocity
   if (drag) {
-    const POW = 1.7
-    const SCALE = 0.5
+    const POW = 1.5
+    const SCALE = 2
 
     const dx =
       ((Math.sign(drag.x) * Math.pow(Math.abs(drag.x), POW)) / size.w) *
