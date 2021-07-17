@@ -35,8 +35,13 @@ export async function newInput(): Promise<Observable<Input>> {
       map(({ key }) => ({ key, down: false }))
     )
   ).pipe(
-    startWith({ key: ' ', down: false }),
-    map(({ down }) => down)
+    scan((acc, { key, down }) => {
+      if (key === ' ') {
+        return down
+      }
+      return acc
+    }, false),
+    startWith(false),
   )
 
   return pointer$.pipe(

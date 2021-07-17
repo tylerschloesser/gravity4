@@ -68,7 +68,7 @@ function updatePhysics({
 
   //grav.op_sub(ballBody.GetPosition())
   grav.Normalize()
-  grav.op_mul(500)
+  grav.op_mul(100)
 
   grav.op_mul(ballBody.GetMass())
   ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
