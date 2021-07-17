@@ -28,7 +28,7 @@ function renderBox(args: RenderArgs, i: number) {
   context.resetTransform()
 }
 
-function renderPointer(args: RenderArgs) {
+function renderInput(args: RenderArgs) {
   const { context, input, size, state } = args
   const { w, h } = size
   if (input.pos) {
@@ -76,5 +76,5 @@ export function render(args: RenderArgs) {
     renderBox(args, i)
   })
   renderBall(args)
-  renderPointer(args)
+  renderInput(args)
 }
