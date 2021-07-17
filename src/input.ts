@@ -27,13 +27,13 @@ export async function newInput(): Promise<Observable<Input>> {
     )
   ).pipe(
     startWith<Pointer | null>(null),
-    scan<Pointer | null, { prev: Pointer | null; next: Pointer | null }>(
-      (acc, next) => ({
-        prev: acc?.next ?? null,
-        next,
-      }),
-      { prev: null, next: null }
-    ),
+    // scan<Pointer | null, { prev: Pointer | null; next: Pointer | null }>(
+    //   (acc, next) => ({
+    //     prev: acc?.next ?? null,
+    //     next,
+    //   }),
+    //   { prev: null, next: null }
+    // ),
   )
 
   // TODO move drag to obvservable here
@@ -52,9 +52,18 @@ export async function newInput(): Promise<Observable<Input>> {
 
   return pointer$.pipe(
     withLatestFrom(key$),
-    map(([pointer, key]) => ({
-      pos: pointer.next ? { x: pointer.next.x, y: pointer.next.y } : null,
-      down: pointer.next?.down || key,
+    map(([pointer, key]) => {
+      //let drag: { x: number, y: number } | null = null
+      return pointer ? {
+        ...pointer,
+        down: pointer.down || key,
+      } : null
+    }),
+
+    // TODO remove
+    map((pointer) => ({
+      pos: pointer ? { x: pointer.x, y: pointer.y } : null,
+      down: pointer?.down ?? false,
     }))
   )
 }
