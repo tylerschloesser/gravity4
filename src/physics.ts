@@ -30,6 +30,7 @@ function calculateAngle({
       Math.sign(av) * (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
   }
 
+  // enforce max av
   av =
     Math.sign(av) * Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 2)
 
