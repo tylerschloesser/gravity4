@@ -78,6 +78,7 @@ export async function newInput(): Promise<Observable<Input>> {
       //console.log(buffer)
     }),
     map((buffer) => {
+      // TODO this may not be a contiguous stream of down/not down events
       const first = buffer.length > 0 ? buffer[0] : null
       const last = buffer.length > 0 ? buffer[buffer.length - 1] : null
 
