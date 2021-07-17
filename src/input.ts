@@ -6,6 +6,7 @@ interface Pointer {
   x: number
   y: number
   down: boolean
+  time: number
 }
 
 export async function newInput(): Promise<Observable<Input>> {
@@ -17,10 +18,11 @@ export async function newInput(): Promise<Observable<Input>> {
       fromEvent<PointerEvent>(window, 'pointerdown'),
       fromEvent<PointerEvent>(window, 'pointerenter')
     ).pipe(
-      map(({ offsetX: x, offsetY: y, pressure }) => ({
-        x,
-        y,
-        down: pressure > 0,
+      map((e) => ({
+        x: e.offsetX,
+        y: e.offsetY,
+        down: e.pressure > 0,
+        time: e.timeStamp,
       }))
     )
   ).pipe(
