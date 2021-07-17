@@ -34,24 +34,36 @@ export async function newGame(init: GameArgs): Promise<Game> {
     }
   }
 
-  const physics = await newPhysics({
+  const initialState: GameState = {
     ball: { x: 50, y: 20, r: 7, angle: 0 },
     boxes,
     angle: 0,
     angularVelocity: 0,
-  })
+  }
 
-  animationFrames()
+  const physics = await newPhysics(initialState)
+
+  const state$ = animationFrames().pipe(
+    mapDelta,
+    withLatestFrom(input$, size$),
+    scan(
+      (state, [delta, input, size]) =>
+        physics.update({ delta, size, input, state }),
+      initialState
+    )
+  )
+
+  state$
     .pipe(
-      mapDelta, 
       withLatestFrom(input$, size$),
-      map(([ delta, input, size ]) => ({
+      map(([state, input, size]) => ({
+        state,
         input,
         size,
-        state: physics.update({ delta, size, input }),
         context,
       }))
-    ).subscribe(render)
+    )
+    .subscribe(render)
 
   // game is never over
   return new Promise(() => {})

@@ -11,7 +11,7 @@ function calculateAngle({
   input: Input
   state: GameState
   size: { w: number; h: number }
-}): { angle: number, angularVelocity: number } {
+}): { angle: number; angularVelocity: number } {
   const { drag } = input
   let angle = state.angle
   let av = state.angularVelocity
@@ -27,20 +27,68 @@ function calculateAngle({
   } else {
     //av = Math.sign(av) * Math.max(Math.abs(av) - Math.sqrt(delta / 5000), 0)
     av =
-      Math.sign(av) *
-      (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
+      Math.sign(av) * (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
   }
 
   av =
-    Math.sign(av) *
-    Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 2)
+    Math.sign(av) * Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 2)
 
-  
   angle += -av
 
   return {
     angle,
-    angularVelocity: av
+    angularVelocity: av,
+  }
+}
+
+function updatePhysics({
+  box2d,
+  world,
+  ballBody,
+  state,
+  delta,
+  size,
+  input,
+}: {
+  box2d: typeof Box2D & EmscriptenModule
+  world: Box2D.b2World
+  ballBody: Box2D.b2Body
+  state: GameState
+  delta: number
+  size: { w: number; h: number }
+  input: Input
+}): GameState {
+  const { angle, angularVelocity } = calculateAngle({
+    delta,
+    input,
+    state,
+    size,
+  })
+  const grav = new box2d.b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
+
+  //grav.op_sub(ballBody.GetPosition())
+  grav.Normalize()
+  grav.op_mul(500)
+
+  grav.op_mul(ballBody.GetMass())
+  ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
+
+  const velocityIterations = 40
+  const positionIterations = 40
+  world.Step(delta / 1000, velocityIterations, positionIterations)
+
+  const ballPosition = ballBody.GetPosition()
+
+  return {
+    ...state,
+    ball: {
+      ...state.ball,
+      x: ballPosition.x,
+      y: ballPosition.y,
+      angle: ballBody.GetAngle(),
+    },
+    angle,
+    angularVelocity,
   }
 }
 
@@ -106,48 +154,27 @@ export async function newPhysics(state: GameState) {
   //   body.CreateFixture(shape, 1)
   // }
 
-  const velocityIterations = 40
-  const positionIterations = 40
-
   return {
     update: ({
       delta,
       size,
       input,
+      state,
     }: {
       delta: number
       size: { w: number; h: number }
       input: Input
+      state: GameState
     }) => {
-      const { angle, angularVelocity } = calculateAngle({ delta, input, state, size })
-      const grav = new b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
-
-      // TODO this is hacky
-      state.angle = angle
-      state.angularVelocity = angularVelocity
-
-      //grav.op_sub(ballBody.GetPosition())
-      grav.Normalize()
-      grav.op_mul(500)
-
-      grav.op_mul(ballBody.GetMass())
-      ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
-
-      world.Step(delta / 1000, velocityIterations, positionIterations)
-
-      const ballPosition = ballBody.GetPosition()
-
-      return {
-        ...state,
-        ball: {
-          ...state.ball,
-          x: ballPosition.x,
-          y: ballPosition.y,
-          angle: ballBody.GetAngle(),
-        },
-        angle,
-        angularVelocity,
-      }
+      return updatePhysics({
+        box2d,
+        world,
+        ballBody,
+        state,
+        delta,
+        size,
+        input,
+      })
     },
   }
 }
