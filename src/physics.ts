@@ -25,7 +25,6 @@ function calculateAngle({
       (Math.PI / 180)
     av = dx * SCALE
   } else {
-    //av = Math.sign(av) * Math.max(Math.abs(av) - Math.sqrt(delta / 5000), 0)
     av =
       Math.sign(av) * (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
   }
@@ -67,7 +66,6 @@ function updatePhysics({
   })
   const grav = new box2d.b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
 
-  //grav.op_sub(ballBody.GetPosition())
   grav.Normalize()
   grav.op_mul(100)
 
