@@ -1,5 +1,5 @@
 import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, scan, startWith, withLatestFrom } from 'rxjs/operators'
+import { map, mapTo, scan, startWith } from 'rxjs/operators'
 import { Input } from './types'
 
 interface Pointer {
