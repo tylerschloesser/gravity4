@@ -66,11 +66,24 @@ function updatePhysics({
   })
   const grav = new box2d.b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
 
+  const gravScale = 200
   grav.Normalize()
-  grav.op_mul(100)
+  grav.op_mul(gravScale)
 
   grav.op_mul(ballBody.GetMass())
   ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
+
+  const maxVel = gravScale / 3
+
+  if (ballBody.GetLinearVelocity().Length() > maxVel) {
+    const newVelocity = new box2d.b2Vec2(
+      ballBody.GetLinearVelocity().x,
+      ballBody.GetLinearVelocity().y
+    )
+    newVelocity.Normalize()
+    newVelocity.op_mul(maxVel)
+    ballBody.SetLinearVelocity(newVelocity)
+  }
 
   const velocityIterations = 40
   const positionIterations = 40
