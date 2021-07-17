@@ -80,5 +80,5 @@ export function render(args: RenderArgs) {
     renderBox(args, i)
   })
   renderBall(args)
-  renderInput(args)
+  //renderInput(args)
 }
