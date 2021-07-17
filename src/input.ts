@@ -56,27 +56,32 @@ export async function newInput(): Promise<Observable<Input>> {
           }
         : null
     ),
-    scan<Pointer | null, { prev: Pointer | null; next: Pointer | null }>(
-      (acc, next) => ({
-        prev: acc?.next ?? null,
-        next,
-      }),
-      { prev: null, next: null }
-    ),
-    map(({ prev, next }) => {
-      if (!prev || !prev.down || !next?.down) {
+    scan<Pointer | null, Pointer[]>((acc, next) => {
+      const now = performance.now()
+      return [...acc, ...(next ? [next] : [])].filter(
+        ({ time }) => time > now - 100
+      )
+    }, []),
+    tap((buffer) => {
+      //console.log(buffer)
+    }),
+    map((buffer) => {
+      const first = buffer.length > 0 ? buffer[0] : null
+      const last = buffer.length > 0 ? buffer[buffer.length - 1] : null
+
+      if (!first || !first.down || !last?.down) {
         return {
-          pos: next,
-          down: next?.down ?? false,
+          pos: last,
+          down: last?.down ?? false,
           drag: null,
         }
       }
-      if (!next) {
+      if (!last) {
         return { pos: null, down: false, drag: null }
       }
-      let dx = next.x - prev.x
-      let dy = next.y - prev.y
-      let dt = (next.time - prev.time) / 1000 // per second
+      let dx = last.x - first.x
+      let dy = last.y - first.y
+      let dt = (last.time - first.time) / 1000 // per second
 
       let drag = null
       // dt might be 0, not sure why though
@@ -85,8 +90,8 @@ export async function newInput(): Promise<Observable<Input>> {
       }
 
       return {
-        pos: next,
-        down: next.down,
+        pos: last,
+        down: last.down,
         drag,
       }
     })
