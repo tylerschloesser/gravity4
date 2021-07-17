@@ -60,7 +60,6 @@ export async function newInput(): Promise<Observable<Input>> {
       }),
       { prev: null, next: null }
     ),
-    tap(console.log),
     map(({ prev, next }) => {
       if (!prev || !prev.down || !next?.down) {
         return {
