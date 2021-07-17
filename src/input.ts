@@ -18,12 +18,24 @@ export async function newInput(): Promise<Observable<Input>> {
       fromEvent<PointerEvent>(window, 'pointerdown'),
       fromEvent<PointerEvent>(window, 'pointerenter')
     ).pipe(
-      map((e) => ({
-        x: e.offsetX,
-        y: e.offsetY,
-        down: e.type === 'pointerup' ? false : e.pressure > 0,
-        time: e.timeStamp,
-      }))
+      map((e) => {
+        let down = e.pressure > 0
+        switch (e.type) {
+          case 'pointerup':
+            down = false
+            break
+          case 'pointerdown':
+            down = true
+            break
+        }
+        return {
+          x: e.offsetX,
+          y: e.offsetY,
+          down,
+          time: e.timeStamp,
+          type: e.type, // for debugging
+        }
+      })
     )
   ).pipe(startWith<Pointer | null>(null))
 
