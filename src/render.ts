@@ -31,6 +31,10 @@ function renderBox(args: RenderArgs, i: number) {
 function renderInput(args: RenderArgs) {
   const { context, input, size, state } = args
   const { w, h } = size
+  if (w <= 600) {
+    // assume mobile
+    return
+  }
   if (input.pos) {
     context.strokeStyle = 'white'
     if (input.down) {

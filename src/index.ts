@@ -1,7 +1,8 @@
-import {fromEvent, Observable} from 'rxjs'
-import {newGame} from './game'
-import {newInput} from './input'
-import {CanvasSize} from './types'
+import { fromEvent, Observable } from 'rxjs'
+import { distinctUntilChanged, tap } from 'rxjs/operators'
+import { newGame } from './game'
+import { newInput } from './input'
+import { CanvasSize } from './types'
 
 async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
@@ -18,13 +19,16 @@ async function main() {
     }).observe(canvas)
   })
 
+  size$
+    .pipe(distinctUntilChanged((a, b) => a.w === b.w && a.h === b.h))
+    .subscribe((size) => console.log('size', size))
+
   fromEvent<PointerEvent>(document, 'touchmove', {
     passive: false,
   }).subscribe((e) => {
     // disable bounce on iOS (passive: false is required)
     e.preventDefault()
   })
-
 
   const input$ = await newInput()
 
