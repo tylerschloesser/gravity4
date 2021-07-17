@@ -1,4 +1,4 @@
-import { fromEvent, merge, Observable } from 'rxjs'
+import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
 import { map, mapTo, scan, startWith, withLatestFrom } from 'rxjs/operators'
 import { Input } from './types'
 
@@ -49,8 +49,7 @@ export async function newInput(): Promise<Observable<Input>> {
     startWith(false)
   )
 
-  return pointer$.pipe(
-    withLatestFrom(key$),
+  return combineLatest([pointer$, key$]).pipe(
     map(([pointer, key]) =>
       pointer
         ? {
