@@ -11,10 +11,15 @@ interface Pointer {
 
 export async function newInput(): Promise<Observable<Input>> {
   const pointer$ = merge(
-    fromEvent<PointerEvent>(window, 'pointerleave').pipe(mapTo(null)),
+    merge(fromEvent<PointerEvent>(window, 'pointerleave')).pipe(mapTo(null)),
     merge(
+      fromEvent<PointerEvent>(window, 'pointerup').pipe(
+        map((e) => ({
+          ...e,
+          pressure: 0,
+        }))
+      ),
       fromEvent<PointerEvent>(window, 'pointermove'),
-      fromEvent<PointerEvent>(window, 'pointerup'),
       fromEvent<PointerEvent>(window, 'pointerdown'),
       fromEvent<PointerEvent>(window, 'pointerenter')
     ).pipe(
@@ -41,7 +46,7 @@ export async function newInput(): Promise<Observable<Input>> {
       }
       return acc
     }, false),
-    startWith(false),
+    startWith(false)
   )
 
   return pointer$.pipe(
