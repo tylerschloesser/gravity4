@@ -37,40 +37,15 @@ export async function newGame(init: GameArgs): Promise<Game> {
   const physics = await newPhysics({
     ball: { x: 50, y: 20, r: 7, angle: 0 },
     boxes,
+    angle: 0,
+    angularVelocity: 0,
   })
-
-  let av = 0
-  let angle = 0
 
   animationFrames()
     .pipe(mapDelta, withLatestFrom(input$, size$))
     .subscribe(([delta, input, size]) => {
-
-      const { drag } = input
-      if (drag) {
-        const POW = 1.8
-        const SCALE = 1
-
-        const dx =
-          ((Math.sign(drag.x) * Math.pow(Math.abs(drag.x), POW)) / size.w) *
-          (delta / 1000) *
-          (Math.PI / 180)
-        av = dx * SCALE
-      } else {
-        //av = Math.sign(av) * Math.max(Math.abs(av) - Math.sqrt(delta / 5000), 0)
-        av =
-          Math.sign(av) *
-          (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
-      }
-
-      av =
-        Math.sign(av) *
-        Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 2)
-
-      angle += -av
-
-      const state = physics.update({ delta, angle, size })
-      render({ state, context, input, size, angle })
+      const state = physics.update({ delta, size, input })
+      render({ state, context, input, size, angle: state.angle })
     })
 
   // game is never over

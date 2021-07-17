@@ -1,5 +1,48 @@
 import Box2DFactory from 'box2d-wasm'
-import { GameState } from './types'
+import { GameState, Input } from './types'
+
+function calculateAngle({
+  delta,
+  input,
+  state,
+  size,
+}: {
+  delta: number
+  input: Input
+  state: GameState
+  size: { w: number; h: number }
+}): { angle: number, angularVelocity: number } {
+  const { drag } = input
+  let angle = state.angle
+  let av = state.angularVelocity
+  if (drag) {
+    const POW = 1.8
+    const SCALE = 1
+
+    const dx =
+      ((Math.sign(drag.x) * Math.pow(Math.abs(drag.x), POW)) / size.w) *
+      (delta / 1000) *
+      (Math.PI / 180)
+    av = dx * SCALE
+  } else {
+    //av = Math.sign(av) * Math.max(Math.abs(av) - Math.sqrt(delta / 5000), 0)
+    av =
+      Math.sign(av) *
+      (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
+  }
+
+  av =
+    Math.sign(av) *
+    Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 2)
+
+  
+  angle += -av
+
+  return {
+    angle,
+    angularVelocity: av
+  }
+}
 
 export async function newPhysics(state: GameState) {
   const box2d = await Box2DFactory()
@@ -69,15 +112,19 @@ export async function newPhysics(state: GameState) {
   return {
     update: ({
       delta,
-      angle,
       size,
+      input,
     }: {
       delta: number
-      angle: number
       size: { w: number; h: number }
+      input: Input
     }) => {
-      //const grav = new box2d.b2Transform(new b2Vec2(0, 1), angle).p
+      const { angle, angularVelocity } = calculateAngle({ delta, input, state, size })
       const grav = new b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
+
+      // TODO this is hacky
+      state.angle = angle
+      state.angularVelocity = angularVelocity
 
       //grav.op_sub(ballBody.GetPosition())
       grav.Normalize()
@@ -98,6 +145,8 @@ export async function newPhysics(state: GameState) {
           y: ballPosition.y,
           angle: ballBody.GetAngle(),
         },
+        angle,
+        angularVelocity,
       }
     },
   }

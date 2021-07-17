@@ -35,4 +35,6 @@ export interface RenderArgs {
 export interface GameState {
   ball: { x: number; y: number; r: number; angle: number }
   boxes: { x: number; y: number; size: number }[]
+  angle: number
+  angularVelocity: number
 }
