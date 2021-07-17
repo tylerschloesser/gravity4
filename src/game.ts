@@ -39,29 +39,17 @@ export async function newGame(init: GameArgs): Promise<Game> {
     boxes,
   })
 
-  let lastInput: Input | null = null
-
   let av = 0
   let angle = 0
 
   animationFrames()
     .pipe(mapDelta, withLatestFrom(input$, size$))
     .subscribe(([delta, input, size]) => {
-      // TODO move this to input.ts
-      let drag: { x: number; y: number } | null = null
-      if (lastInput?.pos && lastInput?.down && input.pos && input?.down) {
-        if (input.pos.x - lastInput.pos.x !== 0) {
-          drag = {
-            x: input.pos.x - lastInput.pos.x,
-            y: input.pos.y - lastInput.pos.y,
-          }
-        }
-      }
-      lastInput = input
 
+      const { drag } = input
       if (drag) {
         const POW = 1.8
-        const SCALE = 200
+        const SCALE = 1
 
         const dx =
           ((Math.sign(drag.x) * Math.pow(Math.abs(drag.x), POW)) / size.w) *
@@ -77,7 +65,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
 
       av =
         Math.sign(av) *
-        Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 3)
+        Math.min(Math.abs(av), (Math.PI * (delta / 1000) * 10) / 2)
 
       angle += -av
 

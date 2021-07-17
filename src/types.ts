@@ -8,7 +8,8 @@ export interface CanvasSize {
 export interface Input {
   pos: { x: number, y: number } | null
   down: boolean
-}
+  drag: { x: number, y: number } | null
+} 
 
 export interface Key {
   key: string

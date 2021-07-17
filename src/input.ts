@@ -25,18 +25,7 @@ export async function newInput(): Promise<Observable<Input>> {
         time: e.timeStamp,
       }))
     )
-  ).pipe(
-    startWith<Pointer | null>(null),
-    // scan<Pointer | null, { prev: Pointer | null; next: Pointer | null }>(
-    //   (acc, next) => ({
-    //     prev: acc?.next ?? null,
-    //     next,
-    //   }),
-    //   { prev: null, next: null }
-    // ),
-  )
-
-  // TODO move drag to obvservable here
+  ).pipe(startWith<Pointer | null>(null))
 
   const key$ = merge(
     fromEvent<KeyboardEvent>(window, 'keydown').pipe(
@@ -52,18 +41,47 @@ export async function newInput(): Promise<Observable<Input>> {
 
   return pointer$.pipe(
     withLatestFrom(key$),
-    map(([pointer, key]) => {
-      //let drag: { x: number, y: number } | null = null
-      return pointer ? {
-        ...pointer,
-        down: pointer.down || key,
-      } : null
-    }),
+    map(([pointer, key]) =>
+      pointer
+        ? {
+            ...pointer,
+            down: pointer.down || key,
+          }
+        : null
+    ),
+    scan<Pointer | null, { prev: Pointer | null; next: Pointer | null }>(
+      (acc, next) => ({
+        prev: acc?.next ?? null,
+        next,
+      }),
+      { prev: null, next: null }
+    ),
+    map(({ prev, next }) => {
+      if (!prev || !prev.down || !next?.down) {
+        return {
+          pos: next,
+          down: next?.down ?? false,
+          drag: null,
+        }
+      }
+      if (!next) {
+        return { pos: null, down: false, drag: null }
+      }
+      let dx = next.x - prev.x
+      let dy = next.y - prev.y
+      let dt = (next.time - prev.time) / 1000 // per second
 
-    // TODO remove
-    map((pointer) => ({
-      pos: pointer ? { x: pointer.x, y: pointer.y } : null,
-      down: pointer?.down ?? false,
-    }))
+      // TODO i've seen this be 0, but idk how...
+      if (dt === 0) {
+        dt = 1
+        dx = dy = 0
+      }
+
+      return {
+        pos: next,
+        down: next.down,
+        drag: { x: dx / dt, y: dy / dt },
+      }
+    })
   )
 }
