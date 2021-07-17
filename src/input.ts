@@ -1,5 +1,5 @@
 import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, scan, startWith } from 'rxjs/operators'
+import { map, mapTo, scan, startWith, tap } from 'rxjs/operators'
 import { Input } from './types'
 
 interface Pointer {
@@ -13,12 +13,7 @@ export async function newInput(): Promise<Observable<Input>> {
   const pointer$ = merge(
     merge(fromEvent<PointerEvent>(window, 'pointerleave')).pipe(mapTo(null)),
     merge(
-      fromEvent<PointerEvent>(window, 'pointerup').pipe(
-        map((e) => ({
-          ...e,
-          pressure: 0,
-        }))
-      ),
+      fromEvent<PointerEvent>(window, 'pointerup'),
       fromEvent<PointerEvent>(window, 'pointermove'),
       fromEvent<PointerEvent>(window, 'pointerdown'),
       fromEvent<PointerEvent>(window, 'pointerenter')
@@ -26,7 +21,7 @@ export async function newInput(): Promise<Observable<Input>> {
       map((e) => ({
         x: e.offsetX,
         y: e.offsetY,
-        down: e.pressure > 0,
+        down: e.type === 'pointerup' ? false : e.pressure > 0,
         time: e.timeStamp,
       }))
     )
@@ -65,6 +60,7 @@ export async function newInput(): Promise<Observable<Input>> {
       }),
       { prev: null, next: null }
     ),
+    tap(console.log),
     map(({ prev, next }) => {
       if (!prev || !prev.down || !next?.down) {
         return {
