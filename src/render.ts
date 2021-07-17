@@ -8,7 +8,7 @@ function renderBox(args: RenderArgs, i: number) {
   const scale = w / 100
 
   context.translate(w / 2, h / 2)
-  context.rotate(-args.angle)
+  context.rotate(-args.state.angle)
 
   context.translate(
     box.x * scale + (box.size / 2) * scale,

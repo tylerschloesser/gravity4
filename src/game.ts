@@ -1,8 +1,8 @@
-import {animationFrames, pipe} from 'rxjs'
-import {map, scan, withLatestFrom} from 'rxjs/operators'
-import {newPhysics} from './physics'
-import {render} from './render'
-import {Game, GameArgs, GameState, Input} from './types'
+import { animationFrames, pipe } from 'rxjs'
+import { map, scan, withLatestFrom } from 'rxjs/operators'
+import { newPhysics } from './physics'
+import { render } from './render'
+import { Game, GameArgs, GameState, Input } from './types'
 
 const mapDelta = pipe(
   scan<{ elapsed: number }, { delta: number; prev: number }>(
@@ -18,7 +18,7 @@ const mapDelta = pipe(
 )
 
 export async function newGame(init: GameArgs): Promise<Game> {
-  const { context, size$, input$, } = init
+  const { context, size$, input$ } = init
 
   const boxes: GameState['boxes'] = []
 
@@ -42,11 +42,16 @@ export async function newGame(init: GameArgs): Promise<Game> {
   })
 
   animationFrames()
-    .pipe(mapDelta, withLatestFrom(input$, size$))
-    .subscribe(([delta, input, size]) => {
-      const state = physics.update({ delta, size, input })
-      render({ state, context, input, size, angle: state.angle })
-    })
+    .pipe(
+      mapDelta, 
+      withLatestFrom(input$, size$),
+      map(([ delta, input, size ]) => ({
+        input,
+        size,
+        state: physics.update({ delta, size, input }),
+        context,
+      }))
+    ).subscribe(render)
 
   // game is never over
   return new Promise(() => {})
