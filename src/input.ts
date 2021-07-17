@@ -45,6 +45,9 @@ export async function newInput(): Promise<Observable<Input>> {
   )
 
   return combineLatest([pointer$, key$]).pipe(
+    tap(([pointer, key]) => {
+      //console.log(pointer, key)
+    }),
     map(([pointer, key]) =>
       pointer
         ? {
@@ -75,16 +78,16 @@ export async function newInput(): Promise<Observable<Input>> {
       let dy = next.y - prev.y
       let dt = (next.time - prev.time) / 1000 // per second
 
-      // TODO i've seen this be 0, but idk how...
-      if (dt === 0) {
-        dt = 1
-        dx = dy = 0
+      let drag = null
+      // dt might be 0, not sure why though
+      if (dt > 0) {
+        drag = { x: dx / dt, y: dy / dt }
       }
 
       return {
         pos: next,
         down: next.down,
-        drag: { x: dx / dt, y: dy / dt },
+        drag,
       }
     })
   )
