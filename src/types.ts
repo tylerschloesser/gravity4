@@ -9,6 +9,8 @@ export interface Input {
   pos: { x: number; y: number } | null
   down: boolean
   drag: { x: number; y: number } | null
+
+  // have this be a number between -1 and 1
   drag2: number
 }
 
