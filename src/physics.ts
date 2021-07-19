@@ -15,6 +15,7 @@ function calculateAngle({
   const { drag } = input
   let angle = state.angle
   let av = state.angularVelocity
+
   if (drag) {
     const POW = 1.5
     const SCALE = 2
@@ -25,6 +26,7 @@ function calculateAngle({
       (Math.PI / 180)
     av = dx * SCALE
   } else {
+    // reduce av
     av =
       Math.sign(av) * (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
   }
