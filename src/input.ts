@@ -1,5 +1,12 @@
 import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
-import { map, mapTo, scan, startWith, tap } from 'rxjs/operators'
+import {
+  map,
+  mapTo,
+  scan,
+  startWith,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators'
 import { CanvasSize, Input } from './types'
 
 interface Pointer {
@@ -79,7 +86,9 @@ export async function newInput(
     tap((buffer) => {
       //console.log(buffer)
     }),
-    map((buffer) => {
+    // TODO fix this causing a delay for some reason
+    withLatestFrom(size$),
+    map(([buffer, size]) => {
       // TODO smooth this out over a longer period of time
       const next = buffer[0] ?? null
       const prev = buffer[1] ?? null
@@ -89,10 +98,11 @@ export async function newInput(
           pos: next,
           down: next?.down ?? false,
           drag: null,
+          drag2: 0,
         }
       }
       if (!next) {
-        return { pos: null, down: false, drag: null }
+        return { pos: null, down: false, drag: null, drag2: 0 }
       }
       let dx = next.x - prev.x
       let dy = next.y - prev.y
@@ -108,6 +118,7 @@ export async function newInput(
         pos: next,
         down: next.down,
         drag,
+        drag2: 0,
       }
     })
   )
