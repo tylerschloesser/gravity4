@@ -66,6 +66,17 @@ function renderBall(args: RenderArgs) {
   context.resetTransform()
 }
 
+export function renderDebug(args: RenderArgs) {
+  const fontSize = 32
+  const { context, state } = args
+
+  const av = state.angularVelocity.toFixed(3)
+
+  context.font = `${fontSize}px -apple-system, BlinkMacSystemFont`
+  context.fillStyle = 'white'
+  context.fillText(`av: ${av}`, fontSize, fontSize * 2)
+}
+
 export function render(args: RenderArgs) {
   const { context, size } = args
   const { w, h } = size
@@ -81,4 +92,6 @@ export function render(args: RenderArgs) {
   })
   renderBall(args)
   //renderInput(args)
+
+  renderDebug(args)
 }
