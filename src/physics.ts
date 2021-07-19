@@ -28,7 +28,8 @@ function calculateAngle({
   } else {
     // reduce av
     av =
-      Math.sign(av) * (Math.abs(av) - Math.abs(av) * 0.5 * (delta / 1000) * 10)
+      Math.sign(av) *
+      (Math.abs(av) - Math.abs(av) * (delta / 1000) * (0.66 * 10))
   }
 
   // enforce max av
