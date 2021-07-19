@@ -1,6 +1,6 @@
 import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
 import { map, mapTo, scan, startWith, tap } from 'rxjs/operators'
-import { Input } from './types'
+import { CanvasSize, Input } from './types'
 
 interface Pointer {
   x: number
@@ -9,7 +9,9 @@ interface Pointer {
   time: number
 }
 
-export async function newInput(): Promise<Observable<Input>> {
+export async function newInput(
+  size$: Observable<CanvasSize>
+): Promise<Observable<Input>> {
   const pointer$ = merge(
     merge(fromEvent<PointerEvent>(window, 'pointerleave')).pipe(mapTo(null)),
     merge(
@@ -70,31 +72,31 @@ export async function newInput(): Promise<Observable<Input>> {
     ),
     scan<Pointer | null, Pointer[]>((acc, next) => {
       const now = performance.now()
-      return [...acc, ...(next ? [next] : [])].filter(
-        ({ time }) => time > now - 100
+      return [...(next ? [next] : []), ...acc].filter(
+        ({ time }) => time > now - 1000
       )
     }, []),
     tap((buffer) => {
       //console.log(buffer)
     }),
     map((buffer) => {
-      // TODO this may not be a contiguous stream of down/not down events
-      const first = buffer.length > 0 ? buffer[0] : null
-      const last = buffer.length > 0 ? buffer[buffer.length - 1] : null
+      // TODO smooth this out over a longer period of time
+      const next = buffer[0] ?? null
+      const prev = buffer[1] ?? null
 
-      if (!first || !first.down || !last?.down) {
+      if (!prev || !prev.down || !next?.down) {
         return {
-          pos: last,
-          down: last?.down ?? false,
+          pos: next,
+          down: next?.down ?? false,
           drag: null,
         }
       }
-      if (!last) {
+      if (!next) {
         return { pos: null, down: false, drag: null }
       }
-      let dx = last.x - first.x
-      let dy = last.y - first.y
-      let dt = (last.time - first.time) / 1000 // per second
+      let dx = next.x - prev.x
+      let dy = next.y - prev.y
+      let dt = (next.time - prev.time) / 1000 // per second
 
       let drag = null
       // dt might be 0, not sure why though
@@ -103,8 +105,8 @@ export async function newInput(): Promise<Observable<Input>> {
       }
 
       return {
-        pos: last,
-        down: last.down,
+        pos: next,
+        down: next.down,
         drag,
       }
     })

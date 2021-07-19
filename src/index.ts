@@ -30,7 +30,7 @@ async function main() {
     e.preventDefault()
   })
 
-  const input$ = await newInput()
+  const input$ = await newInput(size$)
 
   await newGame({
     context,
