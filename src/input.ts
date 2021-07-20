@@ -1,4 +1,4 @@
-import { combineLatest, fromEvent, merge, Observable } from 'rxjs'
+import { combineLatest, fromEvent, merge, Observable, of } from 'rxjs'
 import {
   map,
   mapTo,
@@ -65,6 +65,9 @@ export async function newInput(
     startWith(false)
   )
 
+  // time window (in ms) to capture pointer events
+  const slide$ = of(100)
+
   return combineLatest([pointer$, key$]).pipe(
     tap(([pointer, key]) => {
       //console.log(pointer, key)
@@ -77,13 +80,15 @@ export async function newInput(
           }
         : null
     ),
-    scan<Pointer | null, Pointer[]>((acc, next) => {
+    withLatestFrom(slide$),
+    scan<[Pointer | null, number], Pointer[]>((acc, [next, slide]) => {
       const now = performance.now()
       return [...(next ? [next] : []), ...acc].filter(
-        ({ time }) => time > now - 100
+        ({ time }) => time > now - slide
       )
     }, []),
-    map((buffer) => {
+    withLatestFrom(slide$),
+    map(([buffer, slide]) => {
       // TODO smooth this out over a longer period of time
       const next: Pointer | null = buffer[0] ?? null
       //const prev: Pointer | null = buffer[1] ?? null
@@ -104,7 +109,7 @@ export async function newInput(
       let dy = next.y - last.y
 
       let dt = next.time - last.time
-      const correction = ((100 - dt) / 100) * dx
+      const correction = ((slide - dt) / slide) * dx
       let drag2 = {
         dx: Math.round(dx + correction),
         correction,
