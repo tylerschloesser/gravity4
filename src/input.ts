@@ -80,16 +80,17 @@ export async function newInput(
     scan<Pointer | null, Pointer[]>((acc, next) => {
       const now = performance.now()
       return [...(next ? [next] : []), ...acc].filter(
-        ({ time }) => time > now - 1000
+        ({ time }) => time > now - 100
       )
     }, []),
-    withLatestFrom([size$]),
+    withLatestFrom(size$),
     map(([buffer, size]) => {
       // TODO smooth this out over a longer period of time
-      const next = buffer[0] ?? null
-      const prev = buffer[1] ?? null
+      const next: Pointer | null = buffer[0] ?? null
+      //const prev: Pointer | null = buffer[1] ?? null
+      const last: Pointer | null = buffer[buffer.length - 1] ?? null
 
-      if (!prev || !prev.down || !next?.down) {
+      if (!last || !last.down || !next?.down) {
         return {
           pos: next,
           down: next?.down ?? false,
@@ -100,9 +101,14 @@ export async function newInput(
       if (!next) {
         return { pos: null, down: false, drag: null, drag2: 0 }
       }
-      let dx = next.x - prev.x
-      let dy = next.y - prev.y
-      let dt = (next.time - prev.time) / 1000 // per second
+      let dx = next.x - last.x
+      let dy = next.y - last.y
+
+      let dt = next.time - last.time
+      const correction = ((100 - dt) / 100) * dx
+      let drag2 = Math.round(dx + correction)
+      //let drag2 = 0
+      dt = dt / 1000
 
       let drag = null
       // dt might be 0, not sure why though
@@ -114,7 +120,7 @@ export async function newInput(
         pos: next,
         down: next.down,
         drag,
-        drag2: 0,
+        drag2,
       }
     })
   )

@@ -75,6 +75,8 @@ export function renderDebug(args: RenderArgs) {
   context.font = `${fontSize}px -apple-system, BlinkMacSystemFont`
   context.fillStyle = 'white'
   context.fillText(`av: ${av}`, fontSize, fontSize * 2)
+
+  context.fillText(`drag2: ${args.input.drag2}`, fontSize, fontSize * 3.5)
 }
 
 export function render(args: RenderArgs) {
