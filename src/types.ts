@@ -11,7 +11,11 @@ export interface Input {
   drag: { x: number; y: number } | null
 
   // have this be a number between -1 and 1
-  drag2: number
+  drag2: {
+    dx: number
+    time: number
+    correction: number
+  } | null
 }
 
 export interface Key {

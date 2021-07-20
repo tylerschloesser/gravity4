@@ -83,8 +83,7 @@ export async function newInput(
         ({ time }) => time > now - 100
       )
     }, []),
-    withLatestFrom(size$),
-    map(([buffer, size]) => {
+    map((buffer) => {
       // TODO smooth this out over a longer period of time
       const next: Pointer | null = buffer[0] ?? null
       //const prev: Pointer | null = buffer[1] ?? null
@@ -95,19 +94,23 @@ export async function newInput(
           pos: next,
           down: next?.down ?? false,
           drag: null,
-          drag2: 0,
+          drag2: null,
         }
       }
       if (!next) {
-        return { pos: null, down: false, drag: null, drag2: 0 }
+        return { pos: null, down: false, drag: null, drag2: null }
       }
       let dx = next.x - last.x
       let dy = next.y - last.y
 
       let dt = next.time - last.time
       const correction = ((100 - dt) / 100) * dx
-      let drag2 = Math.round(dx + correction)
-      //let drag2 = 0
+      let drag2 = {
+        dx: Math.round(dx + correction),
+        correction,
+        time: next.time,
+      }
+
       dt = dt / 1000
 
       let drag = null
