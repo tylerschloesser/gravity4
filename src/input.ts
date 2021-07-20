@@ -89,10 +89,10 @@ export async function newInput(
     }, []),
     withLatestFrom(slide$),
     map(([buffer, slide]) => {
-      // TODO smooth this out over a longer period of time
       const next: Pointer | null = buffer[0] ?? null
-      //const prev: Pointer | null = buffer[1] ?? null
       const last: Pointer | null = buffer[buffer.length - 1] ?? null
+
+      // TODO events between next and last are not necessarily all down events
 
       if (!last || !last.down || !next?.down) {
         return {
