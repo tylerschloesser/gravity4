@@ -83,11 +83,7 @@ export async function newInput(
         ({ time }) => time > now - 1000
       )
     }, []),
-    tap((buffer) => {
-      //console.log(buffer)
-    }),
-    // TODO fix this causing a delay for some reason
-    withLatestFrom(size$),
+    withLatestFrom([size$]),
     map(([buffer, size]) => {
       // TODO smooth this out over a longer period of time
       const next = buffer[0] ?? null
