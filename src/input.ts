@@ -1,12 +1,5 @@
 import { combineLatest, fromEvent, merge, Observable, of } from 'rxjs'
-import {
-  map,
-  mapTo,
-  scan,
-  startWith,
-  tap,
-  withLatestFrom,
-} from 'rxjs/operators'
+import { map, mapTo, scan, startWith, withLatestFrom } from 'rxjs/operators'
 import { CanvasSize, Drag, Input } from './types'
 
 interface Pointer {
@@ -14,7 +7,7 @@ interface Pointer {
   y: number
   down: boolean
   time: number
-  type: Event["type"]
+  type: Event['type']
 }
 
 export async function newInput(
@@ -118,8 +111,8 @@ export async function newInput(
       let drag: Drag = {
         rdx,
         rdy,
-        vx: (rdx * (dt / 1000)),
-        vy: (rdy * (dt / 1000)),
+        vx: rdx * (dt / 1000),
+        vy: rdy * (dt / 1000),
         dx: dx / Math.min(size.w, size.h),
         dy: dy / Math.min(size.w, size.h),
         correction: 0,
