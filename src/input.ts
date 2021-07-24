@@ -1,5 +1,12 @@
-import { combineLatest, fromEvent, merge, Observable, of } from 'rxjs'
-import { map, mapTo, scan, startWith, withLatestFrom } from 'rxjs/operators'
+import { combineLatest, fromEvent, merge, Observable, of, timer } from 'rxjs'
+import {
+  map,
+  mapTo,
+  scan,
+  startWith,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs/operators'
 import { CanvasSize, Drag, Input } from './types'
 
 interface Pointer {
@@ -73,6 +80,14 @@ export async function newInput(
           }
         : null
     ),
+
+    // clear input after 100ms of inactivity, otherwise if you
+    // swipe and hold, drag will remain despite input not changing.
+    //
+    // TODO there's probably a cleaner rxjs way to do this
+    //
+    switchMap((value) => merge(of(value), timer(100).pipe(mapTo(null)))),
+
     withLatestFrom(slide$),
     scan<[Pointer | null, number], Pointer[]>((acc, [next, slide]) => {
       const now = performance.now()

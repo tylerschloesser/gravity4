@@ -5,6 +5,8 @@ export interface CanvasSize {
   h: number
 }
 
+// x & y drag velocity in relative units per second
+// 1 relative unit is the minimum screen dimension in pixels
 export interface Drag {
   vx: number
   vy: number
