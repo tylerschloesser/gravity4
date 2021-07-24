@@ -73,7 +73,15 @@ export function renderDebug(args: RenderArgs) {
   const speed = state.speed.toFixed(3)
   document.querySelector('#speed')!.innerHTML = speed
   const drag2 = JSON.stringify(
-    args.input.drag2 || ({ dx: 0, correction: 0, time: 0 } as Drag2),
+    Object.entries(
+      args.input.drag2 || ({ dx: 0, correction: 0, time: 0 } as Drag2)
+    ).reduce(
+      (acc, [k, v]) => ({
+        ...acc,
+        [k]: Math.round(v),
+      }),
+      {}
+    ),
     null,
     2
   )
