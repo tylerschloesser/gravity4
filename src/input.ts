@@ -7,7 +7,7 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs/operators'
-import { CanvasSize, Input } from './types'
+import { CanvasSize, Drag2, Input } from './types'
 
 interface Pointer {
   x: number
@@ -122,8 +122,9 @@ export async function newInput(
       dx += cx
       dy += cy
 
-      let drag2 = {
-        dx: Math.round(dx) / size.w,
+      let drag2: Drag2 = {
+        dx: dx / size.w,
+        dy: dy / size.h,
         correction: cx,
         time: next.time,
       }
