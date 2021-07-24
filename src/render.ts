@@ -78,7 +78,7 @@ export function renderDebug(args: RenderArgs) {
     ).reduce(
       (acc, [k, v]) => ({
         ...acc,
-        [k]: Math.round(v),
+        [k]: (v as number).toFixed(2),
       }),
       {}
     ),

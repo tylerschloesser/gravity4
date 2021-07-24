@@ -68,7 +68,9 @@ export async function newInput(
   // time window (in ms) to capture pointer events
   const slide$ = of(100)
 
-  return combineLatest([pointer$, key$]).pipe(
+  // size$ is only here so that we guarantee that size$ has
+  // emitted an event which will be used later on via withLatestFrom
+  return combineLatest([pointer$, key$, size$]).pipe(
     tap(([pointer, key]) => {
       //console.log(pointer, key)
     }),
@@ -87,8 +89,8 @@ export async function newInput(
         ({ time }) => time > now - slide
       )
     }, []),
-    withLatestFrom(slide$),
-    map(([buffer, slide]) => {
+    withLatestFrom(slide$, size$),
+    map(([buffer, slide, size]) => {
       const next: Pointer | null = buffer[0] ?? null
       const last: Pointer | null = buffer[buffer.length - 1] ?? null
 
@@ -121,7 +123,7 @@ export async function newInput(
       dy += cy
 
       let drag2 = {
-        dx: Math.round(dx),
+        dx: Math.round(dx) / size.w,
         correction: cx,
         time: next.time,
       }
