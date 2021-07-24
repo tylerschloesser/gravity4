@@ -7,7 +7,7 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs/operators'
-import { CanvasSize, Drag2, Input } from './types'
+import { CanvasSize, Drag, Input } from './types'
 
 interface Pointer {
   x: number
@@ -101,11 +101,11 @@ export async function newInput(
           pos: next,
           blah: null,
           down: next?.down ?? false,
-          drag2: null,
+          drag: null,
         }
       }
       if (!next) {
-        return { pos: null, down: false, drag2: null }
+        return { pos: null, down: false, drag: null }
       }
       let dx = next.x - last.x
       let dy = next.y - last.y
@@ -117,7 +117,7 @@ export async function newInput(
       const rdx = dx / Math.min(size.w, size.h)
       const rdy = dy / Math.min(size.w, size.h)
 
-      let drag2: Drag2 = {
+      let drag: Drag = {
         rdx,
         rdy,
         vx: (rdx * (dt / 1000)),
@@ -131,7 +131,7 @@ export async function newInput(
       return <Input>{
         pos: next,
         down: next.down,
-        drag2,
+        drag,
       }
     })
   )

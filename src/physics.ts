@@ -1,5 +1,5 @@
 import Box2DFactory from 'box2d-wasm'
-import { Drag2, GameState, Input } from './types'
+import { Drag, GameState, Input } from './types'
 
 function calculateAngle({
   delta,
@@ -12,15 +12,15 @@ function calculateAngle({
   state: GameState
   size: { w: number; h: number }
 }): { angle: number; angularVelocity: number } {
-  const { drag2 } = input
+  const { drag } = input
   let angle = state.angle
   let av = state.angularVelocity
 
-  if (drag2) {
+  if (drag) {
     const POW = 1
     const SCALE = 20
 
-    let dragX = drag2.vx * 1000 * -1
+    let dragX = drag.vx * 1000 * -1
 
     const dx =
       ((Math.sign(dragX) * Math.pow(Math.abs(dragX), POW))) *
@@ -46,11 +46,11 @@ function calculateAngle({
   }
 }
 
-function isDyMax(drag2: Drag2 | null) {
-  if (!drag2) {
+function isDyMax(drag: Drag | null) {
+  if (!drag) {
     return false
   }
-  return Math.abs(drag2.dy) > Math.abs(drag2.dx)
+  return Math.abs(drag.dy) > Math.abs(drag.dx)
 }
 
 function updatePhysics({
@@ -79,10 +79,10 @@ function updatePhysics({
   const grav = new box2d.b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
 
   let { speed } = state
-  const { drag2 } = input
+  const { drag } = input
 
-  if ((Math.abs(drag2?.dy ?? 0) > .1) && isDyMax(drag2)) {
-    const { dy } = input.drag2!
+  if ((Math.abs(drag?.dy ?? 0) > .1) && isDyMax(drag)) {
+    const { dy } = input.drag!
     speed += dy * (delta / 1000) * 50 * -1
     speed = Math.max(Math.min(speed, 1), 0)
   }

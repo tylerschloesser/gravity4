@@ -5,7 +5,7 @@ export interface CanvasSize {
   h: number
 }
 
-export interface Drag2 {
+export interface Drag {
   rdx: number
   rdy: number
   dx: number
@@ -19,7 +19,7 @@ export interface Drag2 {
 export interface Input {
   pos: { x: number; y: number } | null
   down: boolean
-  drag2: Drag2 | null
+  drag: Drag | null
 }
 
 export interface Key {
