@@ -22,11 +22,6 @@ export interface Input {
   drag: Drag | null
 }
 
-export interface Key {
-  key: string
-  down: boolean
-}
-
 export interface Game {}
 
 export interface GameArgs {
