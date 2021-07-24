@@ -91,7 +91,16 @@ function renderCircle(args: RenderArgs, circle: Circle) {
   )
   context.translate(-state.ball.x * scale, -state.ball.y * scale)
 
-  context.strokeStyle = 'red'
+
+  const dx = p.x - state.ball.x
+  const dy = p.y - state.ball.y
+  const dist = Math.sqrt(dx*dx + dy*dy)
+  if (Math.abs(dist - circle.r) < state.ball.r) {
+    context.strokeStyle = 'blue'
+  } else {
+    context.strokeStyle = 'red'
+  }
+
 
   context.beginPath()
   context.arc(0, 0, r * scale, 0, Math.PI * 2)
