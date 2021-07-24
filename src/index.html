@@ -28,9 +28,40 @@
         height: -webkit-fill-available;
         width: 100vw;
       }
+      #debug {
+        position: fixed;
+        top: 0;
+        left: 0;
+        font: 32px -apple-system, BlinkMacSystemFont;
+        text-align: left;
+      }
+      #debug table {
+        border-spacing: 10px;
+        border-collapse: separate;
+      }
     </style>
   </head>
   <body>
-    <canvas />
+    <canvas></canvas>
+    <div id="debug">
+      <table>
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>av</td>
+            <td id="av"></td>
+          </tr>
+          <tr>
+            <td>speed</td>
+            <td id="speed"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

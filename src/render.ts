@@ -67,22 +67,11 @@ function renderBall(args: RenderArgs) {
 }
 
 export function renderDebug(args: RenderArgs) {
-  const fontSize = 32
-  const { context, state } = args
-
+  const { state } = args
   const av = state.angularVelocity.toFixed(3)
-
-  context.font = `${fontSize}px -apple-system, BlinkMacSystemFont`
-  context.fillStyle = 'white'
-  context.fillText(`av: ${av}`, fontSize, fontSize * 2)
-
+  document.querySelector('#av')!.innerHTML = av
   const speed = state.speed.toFixed(3)
-  context.fillText(`speed: ${speed}`, fontSize, fontSize * 3.5)
-  // context.fillText(
-  //   `drag2: ${JSON.stringify(args.input.drag2, null, 2)}`,
-  //   fontSize,
-  //   fontSize * 3.5
-  // )
+  document.querySelector('#speed')!.innerHTML = speed
 }
 
 export function render(args: RenderArgs) {
