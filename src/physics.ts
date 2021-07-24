@@ -12,19 +12,18 @@ function calculateAngle({
   state: GameState
   size: { w: number; h: number }
 }): { angle: number; angularVelocity: number } {
-  const { drag } = input
+  const { drag, drag2 } = input
   let angle = state.angle
   let av = state.angularVelocity
 
-  if (drag) {
-    const POW = 1.5
-    const SCALE = 2
+  if (drag2) {
+    const POW = 1
+    const SCALE = 20
 
-    let dragX = drag.x
-    dragX *= -1
+    let dragX = drag2.vx * 1000 * -1
 
     const dx =
-      ((Math.sign(dragX) * Math.pow(Math.abs(dragX), POW)) / size.w) *
+      ((Math.sign(dragX) * Math.pow(Math.abs(dragX), POW))) *
       (delta / 1000) *
       (Math.PI / 180)
     av = dx * SCALE
