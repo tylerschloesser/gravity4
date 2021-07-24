@@ -28,24 +28,6 @@ function renderBox(args: RenderArgs, i: number) {
   context.resetTransform()
 }
 
-function renderInput(args: RenderArgs) {
-  const { context, input, size, state } = args
-  const { w, h } = size
-  if (w <= 600) {
-    // assume mobile
-    return
-  }
-  if (input.pos) {
-    context.strokeStyle = 'white'
-    if (input.down) {
-      context.strokeStyle = 'blue'
-    }
-    context.beginPath()
-    context.arc(input.pos.x, input.pos.y, 50, 0, 2 * Math.PI)
-    context.stroke()
-  }
-}
-
 function renderBall(args: RenderArgs) {
   const { context, size, state } = args
   const { w, h } = size
@@ -159,11 +141,10 @@ export function render(args: RenderArgs) {
   args.state.boxes.forEach((_, i) => {
     renderBox(args, i)
   })
-  args.state.circles.forEach((circle, i) => {
+  args.state.circles.forEach((circle) => {
     renderCircle(args, circle)
   })
   renderBall(args)
-  //renderInput(args)
   renderSpeed(args)
 
   renderDebug(args)
