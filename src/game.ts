@@ -2,7 +2,7 @@ import { animationFrames, pipe } from 'rxjs'
 import { map, scan, withLatestFrom } from 'rxjs/operators'
 import { newPhysics } from './physics'
 import { newRender } from './render'
-import { Game, GameArgs, GameState, Input } from './types'
+import { Circle, Game, GameArgs, GameState } from './types'
 
 const mapDelta = pipe(
   scan<{ elapsed: number }, { delta: number; prev: number }>(
@@ -22,10 +22,11 @@ export async function newGame(init: GameArgs): Promise<Game> {
 
   const boxes: GameState['boxes'] = []
 
+  const GRID_SIZE = 5
   const GAP = 40
   const BOX_SIZE = 60
-  for (let i = -2; i < 3; i++) {
-    for (let j = -2; j < 3; j++) {
+  for (let i = Math.ceil(GRID_SIZE / -2); i < Math.ceil(GRID_SIZE / 2); i++) {
+    for (let j = Math.ceil(GRID_SIZE / -2); j < Math.ceil(GRID_SIZE / 2); j++) {
       boxes.push({
         x: i * BOX_SIZE + i * GAP + (100 - BOX_SIZE) / 2,
         y: j * BOX_SIZE + j * GAP + 50,
@@ -34,9 +35,12 @@ export async function newGame(init: GameArgs): Promise<Game> {
     }
   }
 
+  const circles: Circle[] = []
+
   const initialState: GameState = {
     ball: { x: 50, y: 20, r: 7, angle: 0 },
     boxes,
+    circles,
     angle: 0,
     angularVelocity: 0,
     speed: 1,
