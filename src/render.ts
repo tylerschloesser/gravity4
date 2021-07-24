@@ -66,6 +66,17 @@ function renderBall(args: RenderArgs) {
   context.resetTransform()
 }
 
+// resize the debug view. if it's in the bottom right,
+// I don't want it constantly changing size
+function adjustDebug() {
+  const debug = document.querySelector<HTMLDivElement>('#debug')!
+  const width = debug.getBoundingClientRect().width
+  const prev = parseInt(debug.dataset['maxWidth'] || '0')
+  const max = Math.max(width, prev)
+  debug.dataset['maxWidth'] = max.toString()
+  debug.style.setProperty('--width', `${max}px`)
+}
+
 export function renderDebug(args: RenderArgs) {
   const { state } = args
   const av = state.angularVelocity.toFixed(3)
@@ -87,12 +98,7 @@ export function renderDebug(args: RenderArgs) {
   )
   document.querySelector('#drag2')!.innerHTML = drag2
 
-  const debug = document.querySelector<HTMLDivElement>('#debug')!
-  const width = debug.getBoundingClientRect().width
-  const prev = parseInt(debug.dataset['maxWidth'] || '0')
-  const max = Math.max(width, prev)
-  debug.dataset['maxWidth'] = max.toString()
-  debug.style.setProperty('--width', `${max}px`)
+  adjustDebug()
 }
 
 export function render(args: RenderArgs) {
