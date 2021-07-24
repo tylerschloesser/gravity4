@@ -89,8 +89,8 @@ export async function newInput(
         ({ time }) => time > now - slide
       )
     }, []),
-    withLatestFrom(slide$, size$),
-    map(([buffer, slide, size]) => {
+    withLatestFrom(size$),
+    map(([buffer, size]) => {
       const next: Pointer | null = buffer[0] ?? null
       const last: Pointer | null = buffer[buffer.length - 1] ?? null
 
@@ -99,13 +99,13 @@ export async function newInput(
       if (!last || !last.down || !next?.down) {
         return {
           pos: next,
+          blah: null,
           down: next?.down ?? false,
-          drag: null,
           drag2: null,
         }
       }
       if (!next) {
-        return { pos: null, down: false, drag: null, drag2: null }
+        return { pos: null, down: false, drag2: null }
       }
       let dx = next.x - last.x
       let dy = next.y - last.y
@@ -128,31 +128,9 @@ export async function newInput(
         time: next.time,
       }
 
-      // correction. we only look at events in the last 100ms,
-      // but the difference between the last and first event is
-      // probably < 100ms
-      //
-      const cx = ((slide - dt) / slide) * dx
-      const cy = ((slide - dt) / slide) * dy
-
-      dx += cx
-      dy += cy
-      
-
-
-      // don't remember why I do this
-      dt = dt / 1000
-
-      let drag = null
-      // dt might be 0, not sure why though
-      if (dt > 0) {
-        drag = { x: dx / dt, y: dy / dt }
-      }
-
-      return {
+      return <Input>{
         pos: next,
         down: next.down,
-        drag,
         drag2,
       }
     })

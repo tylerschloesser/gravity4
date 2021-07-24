@@ -12,7 +12,7 @@ function calculateAngle({
   state: GameState
   size: { w: number; h: number }
 }): { angle: number; angularVelocity: number } {
-  const { drag, drag2 } = input
+  const { drag2 } = input
   let angle = state.angle
   let av = state.angularVelocity
 
