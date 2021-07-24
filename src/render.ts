@@ -70,38 +70,44 @@ function renderBall(args: RenderArgs) {
 // I don't want it constantly changing size
 function adjustDebug() {
   const debug = document.querySelector<HTMLDivElement>('#debug')!
-  const width = debug.getBoundingClientRect().width
-  const prev = parseInt(localStorage.getItem('debug.width') || '0')
-  const max = Math.max(width, prev)
-  const setCssVariable = () => debug.style.setProperty('--width', `${max}px`)
-  if (max > prev) {
-    localStorage.setItem('debug.width', max.toString())
-    setCssVariable()
-  } else if (!debug.style.getPropertyValue('--width')) {
+  const width = Math.round(debug.getBoundingClientRect().width)
+
+  const cssVar = debug.style.getPropertyValue('--width')
+
+  let prev: number | null = null
+  if (cssVar) {
+    prev = parseInt(cssVar.match(/(\d+)px/)![0])
+  }
+
+  const setWidth = (value: number) =>
+    debug.style.setProperty('--width', `${value}px`)
+
+  if (prev === null) {
     debug.style.opacity = '1'
-    setCssVariable()
+    const saved = parseInt(localStorage.getItem('debug.width') || '0')
+    setWidth(saved || width)
+    return
+  }
+
+  const max = Math.max(width, prev!)
+  if (max > prev!) {
+    localStorage.setItem('debug.width', max.toString())
+    setWidth(max)
   }
 }
 
-export function renderDebug(args: RenderArgs) {
-  const { state } = args
-  const av = state.angularVelocity.toFixed(3)
-  document.querySelector('#av')!.innerHTML = av
-  const speed = state.speed.toFixed(3)
-  document.querySelector('#speed')!.innerHTML = speed
-  const drag = JSON.stringify(
-    Object.entries(args.input.drag).reduce(
-      (acc, [k, v]) => ({
-        ...acc,
-        [k]: (v as number).toFixed(2),
-      }),
-      {}
-    ),
-    null,
-    2
-  )
-  document.querySelector('#drag')!.innerHTML = drag
+const DEBUG: [string, (args: RenderArgs) => string][] = [
+  ['av', (args) => args.state.angularVelocity.toFixed(3)],
+  ['speed', (args) => args.state.speed.toFixed(3)],
+  ['drag.vx', (args) => args.input.drag.vx.toFixed(2)],
+  ['drag.vy', (args) => args.input.drag.vy.toFixed(2)],
+]
 
+export function renderDebug(args: RenderArgs) {
+  DEBUG.forEach(([name, getValue]) => {
+    const value = <HTMLTableCellElement>document.getElementById(name)!
+    value.innerText = getValue(args)
+  })
   adjustDebug()
 }
 
@@ -132,4 +138,21 @@ export function render(args: RenderArgs) {
   renderSpeed(args)
 
   renderDebug(args)
+}
+
+export async function newRender() {
+  const tbody = document.querySelector<HTMLTableElement>('#debug tbody')!
+  DEBUG.forEach(([name]) => {
+    const row = document.createElement('tr')
+    const key = document.createElement('td')
+    const value = document.createElement('td')
+    value.id = name
+    row.appendChild(key)
+    row.appendChild(value)
+    key.innerText = name
+    tbody.appendChild(row)
+  })
+
+  // TODO init render
+  return render
 }
