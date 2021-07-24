@@ -18,9 +18,9 @@ function calculateAngle({
 
   if (drag && !isDyMax(drag)) {
     const POW = 1
-    const SCALE = 20
+    const SCALE = 100
 
-    let dragX = drag.vx * 1000 * -1
+    let dragX = drag.vx * -1
 
     const dx =
       ((Math.sign(dragX) * Math.pow(Math.abs(dragX), POW))) *
@@ -50,7 +50,7 @@ function isDyMax(drag: Drag | null) {
   if (!drag) {
     return false
   }
-  return Math.abs(drag.dy) > Math.abs(drag.dx)
+  return Math.abs(drag.rdy) > Math.abs(drag.rdx)
 }
 
 function updatePhysics({
@@ -82,8 +82,8 @@ function updatePhysics({
   const { drag } = input
 
   if (isDyMax(drag)) {
-    const { dy } = input.drag!
-    speed += dy * (delta / 1000) * 50 * -1
+    const { rdy } = input.drag!
+    speed += rdy * (delta / 1000) * 50 * -1
     speed = Math.max(Math.min(speed, 1), 0)
   }
 

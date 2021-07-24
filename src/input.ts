@@ -103,19 +103,24 @@ export async function newInput(
 
       let dt = next.time - last.time
 
-      // relative dx/dy
-      //
-      const rdx = dx / Math.min(size.w, size.h)
-      const rdy = dy / Math.min(size.w, size.h)
+      let drag: Drag | null = null
+      if (dt > 0) {
+        // relative dx/dy
+        //
+        const rdx = dx / Math.min(size.w, size.h)
+        const rdy = dy / Math.min(size.w, size.h)
+        
 
-      let drag: Drag = {
-        vx: rdx * (dt / 1000),
-        vy: rdy * (dt / 1000),
-        dx: dx / Math.min(size.w, size.h),
-        dy: dy / Math.min(size.w, size.h),
-        correction: 0,
-        time: next.time,
+        drag = {
+          vx: rdx / (dt / 1000),
+          vy: rdy / (dt / 1000),
+          rdx,
+          rdy,
+          correction: 0,
+          time: next.time,
+        }
       }
+
 
       return <Input>{
         pos: next,
