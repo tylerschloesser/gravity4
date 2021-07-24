@@ -20,8 +20,11 @@ function calculateAngle({
     const POW = 1.5
     const SCALE = 2
 
+    let dragX = drag.x
+    dragX *= -1
+
     const dx =
-      ((Math.sign(drag.x) * Math.pow(Math.abs(drag.x), POW)) / size.w) *
+      ((Math.sign(dragX) * Math.pow(Math.abs(dragX), POW)) / size.w) *
       (delta / 1000) *
       (Math.PI / 180)
     av = dx * SCALE
@@ -71,7 +74,7 @@ function updatePhysics({
 
   const gravScale = 200
   grav.Normalize()
-  grav.op_mul(gravScale)
+  grav.op_mul(gravScale * -1)
 
   grav.op_mul(ballBody.GetMass())
   ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
