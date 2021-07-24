@@ -107,6 +107,15 @@ export function renderDebug(args: RenderArgs) {
   adjustDebug()
 }
 
+function renderSpeed(args: RenderArgs) {
+  const { context, size, state } = args
+  context.strokeStyle = 'blue'
+  context.strokeRect(0, 0, size.w, Math.min(size.h, size.w) / 20)
+
+  context.fillStyle = 'blue'
+  context.fillRect(0, 0, size.w * state.speed, Math.min(size.h, size.w) / 20)
+}
+
 export function render(args: RenderArgs) {
   const { context, size } = args
   const { w, h } = size
@@ -122,6 +131,7 @@ export function render(args: RenderArgs) {
   })
   renderBall(args)
   //renderInput(args)
+  renderSpeed(args)
 
   renderDebug(args)
 }
