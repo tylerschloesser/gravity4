@@ -99,6 +99,7 @@ export async function newInput(
     map(([buffer, size]) => {
       const next: Pointer | null = buffer[0] ?? null
       const last: Pointer | null = buffer[buffer.length - 1] ?? null
+      let drag: Drag = { vx: 0, vy: 0 }
 
       // TODO events between next and last are not necessarily all down events
 
@@ -107,18 +108,17 @@ export async function newInput(
           pos: next,
           blah: null,
           down: next?.down ?? false,
-          drag: null,
+          drag,
         }
       }
       if (!next) {
-        return { pos: null, down: false, drag: null }
+        return { pos: null, down: false, drag }
       }
       let dx = next.x - last.x
       let dy = next.y - last.y
 
       let dt = next.time - last.time
 
-      let drag: Drag | null = null
       if (dt > 0) {
         // relative dx/dy
         //
