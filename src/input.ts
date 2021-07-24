@@ -114,8 +114,6 @@ export async function newInput(
         drag = {
           vx: rdx / (dt / 1000),
           vy: rdy / (dt / 1000),
-          correction: 0,
-          time: next.time,
         }
       }
 

@@ -8,8 +8,6 @@ export interface CanvasSize {
 export interface Drag {
   vx: number
   vy: number
-  time: number
-  correction: number
 }
 
 export interface Input {
