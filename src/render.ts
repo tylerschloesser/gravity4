@@ -1,4 +1,4 @@
-import { Drag, RenderArgs } from './types'
+import { Circle, Drag, RenderArgs } from './types'
 
 function renderBox(args: RenderArgs, i: number) {
   const { context, input, size, state } = args
@@ -63,6 +63,32 @@ function renderBall(args: RenderArgs) {
   context.moveTo(0, 0)
   context.lineTo(state.ball.r * scale, 0)
   context.stroke()
+  context.resetTransform()
+}
+
+function renderCircle(args: RenderArgs, circle: Circle) {
+  const { context, input, size, state } = args
+  const { w, h } = size
+
+  const scale = w / 100
+
+  context.translate(w / 2, h / 2)
+  context.rotate(-args.state.angle)
+
+  const { p, r } = circle
+
+  context.translate(
+    p.x * scale,
+    p.y * scale,
+  )
+  context.translate(-state.ball.x * scale, -state.ball.y * scale)
+
+  context.strokeStyle = 'red'
+
+  context.beginPath()
+  context.arc(0, 0, r, 0, Math.PI * 2)
+  context.stroke()
+
   context.resetTransform()
 }
 
@@ -133,12 +159,16 @@ export function render(args: RenderArgs) {
   args.state.boxes.forEach((_, i) => {
     renderBox(args, i)
   })
+  args.state.circles.forEach((circle, i) => {
+    renderCircle(args, circle)
+  })
   renderBall(args)
   //renderInput(args)
   renderSpeed(args)
 
   renderDebug(args)
 }
+
 
 export async function newRender() {
   const tbody = document.querySelector<HTMLTableElement>('#debug tbody')!

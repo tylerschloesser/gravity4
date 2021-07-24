@@ -36,7 +36,15 @@ export async function newGame(init: GameArgs): Promise<Game> {
     }
   }
 
-  const circles: Circle[] = []
+  const circles: Circle[] = [
+    {
+      p: {
+        x: 50,
+        y: -50,
+      },
+      r: 500,
+    },
+  ]
 
   const initialState: GameState = {
     ball: { x: 50, y: 20, r: 7, angle: 0 },
