@@ -86,6 +86,13 @@ export function renderDebug(args: RenderArgs) {
     2
   )
   document.querySelector('#drag2')!.innerHTML = drag2
+
+  const debug = document.querySelector<HTMLDivElement>('#debug')!
+  const width = debug.getBoundingClientRect().width
+  const prev = parseInt(debug.dataset['maxWidth'] || '0')
+  const max = Math.max(width, prev)
+  debug.dataset['maxWidth'] = max.toString()
+  debug.style.setProperty('--width', `${max}px`)
 }
 
 export function render(args: RenderArgs) {
