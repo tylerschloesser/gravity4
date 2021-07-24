@@ -16,14 +16,15 @@ function calculateAngle({
   let angle = state.angle
   let av = state.angularVelocity
 
-  if (drag && !isVyMax(drag)) {
+  if (input.down && !isVyMax(drag)) {
     const POW = 1
     const SCALE = 100
 
     let dragX = drag.vx * -1
 
     const dx =
-      ((Math.sign(dragX) * Math.pow(Math.abs(dragX), POW))) *
+      Math.sign(dragX) *
+      Math.pow(Math.abs(dragX), POW) *
       (delta / 1000) *
       (Math.PI / 180)
     av = dx * SCALE
