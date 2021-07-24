@@ -39,6 +39,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
     boxes,
     angle: 0,
     angularVelocity: 0,
+    speed: 1,
   }
 
   const physics = await newPhysics(initialState)

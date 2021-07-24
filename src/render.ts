@@ -76,11 +76,13 @@ export function renderDebug(args: RenderArgs) {
   context.fillStyle = 'white'
   context.fillText(`av: ${av}`, fontSize, fontSize * 2)
 
-  context.fillText(
-    `drag2: ${JSON.stringify(args.input.drag2)}`,
-    fontSize,
-    fontSize * 3.5
-  )
+  const speed = state.speed.toFixed(3)
+  context.fillText(`speed: ${speed}`, fontSize, fontSize * 3.5)
+  // context.fillText(
+  //   `drag2: ${JSON.stringify(args.input.drag2, null, 2)}`,
+  //   fontSize,
+  //   fontSize * 3.5
+  // )
 }
 
 export function render(args: RenderArgs) {

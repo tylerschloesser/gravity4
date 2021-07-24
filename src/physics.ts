@@ -79,7 +79,7 @@ function updatePhysics({
   grav.op_mul(ballBody.GetMass())
   ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
 
-  const maxVel = gravScale / 3
+  const maxVel = (gravScale / 3) * state.speed
 
   if (ballBody.GetLinearVelocity().Length() > maxVel) {
     const newVelocity = new box2d.b2Vec2(

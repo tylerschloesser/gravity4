@@ -43,4 +43,5 @@ export interface GameState {
   boxes: { x: number; y: number; size: number }[]
   angle: number
   angularVelocity: number
+  speed: number
 }
