@@ -109,14 +109,12 @@ export async function newInput(
         //
         const rdx = dx / Math.min(size.w, size.h)
         const rdy = dy / Math.min(size.w, size.h)
-        
 
         drag = {
           vx: rdx / (dt / 1000),
           vy: rdy / (dt / 1000),
         }
       }
-
 
       return <Input>{
         pos: next,
