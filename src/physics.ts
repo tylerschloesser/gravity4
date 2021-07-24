@@ -16,7 +16,7 @@ function calculateAngle({
   let angle = state.angle
   let av = state.angularVelocity
 
-  if (drag) {
+  if (drag && !isDyMax(drag)) {
     const POW = 1
     const SCALE = 20
 
@@ -81,7 +81,7 @@ function updatePhysics({
   let { speed } = state
   const { drag } = input
 
-  if ((Math.abs(drag?.dy ?? 0) > .1) && isDyMax(drag)) {
+  if (isDyMax(drag)) {
     const { dy } = input.drag!
     speed += dy * (delta / 1000) * 50 * -1
     speed = Math.max(Math.min(speed, 1), 0)

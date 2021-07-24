@@ -14,6 +14,7 @@ interface Pointer {
   y: number
   down: boolean
   time: number
+  type: Event["type"]
 }
 
 export async function newInput(
