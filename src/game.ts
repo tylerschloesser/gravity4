@@ -22,8 +22,8 @@ export async function newGame(init: GameArgs): Promise<Game> {
 
   const boxes: GameState['boxes'] = []
 
-  const GRID_SIZE = 1
-  const GAP = 40
+  const GRID_SIZE = 3
+  const GAP = 60
   const BOX_SIZE = 60
   const GRID_CENTER = { x: (100 - BOX_SIZE) / 2, y: -80 }
   for (let i = Math.ceil(GRID_SIZE / -2); i < Math.ceil(GRID_SIZE / 2); i++) {
@@ -42,7 +42,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
         x: 50,
         y: -50,
       },
-      r: 500,
+      r: 50,
     },
   ]
 

@@ -94,7 +94,7 @@ function renderCircle(args: RenderArgs, circle: Circle) {
   context.strokeStyle = 'red'
 
   context.beginPath()
-  context.arc(0, 0, r, 0, Math.PI * 2)
+  context.arc(0, 0, r * scale, 0, Math.PI * 2)
   context.stroke()
 
   context.resetTransform()
