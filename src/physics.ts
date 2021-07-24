@@ -76,7 +76,8 @@ function updatePhysics({
 
   if (Math.abs(input.drag2?.dy ?? 0) > .01) {
     const { dy } = input.drag2!
-    speed += dy * (delta / 1000)
+    speed += dy * (delta / 1000) * 50 * -1
+    speed = Math.max(Math.min(speed, 1), 0)
   }
 
   const gravScale = 200
@@ -106,6 +107,7 @@ function updatePhysics({
 
   return {
     ...state,
+    speed,
     ball: {
       ...state.ball,
       x: ballPosition.x,
