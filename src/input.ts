@@ -126,6 +126,7 @@ export async function newInput(
         time: next.time,
       }
 
+      // don't remember why I do this
       dt = dt / 1000
 
       let drag = null
