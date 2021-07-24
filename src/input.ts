@@ -109,8 +109,6 @@ export async function newInput(
       const rdy = dy / Math.min(size.w, size.h)
 
       let drag: Drag = {
-        rdx,
-        rdy,
         vx: rdx * (dt / 1000),
         vy: rdy * (dt / 1000),
         dx: dx / Math.min(size.w, size.h),

@@ -6,8 +6,6 @@ export interface CanvasSize {
 }
 
 export interface Drag {
-  rdx: number
-  rdy: number
   dx: number
   dy: number
   vx: number
