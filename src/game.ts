@@ -22,14 +22,15 @@ export async function newGame(init: GameArgs): Promise<Game> {
 
   const boxes: GameState['boxes'] = []
 
-  const GRID_SIZE = 5
+  const GRID_SIZE = 1
   const GAP = 40
   const BOX_SIZE = 60
+  const GRID_CENTER = { x: (100 - BOX_SIZE) / 2, y: -50 }
   for (let i = Math.ceil(GRID_SIZE / -2); i < Math.ceil(GRID_SIZE / 2); i++) {
     for (let j = Math.ceil(GRID_SIZE / -2); j < Math.ceil(GRID_SIZE / 2); j++) {
       boxes.push({
-        x: i * BOX_SIZE + i * GAP + (100 - BOX_SIZE) / 2,
-        y: j * BOX_SIZE + j * GAP + 50,
+        x: i * BOX_SIZE + i * GAP + GRID_CENTER.x,
+        y: j * BOX_SIZE + j * GAP + GRID_CENTER.y,
         size: BOX_SIZE,
       })
     }
