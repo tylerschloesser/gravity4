@@ -121,10 +121,11 @@ export async function newInput(
 
       dx += cx
       dy += cy
+      
 
       let drag2: Drag2 = {
-        dx: dx / size.w,
-        dy: dy / size.h,
+        dx: dx / Math.min(size.w, size.h),
+        dy: dy / Math.min(size.w, size.h),
         correction: cx,
         time: next.time,
       }
