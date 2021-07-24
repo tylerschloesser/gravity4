@@ -109,10 +109,20 @@ export async function newInput(
       let dy = next.y - last.y
 
       let dt = next.time - last.time
-      const correction = ((slide - dt) / slide) * dx
+
+      // correction. we only look at events in the last 100ms,
+      // but the difference between the last and first event is
+      // probably < 100ms
+      //
+      const cx = ((slide - dt) / slide) * dx
+      const cy = ((slide - dt) / slide) * dy
+
+      dx += cx
+      dy += cy
+
       let drag2 = {
-        dx: Math.round(dx + correction),
-        correction,
+        dx: Math.round(dx),
+        correction: cx,
         time: next.time,
       }
 
