@@ -1,5 +1,6 @@
 import Box2DFactory from 'box2d-wasm'
 import { Drag, GameState, Input } from './types'
+import { isCircleHit } from './util'
 
 function calculateAngle({
   delta,
@@ -88,16 +89,23 @@ function updatePhysics({
     speed = Math.max(Math.min(speed, 1), 0)
   }
 
-  const gravScale = 200
+  let gravScale = 200
+  let maxVel = (gravScale / 3) * speed
+  if (state.circles.some((circle) => isCircleHit(state, circle))) {
+    gravScale *= 2
+    maxVel *= 2
+  }
+
   grav.Normalize()
   grav.op_mul(gravScale * -1)
 
   grav.op_mul(ballBody.GetMass())
   ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
 
-  let maxVel = (gravScale / 3) * speed
+
 
   if (ballBody.GetLinearVelocity().Length() > maxVel) {
+    // decelerate
     const newVelocity = new box2d.b2Vec2(
       ballBody.GetLinearVelocity().x,
       ballBody.GetLinearVelocity().y
