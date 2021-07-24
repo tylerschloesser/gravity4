@@ -71,10 +71,12 @@ function renderBall(args: RenderArgs) {
 function adjustDebug() {
   const debug = document.querySelector<HTMLDivElement>('#debug')!
   const width = debug.getBoundingClientRect().width
-  const prev = parseInt(debug.dataset['maxWidth'] || '0')
+  const prev = parseInt(localStorage.getItem('debug.width') || '0')
   const max = Math.max(width, prev)
-  debug.dataset['maxWidth'] = max.toString()
-  debug.style.setProperty('--width', `${max}px`)
+  if (max > prev || !debug.style.getPropertyValue('--width')) {
+    localStorage.setItem('debug.width', max.toString())
+    debug.style.setProperty('--width', `${max}px`)
+  }
 }
 
 export function renderDebug(args: RenderArgs) {
