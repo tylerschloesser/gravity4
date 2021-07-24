@@ -82,8 +82,8 @@ function updatePhysics({
   const { drag } = input
 
   if (isDyMax(drag)) {
-    const { rdy } = input.drag!
-    speed += rdy * (delta / 1000) * 50 * -1
+    const { vy } = input.drag!
+    speed += vy * (delta / 1000) * -1 * 2
     speed = Math.max(Math.min(speed, 1), 0)
   }
 
