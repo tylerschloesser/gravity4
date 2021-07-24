@@ -1,4 +1,4 @@
-import { RenderArgs } from './types'
+import { Drag2, RenderArgs } from './types'
 
 function renderBox(args: RenderArgs, i: number) {
   const { context, input, size, state } = args
@@ -72,6 +72,12 @@ export function renderDebug(args: RenderArgs) {
   document.querySelector('#av')!.innerHTML = av
   const speed = state.speed.toFixed(3)
   document.querySelector('#speed')!.innerHTML = speed
+  const drag2 = JSON.stringify(
+    args.input.drag2 || ({ dx: 0, correction: 0, time: 0 } as Drag2),
+    null,
+    2
+  )
+  document.querySelector('#drag2')!.innerHTML = drag2
 }
 
 export function render(args: RenderArgs) {

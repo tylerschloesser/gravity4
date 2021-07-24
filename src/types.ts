@@ -5,17 +5,18 @@ export interface CanvasSize {
   h: number
 }
 
+export interface Drag2 {
+  dx: number
+  time: number
+  correction: number
+}
+
 export interface Input {
   pos: { x: number; y: number } | null
   down: boolean
   drag: { x: number; y: number } | null
 
-  // have this be a number between -1 and 1
-  drag2: {
-    dx: number
-    time: number
-    correction: number
-  } | null
+  drag2: Drag2 | null
 }
 
 export interface Key {
