@@ -73,9 +73,13 @@ function adjustDebug() {
   const width = debug.getBoundingClientRect().width
   const prev = parseInt(localStorage.getItem('debug.width') || '0')
   const max = Math.max(width, prev)
-  if (max > prev || !debug.style.getPropertyValue('--width')) {
+  const setCssVariable = () => debug.style.setProperty('--width', `${max}px`)
+  if (max > prev) {
     localStorage.setItem('debug.width', max.toString())
-    debug.style.setProperty('--width', `${max}px`)
+    setCssVariable()
+  } else if (!debug.style.getPropertyValue('--width')) {
+    debug.style.opacity = '1'
+    setCssVariable()
   }
 }
 
