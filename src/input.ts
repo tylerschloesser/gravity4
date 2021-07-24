@@ -112,9 +112,16 @@ export async function newInput(
 
       let dt = next.time - last.time
 
+      // relative dx/dy
+      //
+      const rdx = dx / Math.min(size.w, size.h)
+      const rdy = dy / Math.min(size.w, size.h)
+
       let drag2: Drag2 = {
-        vx: 0,
-        vy: 0,
+        rdx,
+        rdy,
+        vx: (rdx * (dt / 1000)),
+        vy: (rdy * (dt / 1000)),
         dx: dx / Math.min(size.w, size.h),
         dy: dy / Math.min(size.w, size.h),
         correction: 0,
