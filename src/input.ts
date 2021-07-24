@@ -72,9 +72,6 @@ export async function newInput(
   // size$ is only here so that we guarantee that size$ has
   // emitted an event which will be used later on via withLatestFrom
   return combineLatest([pointer$, key$, size$]).pipe(
-    tap(([pointer, key]) => {
-      //console.log(pointer, key)
-    }),
     map(([pointer, key]) =>
       pointer
         ? {
