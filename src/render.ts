@@ -1,5 +1,31 @@
 import { Circle, Drag, RenderArgs } from './types'
 
+function renderBackground(args: RenderArgs) {
+  const { context, input, size, state } = args
+  const { w, h } = size
+
+  const scale = w / 100
+  
+  context.translate(w / 2, h / 2)
+  context.rotate(-args.state.angle)
+  context.translate(-state.ball.x * scale, -state.ball.y * scale)
+
+  context.translate(-50, -50)
+  context.lineWidth = 2
+  context.strokeStyle = '#555'
+  context.beginPath()
+  for (let i = -20; i < 20 + 1; i++) {
+    context.moveTo(-100 * scale * 2, i * 10 * scale)
+    context.lineTo(100 * scale * 2, i * 10 * scale)
+
+    context.moveTo(i * 10 * scale, -100 * scale * 2)
+    context.lineTo(i * 10 * scale, 100 * scale * 2)
+  }
+  context.stroke()
+
+  context.resetTransform()
+}
+
 function renderBox(args: RenderArgs, i: number) {
   const { context, input, size, state } = args
   const { w, h } = size
@@ -135,6 +161,8 @@ export function render(args: RenderArgs) {
 
   context.fillStyle = '#444'
   context.fillRect(0, 0, w, h)
+
+  renderBackground(args)
 
   context.lineWidth = 3
 
