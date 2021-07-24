@@ -91,7 +91,7 @@ export function renderDebug(args: RenderArgs) {
   document.querySelector('#speed')!.innerHTML = speed
   const drag2 = JSON.stringify(
     Object.entries(
-      args.input.drag2 || ({ dx: 0, dy: 0, correction: 0, time: 0 } as Drag2)
+      args.input.drag2 ?? <Drag2>{ dx: 0, dy: 0, correction: 0, time: 0 }
     ).reduce(
       (acc, [k, v]) => ({
         ...acc,

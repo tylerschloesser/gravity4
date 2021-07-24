@@ -8,6 +8,8 @@ export interface CanvasSize {
 export interface Drag2 {
   dx: number
   dy: number
+  vx: number
+  vy: number
   time: number
   correction: number
 }

@@ -112,6 +112,15 @@ export async function newInput(
 
       let dt = next.time - last.time
 
+      let drag2: Drag2 = {
+        vx: 0,
+        vy: 0,
+        dx: dx / Math.min(size.w, size.h),
+        dy: dy / Math.min(size.w, size.h),
+        correction: 0,
+        time: next.time,
+      }
+
       // correction. we only look at events in the last 100ms,
       // but the difference between the last and first event is
       // probably < 100ms
@@ -123,12 +132,6 @@ export async function newInput(
       dy += cy
       
 
-      let drag2: Drag2 = {
-        dx: dx / Math.min(size.w, size.h),
-        dy: dy / Math.min(size.w, size.h),
-        correction: cx,
-        time: next.time,
-      }
 
       // don't remember why I do this
       dt = dt / 1000
