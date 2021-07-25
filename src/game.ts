@@ -62,10 +62,9 @@ export async function newGame(init: GameArgs): Promise<Game> {
 
   const state$ = animationFrames().pipe(
     mapDelta,
-    withLatestFrom(input$, size$),
+    withLatestFrom(input$),
     scan(
-      (state, [delta, input, size]) =>
-        physics.update({ delta, size, input, state }),
+      (state, [delta, input]) => physics.update({ delta, input, state }),
       initialState
     )
   )

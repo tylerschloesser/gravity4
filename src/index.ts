@@ -1,7 +1,8 @@
 import { fromEvent, Observable } from 'rxjs'
-import { distinctUntilChanged, tap } from 'rxjs/operators'
+import { distinctUntilChanged } from 'rxjs/operators'
 import { newGame } from './game'
 import { newInput } from './input'
+import { vec2 } from './math'
 import { CanvasSize } from './types'
 
 async function main() {
@@ -15,13 +16,9 @@ async function main() {
       } = entries[0]
       canvas.width = w
       canvas.height = h
-      subscriber.next({ w, h })
+      subscriber.next(vec2(w, h))
     }).observe(canvas)
   })
-
-  size$
-    .pipe(distinctUntilChanged((a, b) => a.w === b.w && a.h === b.h))
-    .subscribe((size) => console.log('size', size))
 
   fromEvent<PointerEvent>(document, 'touchmove', {
     passive: false,

@@ -56,7 +56,6 @@ function updatePhysics({
   ballBody,
   state,
   delta,
-  size,
   input,
 }: {
   box2d: typeof Box2D & EmscriptenModule
@@ -64,7 +63,6 @@ function updatePhysics({
   ballBody: Box2D.b2Body
   state: GameState
   delta: number
-  size: { w: number; h: number }
   input: Input
 }): GameState {
   const camera = updateCamera({
@@ -72,7 +70,10 @@ function updatePhysics({
     input,
     state,
   })
-  const grav = new box2d.b2Vec2(-1 * Math.sin(camera.angle), Math.cos(camera.angle))
+  const grav = new box2d.b2Vec2(
+    -1 * Math.sin(camera.angle),
+    Math.cos(camera.angle)
+  )
 
   let { speed } = state
   const { drag } = input
@@ -165,12 +166,10 @@ export async function newPhysics(state: GameState) {
   return {
     update: ({
       delta,
-      size,
       input,
       state,
     }: {
       delta: number
-      size: { w: number; h: number }
       input: Input
       state: GameState
     }) => {
@@ -180,7 +179,6 @@ export async function newPhysics(state: GameState) {
         ballBody,
         state,
         delta,
-        size,
         input,
       })
     },

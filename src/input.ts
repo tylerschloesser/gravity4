@@ -121,8 +121,8 @@ export async function newInput(
       if (dt > 0) {
         // relative dx/dy
         //
-        const rdx = dx / Math.min(size.w, size.h)
-        const rdy = dy / Math.min(size.w, size.h)
+        const rdx = dx / Math.min(size.x, size.y)
+        const rdy = dy / Math.min(size.x, size.y)
 
         const vx = rdx / (dt / 1000)
         const vy = rdy / (dt / 1000)

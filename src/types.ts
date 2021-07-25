@@ -5,10 +5,13 @@ export interface Vec2 {
   y: number
 }
 
-export interface CanvasSize {
-  w: number
-  h: number
-}
+export type CanvasSize = Vec2
+
+// export interface CanvasSize {
+// 
+//   w: number
+//   h: number
+// }
 
 // x & y drag velocity in relative units per second
 // 1 relative unit is the minimum screen dimension in pixels

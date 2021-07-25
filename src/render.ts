@@ -2,12 +2,11 @@ import { Circle, Drag, RenderArgs } from './types'
 import {isCircleHit} from './util'
 
 function renderBackground(args: RenderArgs) {
-  const { context, input, size, state } = args
-  const { w, h } = size
+  const { context, size, state } = args
 
-  const scale = w / 100
+  const scale = size.x / 100
   
-  context.translate(w / 2, h / 2)
+  context.translate(size.x / 2, size.y / 2)
   context.rotate(-args.state.camera.angle)
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
@@ -28,13 +27,12 @@ function renderBackground(args: RenderArgs) {
 }
 
 function renderBox(args: RenderArgs, i: number) {
-  const { context, input, size, state } = args
-  const { w, h } = size
+  const { context, size, state } = args
   const box = state.boxes[i]
 
-  const scale = w / 100
+  const scale = size.x / 100
 
-  context.translate(w / 2, h / 2)
+  context.translate(size.x / 2, size.y / 2)
   context.rotate(-args.state.camera.angle)
 
   context.translate(
@@ -57,10 +55,9 @@ function renderBox(args: RenderArgs, i: number) {
 
 function renderBall(args: RenderArgs) {
   const { context, size, state } = args
-  const { w, h } = size
 
-  context.translate(w / 2, h / 2)
-  const scale = w / 100
+  context.translate(size.x / 2, size.y / 2)
+  const scale = size.x / 100
   context.strokeStyle = 'white'
   context.beginPath()
   context.arc(0, 0, state.ball.r * scale, 0, 2 * Math.PI)
@@ -76,12 +73,11 @@ function renderBall(args: RenderArgs) {
 }
 
 function renderCircle(args: RenderArgs, circle: Circle) {
-  const { context, input, size, state } = args
-  const { w, h } = size
+  const { context, size, state } = args
 
-  const scale = w / 100
+  const scale = size.x / 100
 
-  context.translate(w / 2, h / 2)
+  context.translate(size.x / 2, size.y / 2)
   context.rotate(-args.state.camera.angle)
 
   const { p, r } = circle
@@ -159,19 +155,18 @@ export function renderDebug(args: RenderArgs) {
 function renderSpeed(args: RenderArgs) {
   const { context, size, state } = args
   context.strokeStyle = 'blue'
-  context.strokeRect(0, 0, size.w, Math.min(size.h, size.w) / 20)
+  context.strokeRect(0, 0, size.x, Math.min(size.x, size.y) / 20)
 
   context.fillStyle = 'blue'
-  context.fillRect(0, 0, size.w * state.speed, Math.min(size.h, size.w) / 20)
+  context.fillRect(0, 0, size.x * state.speed, Math.min(size.x, size.y) / 20)
 }
 
 export function render(args: RenderArgs) {
   const { context, size } = args
-  const { w, h } = size
-  context.clearRect(0, 0, w, h)
+  context.clearRect(0, 0, size.x, size.y)
 
   context.fillStyle = '#444'
-  context.fillRect(0, 0, w, h)
+  context.fillRect(0, 0, size.x, size.y)
 
   renderBackground(args)
 
