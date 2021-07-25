@@ -68,7 +68,6 @@ export function updatePhysics({
   world.Step(delta / 1000, velocityIterations, positionIterations)
 
   const ballPosition = ballBody.GetPosition()
-  const ballVelocity = ballBody.GetLinearVelocity()
 
   return {
     ...state,
@@ -76,7 +75,7 @@ export function updatePhysics({
     ball: {
       ...state.ball,
       p: vec2(ballPosition.x, ballPosition.y),
-      v: vec2(ballVelocity.x, ballVelocity.y),
+      v,
       angle: ballBody.GetAngle(),
     },
     camera,
