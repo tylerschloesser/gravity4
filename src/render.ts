@@ -1,4 +1,4 @@
-import { curry } from 'lodash/fp'
+import * as _ from 'lodash/fp'
 import { Box, Circle, RenderArgs } from './types'
 import { isCircleHit } from './util'
 
@@ -27,7 +27,7 @@ function renderBackground(args: RenderArgs) {
   context.resetTransform()
 }
 
-function renderBox(args: RenderArgs, box: Box) {
+function renderBox(box: Box, args: RenderArgs) {
   const { context, viewport, state } = args
 
   context.lineWidth = 3
@@ -76,7 +76,7 @@ function renderBall(args: RenderArgs) {
   context.resetTransform()
 }
 
-function renderCircle(args: RenderArgs, circle: Circle) {
+function renderCircle(circle: Circle, args: RenderArgs) {
   const { context, viewport, state } = args
 
   context.lineWidth = 3
@@ -170,8 +170,6 @@ function renderSpeed(args: RenderArgs) {
   )
 }
 
-type RenderFn = (args: RenderArgs) => void
-
 function renderInit(args: RenderArgs) {
   const { context, viewport } = args
   context.clearRect(0, 0, viewport.x, viewport.y)
@@ -181,15 +179,15 @@ function renderInit(args: RenderArgs) {
 }
 
 export function render(args: RenderArgs) {
-  renderInit(args)
-  renderBackground(args)
-
-  args.state.boxes.forEach(curry(renderBox)(args))
-  args.state.circles.forEach(curry(renderCircle)(args))
-  renderBall(args)
-  renderSpeed(args)
-
-  renderDebug(args)
+  ;[
+    renderInit,
+    renderBackground,
+    ...args.state.boxes.map((box) => _.curry(renderBox)(box)),
+    ...args.state.circles.map((circle) => _.curry(renderCircle)(circle)),
+    renderBall,
+    renderSpeed,
+    renderDebug,
+  ].forEach((renderFn) => renderFn(args))
 }
 
 export async function newRender() {
