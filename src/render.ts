@@ -92,11 +92,8 @@ function renderCircle(circle: Circle, args: RenderArgs) {
   context.translate(p.x * scale, p.y * scale)
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
-  if (isCircleHit(state, circle)) {
-    context.strokeStyle = 'blue'
-  } else {
-    context.strokeStyle = 'red'
-  }
+  const hit = isCircleHit(state, circle)
+  context.strokeStyle = hit ? 'blue' : 'red'
 
   context.beginPath()
   context.arc(0, 0, r * scale, 0, Math.PI * 2)
