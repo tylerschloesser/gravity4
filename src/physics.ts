@@ -26,7 +26,7 @@ export function updatePhysics({
     state,
   })
 
-  let { speed } = state
+  let { speed, ball } = state
   const { drag } = input
 
   if (isVyMax(drag)) {
@@ -53,15 +53,14 @@ export function updatePhysics({
     true
   )
 
-  if (ballBody.GetLinearVelocity().Length() > maxVel) {
-    // decelerate
-    const newVelocity = new box2d.b2Vec2(
-      ballBody.GetLinearVelocity().x,
-      ballBody.GetLinearVelocity().y
-    )
-    newVelocity.Normalize()
-    newVelocity.op_mul(maxVel)
-    ballBody.SetLinearVelocity(newVelocity)
+  let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
+
+  if (vec2.dist(v) > maxVel) {
+    v = _.pipe(
+      vec2.normalize,
+      vec2.scale(maxVel),
+    )(v)
+    ballBody.SetLinearVelocity(new box2d.b2Vec2(v.x, v.y))
   }
 
   const velocityIterations = 10
