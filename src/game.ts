@@ -1,5 +1,6 @@
 import { animationFrames, pipe } from 'rxjs'
 import { map, scan, withLatestFrom } from 'rxjs/operators'
+import { vec2 } from './math'
 import { newPhysics } from './physics'
 import { newRender } from './render'
 import { Circle, Game, GameArgs, GameState } from './types'
@@ -47,7 +48,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
   ]
 
   const initialState: GameState = {
-    ball: { x: 50, y: 20, r: 7, angle: 0 },
+    ball: { p: vec2(50, 20), r: 7, angle: 0 },
     boxes,
     circles,
     angle: 0,

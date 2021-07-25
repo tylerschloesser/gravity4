@@ -42,8 +42,7 @@ export interface Circle {
 }
 
 interface Ball {
-  x: number
-  y: number
+  p: Vec2
   r: number
   angle: number
 }

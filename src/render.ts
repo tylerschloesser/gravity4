@@ -9,7 +9,7 @@ function renderBackground(args: RenderArgs) {
   
   context.translate(w / 2, h / 2)
   context.rotate(-args.state.angle)
-  context.translate(-state.ball.x * scale, -state.ball.y * scale)
+  context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
   context.translate(-50, -50)
   context.lineWidth = 2
@@ -41,7 +41,7 @@ function renderBox(args: RenderArgs, i: number) {
     box.x * scale + (box.size / 2) * scale,
     box.y * scale + (box.size / 2) * scale
   )
-  context.translate(-state.ball.x * scale, -state.ball.y * scale)
+  context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
   context.strokeStyle = 'red'
 
@@ -90,7 +90,7 @@ function renderCircle(args: RenderArgs, circle: Circle) {
     p.x * scale,
     p.y * scale,
   )
-  context.translate(-state.ball.x * scale, -state.ball.y * scale)
+  context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
 
   if (isCircleHit(state, circle)) {

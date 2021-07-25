@@ -1,4 +1,5 @@
 import Box2DFactory from 'box2d-wasm'
+import { vec2 } from './math'
 import { Drag, GameState, Input } from './types'
 import { isCircleHit } from './util'
 
@@ -102,8 +103,6 @@ function updatePhysics({
   grav.op_mul(ballBody.GetMass())
   ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
 
-
-
   if (ballBody.GetLinearVelocity().Length() > maxVel) {
     // decelerate
     const newVelocity = new box2d.b2Vec2(
@@ -126,8 +125,7 @@ function updatePhysics({
     speed,
     ball: {
       ...state.ball,
-      x: ballPosition.x,
-      y: ballPosition.y,
+      p: vec2(ballPosition.x, ballPosition.y),
       angle: ballBody.GetAngle(),
     },
     angle,
@@ -151,7 +149,7 @@ export async function newPhysics(state: GameState) {
     const bd = new b2BodyDef()
     bd.set_type(b2_dynamicBody)
     console.log(state.ball)
-    bd.position.Set(state.ball.x, state.ball.y)
+    bd.position.Set(state.ball.p.x, state.ball.p.y)
 
     ballBody = world.CreateBody(bd)
     ballBody.CreateFixture(circle, 10)
