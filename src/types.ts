@@ -59,6 +59,7 @@ interface Box {
   size: number
 }
 
+// camera position is the same as ball position
 export interface Camera {
   angle: number
   av: number
