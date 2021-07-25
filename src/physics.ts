@@ -44,7 +44,6 @@ export function updatePhysics({
 
   const grav = _.pipe(
     vec2.rotate(camera.angle),
-    vec2.normalize,
     vec2.scale(gravScale * -1 * ballBody.GetMass())
   )(vec2(0, 1))
 
