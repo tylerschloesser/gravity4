@@ -10,11 +10,13 @@ vec2.rotate = _.curry((theta: number, { x, y }: Vec2) =>
   )
 )
 
-vec2.normalize = ({ x, y }: Vec2) => {
-  const dist = Math.sqrt(x * x + y * y)
-  return vec2(x / dist, y / dist)
+vec2.normalize = (v: Vec2) => {
+  const dist = vec2.dist(v)
+  return vec2(v.x / dist, v.y / dist)
 }
 
 vec2.scale = _.curry((scalar: number, { x, y }: Vec2) =>
   vec2(x * scalar, y * scalar)
 )
+
+vec2.dist = ({ x, y }: Vec2) => Math.sqrt(x * x + y * y)

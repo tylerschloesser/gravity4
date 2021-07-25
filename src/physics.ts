@@ -64,8 +64,8 @@ export function updatePhysics({
     ballBody.SetLinearVelocity(newVelocity)
   }
 
-  const velocityIterations = 40
-  const positionIterations = 40
+  const velocityIterations = 10
+  const positionIterations = 10
   world.Step(delta / 1000, velocityIterations, positionIterations)
 
   const ballPosition = ballBody.GetPosition()
