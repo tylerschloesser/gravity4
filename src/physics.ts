@@ -142,7 +142,6 @@ export async function newPhysics(state: GameState) {
     circle.set_m_radius(state.ball.r)
     const bd = new b2BodyDef()
     bd.set_type(b2_dynamicBody)
-    console.log(state.ball)
     bd.position.Set(state.ball.p.x, state.ball.p.y)
 
     ballBody = world.CreateBody(bd)
