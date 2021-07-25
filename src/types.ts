@@ -42,8 +42,15 @@ export interface Circle {
   r: number
 }
 
+interface Ball {
+  x: number
+  y: number
+  r: number
+  angle: number
+}
+
 export interface GameState {
-  ball: { x: number; y: number; r: number; angle: number }
+  ball: Ball
   boxes: { x: number; y: number; size: number }[]
   circles: Circle[]
   angle: number
