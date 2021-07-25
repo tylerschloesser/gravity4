@@ -68,3 +68,7 @@ export interface GameState {
   camera: Camera
   speed: number
 }
+
+export interface Physics {
+  update: (args: { delta: number; input: Input; state: GameState }) => GameState
+}

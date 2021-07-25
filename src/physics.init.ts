@@ -1,6 +1,6 @@
 import Box2DFactory from 'box2d-wasm'
 import { updatePhysics } from './physics'
-import { GameState, Input } from './types'
+import { GameState, Input, Physics } from './types'
 
 export async function initPhysics(state: GameState) {
   const box2d = await Box2DFactory()
@@ -37,15 +37,11 @@ export async function initPhysics(state: GameState) {
     body.CreateFixture(shape, 0)
   })
 
-  return {
+  return <Physics>{
     update: ({
       delta,
       input,
       state,
-    }: {
-      delta: number
-      input: Input
-      state: GameState
     }) => {
       return updatePhysics({
         box2d,
