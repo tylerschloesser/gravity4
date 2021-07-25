@@ -106,7 +106,6 @@ export async function newInput(
 
       if (!last || !last.down || !next?.down) {
         return {
-          blah: null,
           down: next?.down ?? false,
           drag,
         }
