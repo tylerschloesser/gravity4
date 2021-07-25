@@ -7,12 +7,10 @@ function calculateAngle({
   delta,
   input,
   state,
-  size,
 }: {
   delta: number
   input: Input
   state: GameState
-  size: { w: number; h: number }
 }): { angle: number; angularVelocity: number } {
   const { drag } = input
   let angle = state.angle
@@ -77,7 +75,6 @@ function updatePhysics({
     delta,
     input,
     state,
-    size,
   })
   const grav = new box2d.b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
 
