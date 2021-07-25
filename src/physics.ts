@@ -159,7 +159,7 @@ export async function newPhysics(state: GameState) {
     let def: Box2D.b2BodyDef = new box2d.b2BodyDef()
 
     const halfSize = box.size / 2
-    def.position.Set(box.x + halfSize, box.y + halfSize)
+    def.position.Set(box.p.x + halfSize, box.p.y + halfSize)
 
     def.set_type(box2d.b2_kinematicBody)
     const shape = new b2PolygonShape()

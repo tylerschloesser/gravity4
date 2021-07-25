@@ -48,8 +48,7 @@ interface Ball {
 }
 
 interface Box {
-  x: number
-  y: number
+  p: Vec2
   size: number
 }
 

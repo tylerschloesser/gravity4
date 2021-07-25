@@ -38,8 +38,8 @@ function renderBox(args: RenderArgs, i: number) {
   context.rotate(-args.state.angle)
 
   context.translate(
-    box.x * scale + (box.size / 2) * scale,
-    box.y * scale + (box.size / 2) * scale
+    box.p.x * scale + (box.size / 2) * scale,
+    box.p.y * scale + (box.size / 2) * scale
   )
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 

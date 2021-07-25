@@ -30,8 +30,10 @@ export async function newGame(init: GameArgs): Promise<Game> {
   for (let i = Math.ceil(GRID_SIZE / -2); i < Math.ceil(GRID_SIZE / 2); i++) {
     for (let j = Math.ceil(GRID_SIZE / -2); j < Math.ceil(GRID_SIZE / 2); j++) {
       boxes.push({
-        x: i * BOX_SIZE + i * GAP + GRID_CENTER.x,
-        y: j * BOX_SIZE + j * GAP + GRID_CENTER.y,
+        p: vec2(
+          i * BOX_SIZE + i * GAP + GRID_CENTER.x,
+          j * BOX_SIZE + j * GAP + GRID_CENTER.y
+        ),
         size: BOX_SIZE,
       })
     }
