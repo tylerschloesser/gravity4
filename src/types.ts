@@ -5,7 +5,7 @@ export interface Vec2 {
   y: number
 }
 
-export type CanvasSize = Vec2
+export type Viewport = Vec2
 
 // export interface CanvasSize {
 // 
@@ -28,14 +28,14 @@ export interface Game {}
 
 export interface GameArgs {
   context: CanvasRenderingContext2D
-  size$: Observable<CanvasSize>
+  size$: Observable<Viewport>
   input$: Observable<Input>
 }
 
 export interface RenderArgs {
   context: CanvasRenderingContext2D
   input: Input
-  size: CanvasSize
+  size: Viewport
   state: GameState
 }
 

@@ -8,7 +8,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators'
 import { vec2 } from './math'
-import { CanvasSize, Drag, Input } from './types'
+import { Viewport, Drag, Input } from './types'
 
 interface Pointer {
   x: number
@@ -19,7 +19,7 @@ interface Pointer {
 }
 
 export async function newInput(
-  size$: Observable<CanvasSize>
+  size$: Observable<Viewport>
 ): Promise<Observable<Input>> {
   const pointer$ = merge(
     merge(fromEvent<PointerEvent>(window, 'pointerleave')).pipe(mapTo(null)),

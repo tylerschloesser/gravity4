@@ -1,15 +1,14 @@
 import { fromEvent, Observable } from 'rxjs'
-import { distinctUntilChanged } from 'rxjs/operators'
 import { newGame } from './game'
 import { newInput } from './input'
 import { vec2 } from './math'
-import { CanvasSize } from './types'
+import { Viewport } from './types'
 
 async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
   const context = canvas.getContext('2d')!
 
-  const size$ = new Observable<CanvasSize>((subscriber) => {
+  const size$ = new Observable<Viewport>((subscriber) => {
     new ResizeObserver((entries) => {
       const {
         contentRect: { width: w, height: h },
