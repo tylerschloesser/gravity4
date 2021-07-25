@@ -26,7 +26,7 @@ export function updatePhysics({
     state,
   })
 
-  let { speed, ball } = state
+  let { speed } = state
   const { drag } = input
 
   if (isVyMax(drag)) {
@@ -53,7 +53,7 @@ export function updatePhysics({
   if (vec2.dist(v) > vmax) {
     dampen = _.pipe(
       vec2.normalize,
-      vec2.scale(vec2.dist(grav) * 2),
+      vec2.scale(vec2.dist(grav) * 1.2),
       vec2.scale(-1),
     )(v)
   }
