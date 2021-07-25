@@ -1,3 +1,4 @@
+import { curry } from 'lodash/fp'
 import { Box, Circle, RenderArgs } from './types'
 import { isCircleHit } from './util'
 
@@ -180,12 +181,8 @@ export function render(args: RenderArgs) {
 
   renderBackground(args)
 
-  args.state.boxes.forEach((box) => {
-    renderBox(args, box)
-  })
-  args.state.circles.forEach((circle) => {
-    renderCircle(args, circle)
-  })
+  args.state.boxes.forEach(curry(renderBox)(args))
+  args.state.circles.forEach(curry(renderCircle)(args))
   renderBall(args)
   renderSpeed(args)
 
