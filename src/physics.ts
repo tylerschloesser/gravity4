@@ -1,4 +1,5 @@
-import { normalizeVec2, rotateVec2, scaleVec2, vec2 } from './math'
+import * as _ from 'lodash/fp'
+import { vec2 } from './math'
 import { updateCamera } from './physics.camera'
 import { isVyMax } from './physics.util'
 import { GameState, Input } from './types'
@@ -25,8 +26,6 @@ export function updatePhysics({
     state,
   })
 
-  let grav = rotateVec2(vec2(0, 1), camera.angle)
-
   let { speed } = state
   const { drag } = input
 
@@ -43,8 +42,11 @@ export function updatePhysics({
     maxVel *= 2
   }
 
-  grav = normalizeVec2(grav)
-  grav = scaleVec2(grav, gravScale * -1 * ballBody.GetMass())
+  const grav = _.pipe(
+    vec2.rotate(camera.angle),
+    vec2.normalize,
+    vec2.scale(gravScale * -1 * ballBody.GetMass())
+  )(vec2(0, 1))
 
   ballBody.ApplyForce(
     new box2d.b2Vec2(grav.x, grav.y),
