@@ -1,5 +1,10 @@
 import { Observable } from 'rxjs'
 
+export interface Vec2 {
+  x: number
+  y: number
+}
+
 export interface CanvasSize {
   w: number
   h: number
@@ -8,6 +13,7 @@ export interface CanvasSize {
 // x & y drag velocity in relative units per second
 // 1 relative unit is the minimum screen dimension in pixels
 export interface Drag {
+  v: Vec2
   vx: number
   vy: number
 }
@@ -33,10 +39,6 @@ export interface RenderArgs {
   state: GameState
 }
 
-interface Vec2 {
-  x: number
-  y: number
-}
 
 export interface Circle {
   p: Vec2

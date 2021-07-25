@@ -7,6 +7,7 @@ import {
   switchMap,
   withLatestFrom,
 } from 'rxjs/operators'
+import { vec2 } from './math'
 import { CanvasSize, Drag, Input } from './types'
 
 interface Pointer {
@@ -99,7 +100,7 @@ export async function newInput(
     map(([buffer, size]) => {
       const next: Pointer | null = buffer[0] ?? null
       const last: Pointer | null = buffer[buffer.length - 1] ?? null
-      let drag: Drag = { vx: 0, vy: 0 }
+      let drag: Drag = { v: vec2(), vx: 0, vy: 0 }
 
       // TODO events between next and last are not necessarily all down events
 
@@ -125,9 +126,13 @@ export async function newInput(
         const rdx = dx / Math.min(size.w, size.h)
         const rdy = dy / Math.min(size.w, size.h)
 
+        const vx = rdx / (dt / 1000)
+        const vy = rdy / (dt / 1000)
+
         drag = {
-          vx: rdx / (dt / 1000),
-          vy: rdy / (dt / 1000),
+          v: vec2(vx, vy),
+          vx,
+          vy,
         }
       }
 
