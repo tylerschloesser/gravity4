@@ -137,6 +137,10 @@ function adjustDebug() {
 }
 
 const DEBUG: [string, (args: RenderArgs) => string][] = [
+  ['ball.p.x', (args) => args.state.ball.p.x.toFixed(2)],
+  ['ball.p.y', (args) => args.state.ball.p.y.toFixed(2)],
+  ['ball.v.x', (args) => args.state.ball.v.x.toFixed(2)],
+  ['ball.v.y', (args) => args.state.ball.v.y.toFixed(2)],
   ['av', (args) => args.state.angularVelocity.toFixed(3)],
   ['speed', (args) => args.state.speed.toFixed(3)],
   ['drag.v.x', (args) => args.input.drag.v.x.toFixed(2)],

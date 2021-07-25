@@ -41,8 +41,9 @@ export interface Circle {
   r: number
 }
 
-interface Ball {
+export interface Ball {
   p: Vec2
+  v: Vec2
   r: number
   angle: number
 }
