@@ -169,32 +169,6 @@ export async function newPhysics(state: GameState) {
     body.CreateFixture(shape, 0)
   })
 
-  // for (let { x, y } of [
-  //   {
-  //     x: -5,
-  //     y: 50,
-  //   },
-  //   {
-  //     x: 105,
-  //     y: 50,
-  //   },
-  // ]) {
-  //   const bd = new box2d.b2BodyDef()
-  //   bd.position.Set(x, y)
-  //   const body = world.CreateBody(bd)
-  //   const shape = new b2PolygonShape()
-  //   shape.SetAsBox(5, 50)
-  //   body.CreateFixture(shape, 1)
-  // }
-  // {
-  //   const bd = new box2d.b2BodyDef()
-  //   bd.position.Set(50, -5)
-  //   const body = world.CreateBody(bd)
-  //   const shape = new b2PolygonShape()
-  //   shape.SetAsBox(50, 5)
-  //   body.CreateFixture(shape, 1)
-  // }
-
   return {
     update: ({
       delta,
