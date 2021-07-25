@@ -19,7 +19,7 @@ const mapDelta = pipe(
 )
 
 export async function newGame(init: GameArgs): Promise<Game> {
-  const { context, size$, input$ } = init
+  const { context, viewport$, input$ } = init
 
   const boxes: GameState['boxes'] = []
 
@@ -71,11 +71,11 @@ export async function newGame(init: GameArgs): Promise<Game> {
 
   state$
     .pipe(
-      withLatestFrom(input$, size$),
-      map(([state, input, size]) => ({
+      withLatestFrom(input$, viewport$),
+      map(([state, input, viewport]) => ({
         state,
         input,
-        size,
+        viewport,
         context,
       }))
     )

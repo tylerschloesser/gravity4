@@ -1,12 +1,12 @@
-import { Circle, Drag, RenderArgs } from './types'
-import {isCircleHit} from './util'
+import { Circle, RenderArgs } from './types'
+import { isCircleHit } from './util'
 
 function renderBackground(args: RenderArgs) {
-  const { context, size, state } = args
+  const { context, viewport, state } = args
 
-  const scale = size.x / 100
-  
-  context.translate(size.x / 2, size.y / 2)
+  const scale = viewport.x / 100
+
+  context.translate(viewport.x / 2, viewport.y / 2)
   context.rotate(-args.state.camera.angle)
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
@@ -27,12 +27,12 @@ function renderBackground(args: RenderArgs) {
 }
 
 function renderBox(args: RenderArgs, i: number) {
-  const { context, size, state } = args
+  const { context, viewport, state } = args
   const box = state.boxes[i]
 
-  const scale = size.x / 100
+  const scale = viewport.x / 100
 
-  context.translate(size.x / 2, size.y / 2)
+  context.translate(viewport.x / 2, viewport.y / 2)
   context.rotate(-args.state.camera.angle)
 
   context.translate(
@@ -54,10 +54,10 @@ function renderBox(args: RenderArgs, i: number) {
 }
 
 function renderBall(args: RenderArgs) {
-  const { context, size, state } = args
+  const { context, viewport, state } = args
 
-  context.translate(size.x / 2, size.y / 2)
-  const scale = size.x / 100
+  context.translate(viewport.x / 2, viewport.y / 2)
+  const scale = viewport.x / 100
   context.strokeStyle = 'white'
   context.beginPath()
   context.arc(0, 0, state.ball.r * scale, 0, 2 * Math.PI)
@@ -73,21 +73,17 @@ function renderBall(args: RenderArgs) {
 }
 
 function renderCircle(args: RenderArgs, circle: Circle) {
-  const { context, size, state } = args
+  const { context, viewport, state } = args
 
-  const scale = size.x / 100
+  const scale = viewport.x / 100
 
-  context.translate(size.x / 2, size.y / 2)
+  context.translate(viewport.x / 2, viewport.y / 2)
   context.rotate(-args.state.camera.angle)
 
   const { p, r } = circle
 
-  context.translate(
-    p.x * scale,
-    p.y * scale,
-  )
+  context.translate(p.x * scale, p.y * scale)
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
-
 
   if (isCircleHit(state, circle)) {
     context.strokeStyle = 'blue'
@@ -153,20 +149,25 @@ export function renderDebug(args: RenderArgs) {
 }
 
 function renderSpeed(args: RenderArgs) {
-  const { context, size, state } = args
+  const { context, viewport, state } = args
   context.strokeStyle = 'blue'
-  context.strokeRect(0, 0, size.x, Math.min(size.x, size.y) / 20)
+  context.strokeRect(0, 0, viewport.x, Math.min(viewport.x, viewport.y) / 20)
 
   context.fillStyle = 'blue'
-  context.fillRect(0, 0, size.x * state.speed, Math.min(size.x, size.y) / 20)
+  context.fillRect(
+    0,
+    0,
+    viewport.x * state.speed,
+    Math.min(viewport.x, viewport.y) / 20
+  )
 }
 
 export function render(args: RenderArgs) {
-  const { context, size } = args
-  context.clearRect(0, 0, size.x, size.y)
+  const { context, viewport } = args
+  context.clearRect(0, 0, viewport.x, viewport.y)
 
   context.fillStyle = '#444'
-  context.fillRect(0, 0, size.x, size.y)
+  context.fillRect(0, 0, viewport.x, viewport.y)
 
   renderBackground(args)
 
@@ -183,7 +184,6 @@ export function render(args: RenderArgs) {
 
   renderDebug(args)
 }
-
 
 export async function newRender() {
   const tbody = document.querySelector<HTMLTableElement>('#debug tbody')!

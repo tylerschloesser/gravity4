@@ -7,12 +7,6 @@ export interface Vec2 {
 
 export type Viewport = Vec2
 
-// export interface CanvasSize {
-// 
-//   w: number
-//   h: number
-// }
-
 // x & y drag velocity in relative units per second
 // 1 relative unit is the minimum screen dimension in pixels
 export interface Drag {
@@ -28,14 +22,14 @@ export interface Game {}
 
 export interface GameArgs {
   context: CanvasRenderingContext2D
-  size$: Observable<Viewport>
+  viewport$: Observable<Viewport>
   input$: Observable<Input>
 }
 
 export interface RenderArgs {
   context: CanvasRenderingContext2D
   input: Input
-  size: Viewport
+  viewport: Viewport
   state: GameState
 }
 
@@ -52,7 +46,6 @@ export interface Ball {
 }
 
 interface Box {
-
   /**
    * Top left corner of the box. Optimized for canvas drawing.
    * Box2D uses the center of rectangles.

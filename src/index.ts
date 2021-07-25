@@ -8,7 +8,7 @@ async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('canvas')!
   const context = canvas.getContext('2d')!
 
-  const size$ = new Observable<Viewport>((subscriber) => {
+  const viewport$ = new Observable<Viewport>((subscriber) => {
     new ResizeObserver((entries) => {
       const {
         contentRect: { width: w, height: h },
@@ -26,11 +26,11 @@ async function main() {
     e.preventDefault()
   })
 
-  const input$ = await newInput(size$)
+  const input$ = await newInput(viewport$)
 
   await newGame({
     context,
-    size$,
+    viewport$,
     input$,
   })
 
