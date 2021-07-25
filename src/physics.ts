@@ -47,21 +47,23 @@ export function updatePhysics({
     vec2.scale(gravScale * -1 * ballBody.GetMass())
   )(vec2(0, 1))
 
-  ballBody.ApplyForce(
-    new box2d.b2Vec2(grav.x, grav.y),
-    ballBody.GetPosition(),
-    true
-  )
 
+  let dampen = vec2()
   let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
-
   if (vec2.dist(v) > vmax) {
-    v = _.pipe(
+    dampen = _.pipe(
       vec2.normalize,
-      vec2.scale(vmax),
+      vec2.scale(vec2.dist(grav) * 2),
+      vec2.scale(-1),
     )(v)
-    ballBody.SetLinearVelocity(new box2d.b2Vec2(v.x, v.y))
   }
+
+  const force = vec2.add(grav, dampen)
+  ballBody.ApplyForce(
+    new box2d.b2Vec2(force.x, force.y),
+    ballBody.GetPosition(),
+    true,
+  )
 
   const velocityIterations = 10
   const positionIterations = 10

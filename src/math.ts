@@ -20,3 +20,7 @@ vec2.scale = _.curry((scalar: number, { x, y }: Vec2) =>
 )
 
 vec2.dist = ({ x, y }: Vec2) => Math.sqrt(x * x + y * y)
+
+vec2.copy = ({ x, y }: Vec2) => vec2(x, y)
+
+vec2.add = (a: Vec2, b: Vec2) => vec2(a.x + b.x, a.y + b.y)
