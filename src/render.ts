@@ -1,4 +1,5 @@
 import * as _ from 'lodash/fp'
+import {vec2} from './math'
 import { Box, Circle, RenderArgs } from './types'
 import { isCircleHit } from './util'
 
@@ -139,6 +140,7 @@ const DEBUG: [string, (args: RenderArgs) => string][] = [
   ['ball.p.y', (args) => args.state.ball.p.y.toFixed(2)],
   ['ball.v.x', (args) => args.state.ball.v.x.toFixed(2)],
   ['ball.v.y', (args) => args.state.ball.v.y.toFixed(2)],
+  ['ball~speed', (args) => vec2.dist(args.state.ball.v).toFixed(2)],
   ['camera.av', (args) => args.state.camera.av.toFixed(3)],
   ['camera.angle', (args) => args.state.camera.angle.toFixed(3)],
   ['speed', (args) => args.state.speed.toFixed(3)],
