@@ -8,7 +8,7 @@ function renderBackground(args: RenderArgs) {
   const scale = w / 100
   
   context.translate(w / 2, h / 2)
-  context.rotate(-args.state.angle)
+  context.rotate(-args.state.camera.angle)
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
   context.translate(-50, -50)
@@ -35,7 +35,7 @@ function renderBox(args: RenderArgs, i: number) {
   const scale = w / 100
 
   context.translate(w / 2, h / 2)
-  context.rotate(-args.state.angle)
+  context.rotate(-args.state.camera.angle)
 
   context.translate(
     box.p.x * scale + (box.size / 2) * scale,
@@ -82,7 +82,7 @@ function renderCircle(args: RenderArgs, circle: Circle) {
   const scale = w / 100
 
   context.translate(w / 2, h / 2)
-  context.rotate(-args.state.angle)
+  context.rotate(-args.state.camera.angle)
 
   const { p, r } = circle
 
@@ -141,7 +141,8 @@ const DEBUG: [string, (args: RenderArgs) => string][] = [
   ['ball.p.y', (args) => args.state.ball.p.y.toFixed(2)],
   ['ball.v.x', (args) => args.state.ball.v.x.toFixed(2)],
   ['ball.v.y', (args) => args.state.ball.v.y.toFixed(2)],
-  ['av', (args) => args.state.angularVelocity.toFixed(3)],
+  ['camera.av', (args) => args.state.camera.av.toFixed(3)],
+  ['camera.angle', (args) => args.state.camera.angle.toFixed(3)],
   ['speed', (args) => args.state.speed.toFixed(3)],
   ['drag.v.x', (args) => args.input.drag.v.x.toFixed(2)],
   ['drag.v.y', (args) => args.input.drag.v.y.toFixed(2)],

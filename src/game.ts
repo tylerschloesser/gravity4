@@ -53,8 +53,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
     ball: <Ball>{ p: vec2(50, 20), v: vec2(), r: 7, angle: 0 },
     boxes,
     circles,
-    angle: 0,
-    angularVelocity: 0,
+    camera: { angle: 0, av: 0 },
     speed: 1,
   }
 

@@ -1,9 +1,9 @@
 import Box2DFactory from 'box2d-wasm'
 import { vec2 } from './math'
-import { Drag, GameState, Input } from './types'
+import { Camera, Drag, GameState, Input } from './types'
 import { isCircleHit } from './util'
 
-function calculateAngle({
+function updateCamera({
   delta,
   input,
   state,
@@ -11,10 +11,9 @@ function calculateAngle({
   delta: number
   input: Input
   state: GameState
-}): { angle: number; angularVelocity: number } {
+}): Camera {
   const { drag } = input
-  let angle = state.angle
-  let av = state.angularVelocity
+  let { angle, av } = state.camera
 
   if (input.down && !isVyMax(drag)) {
     const POW = 1
@@ -41,10 +40,7 @@ function calculateAngle({
 
   angle += -av
 
-  return {
-    angle,
-    angularVelocity: av,
-  }
+  return { angle, av }
 }
 
 function isVyMax(drag: Drag | null) {
@@ -71,12 +67,12 @@ function updatePhysics({
   size: { w: number; h: number }
   input: Input
 }): GameState {
-  const { angle, angularVelocity } = calculateAngle({
+  const camera = updateCamera({
     delta,
     input,
     state,
   })
-  const grav = new box2d.b2Vec2(-1 * Math.sin(angle), Math.cos(angle))
+  const grav = new box2d.b2Vec2(-1 * Math.sin(camera.angle), Math.cos(camera.angle))
 
   let { speed } = state
   const { drag } = input
@@ -127,8 +123,7 @@ function updatePhysics({
       v: vec2(ballVelocity.x, ballVelocity.y),
       angle: ballBody.GetAngle(),
     },
-    angle,
-    angularVelocity,
+    camera,
   }
 }
 

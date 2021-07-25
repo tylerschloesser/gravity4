@@ -59,11 +59,15 @@ interface Box {
   size: number
 }
 
+export interface Camera {
+  angle: number
+  av: number
+}
+
 export interface GameState {
   ball: Ball
   boxes: Box[]
   circles: Circle[]
-  angle: number
-  angularVelocity: number
+  camera: Camera
   speed: number
 }
