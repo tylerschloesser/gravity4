@@ -100,7 +100,7 @@ export async function newInput(
     map(([buffer, size]) => {
       const next: Pointer | null = buffer[0] ?? null
       const last: Pointer | null = buffer[buffer.length - 1] ?? null
-      let drag: Drag = { v: vec2(), vx: 0, vy: 0 }
+      let drag: Drag = { v: vec2() }
 
       // TODO events between next and last are not necessarily all down events
 
@@ -129,11 +129,7 @@ export async function newInput(
         const vx = rdx / (dt / 1000)
         const vy = rdy / (dt / 1000)
 
-        drag = {
-          v: vec2(vx, vy),
-          vx,
-          vy,
-        }
+        drag = { v: vec2(vx, vy) }
       }
 
       return <Input>{

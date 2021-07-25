@@ -14,8 +14,6 @@ export interface CanvasSize {
 // 1 relative unit is the minimum screen dimension in pixels
 export interface Drag {
   v: Vec2
-  vx: number
-  vy: number
 }
 
 export interface Input {

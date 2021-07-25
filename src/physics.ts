@@ -21,7 +21,7 @@ function calculateAngle({
     const POW = 1
     const SCALE = 100
 
-    let dragX = drag.vx * -1
+    let dragX = drag.v.x * -1
 
     const dx =
       Math.sign(dragX) *
@@ -52,7 +52,7 @@ function isVyMax(drag: Drag | null) {
   if (!drag) {
     return false
   }
-  return Math.abs(drag.vy) > Math.abs(drag.vx)
+  return Math.abs(drag.v.y) > Math.abs(drag.v.x)
 }
 
 function updatePhysics({
@@ -84,8 +84,8 @@ function updatePhysics({
   const { drag } = input
 
   if (isVyMax(drag)) {
-    const { vy } = input.drag!
-    speed += vy * (delta / 1000) * -1 * 2
+    const { v } = input.drag!
+    speed += v.y * (delta / 1000) * -1 * 2
     speed = Math.max(Math.min(speed, 1), 0)
   }
 
