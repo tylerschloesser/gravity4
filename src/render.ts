@@ -124,18 +124,29 @@ function renderInit(args: RenderArgs) {
   context.fillRect(0, 0, viewport.x, viewport.y)
 }
 
+function transformWorld(args: RenderArgs) {
+
+}
+
+function transformOverlay(args: RenderArgs) {
+  args.context.resetTransform()
+}
+
 export function render(args: RenderArgs) {
   ;[
     renderInit,
+    transformWorld,
     renderBackground,
     ...args.state.boxes.map((box) => _.curry(renderBox)(box)),
     ...args.state.circles.map((circle) => _.curry(renderCircle)(circle)),
     renderBall,
+    transformOverlay,
     renderSpeed,
     renderDebug,
-  ].forEach((renderFn) => {
-    renderFn(args)
-    args.context.resetTransform()
+  ].forEach((fn) => {
+    args.context.save()
+    fn(args)
+    args.context.restore()
   })
 }
 
