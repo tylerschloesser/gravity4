@@ -36,7 +36,6 @@ export interface RenderArgs {
   state: GameState
 }
 
-
 export interface Circle {
   p: Vec2
   r: number
@@ -49,9 +48,15 @@ interface Ball {
   angle: number
 }
 
+interface Box {
+  x: number
+  y: number
+  size: number
+}
+
 export interface GameState {
   ball: Ball
-  boxes: { x: number; y: number; size: number }[]
+  boxes: Box[]
   circles: Circle[]
   angle: number
   angularVelocity: number
