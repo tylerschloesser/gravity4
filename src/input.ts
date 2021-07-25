@@ -106,14 +106,13 @@ export async function newInput(
 
       if (!last || !last.down || !next?.down) {
         return {
-          pos: next,
           blah: null,
           down: next?.down ?? false,
           drag,
         }
       }
       if (!next) {
-        return { pos: null, down: false, drag }
+        return { down: false, drag }
       }
       let dx = next.x - last.x
       let dy = next.y - last.y
@@ -133,7 +132,6 @@ export async function newInput(
       }
 
       return <Input>{
-        pos: next,
         down: next.down,
         drag,
       }

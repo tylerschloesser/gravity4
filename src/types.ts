@@ -17,7 +17,6 @@ export interface Drag {
 }
 
 export interface Input {
-  pos: { x: number; y: number } | null
   down: boolean
   drag: Drag
 }
