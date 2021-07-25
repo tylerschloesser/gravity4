@@ -97,7 +97,13 @@ function renderCircle(circle: Circle, args: RenderArgs) {
 
   context.beginPath()
   context.arc(0, 0, r * scale, 0, Math.PI * 2)
+
+  if (hit) {
+    context.moveTo(0, 0)
+    context.lineTo((state.ball.p.x - p.x) * scale, (state.ball.p.y - p.y) * scale)
+  }
   context.stroke()
+  
 
   context.resetTransform()
 }
