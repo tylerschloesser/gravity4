@@ -4,15 +4,11 @@ import { Box, Circle, RenderArgs } from './types'
 import { isCircleHit } from './util'
 
 function renderBackground(args: RenderArgs) {
-  const { context, viewport, state } = args
-
-  const scale = viewport.x / 100
-
-  context.translate(viewport.x / 2, viewport.y / 2)
-  context.rotate(-args.state.camera.angle)
-  context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
+  const { context } = args
+  const { scale } = transformWorld(args)
 
   context.translate(-50, -50)
+
   context.lineWidth = 2
   context.strokeStyle = '#555'
   context.beginPath()
@@ -27,23 +23,17 @@ function renderBackground(args: RenderArgs) {
 }
 
 function renderBox(box: Box, args: RenderArgs) {
-  const { context, viewport, state } = args
+  const { context } = args
 
-  context.lineWidth = 3
-
-  const scale = viewport.x / 100
-
-  context.translate(viewport.x / 2, viewport.y / 2)
-  context.rotate(-args.state.camera.angle)
+  const { scale } = transformWorld(args)
 
   context.translate(
     box.p.x * scale + (box.size / 2) * scale,
     box.p.y * scale + (box.size / 2) * scale
   )
-  context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
+  context.lineWidth = 3
   context.strokeStyle = 'red'
-
   context.strokeRect(
     (-box.size * scale) / 2,
     (-box.size * scale) / 2,
@@ -73,29 +63,25 @@ function renderBall(args: RenderArgs) {
 }
 
 function renderCircle(circle: Circle, args: RenderArgs) {
-  const { context, viewport, state } = args
+  const { context, state } = args
 
-  context.lineWidth = 3
-
-  const scale = viewport.x / 100
-
-  context.translate(viewport.x / 2, viewport.y / 2)
-  context.rotate(-args.state.camera.angle)
+  const { scale } = transformWorld(args)
 
   const { p, r } = circle
-
   context.translate(p.x * scale, p.y * scale)
-  context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
 
   const hit = isCircleHit(state, circle)
   context.strokeStyle = hit ? 'blue' : 'red'
-
+  context.lineWidth = 3
   context.beginPath()
   context.arc(0, 0, r * scale, 0, Math.PI * 2)
 
   if (hit) {
     context.moveTo(0, 0)
-    context.lineTo((state.ball.p.x - p.x) * scale, (state.ball.p.y - p.y) * scale)
+    context.lineTo(
+      (state.ball.p.x - p.x) * scale,
+      (state.ball.p.y - p.y) * scale
+    )
   }
   context.stroke()
 }
@@ -125,28 +111,26 @@ function renderInit(args: RenderArgs) {
 }
 
 function transformWorld(args: RenderArgs) {
-
-}
-
-function transformOverlay(args: RenderArgs) {
-  args.context.resetTransform()
+  const { context, viewport, state } = args
+  const scale = viewport.x / 100
+  context.translate(viewport.x / 2, viewport.y / 2)
+  context.rotate(-args.state.camera.angle)
+  context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
+  return { scale }
 }
 
 export function render(args: RenderArgs) {
   ;[
     renderInit,
-    transformWorld,
     renderBackground,
     ...args.state.boxes.map((box) => _.curry(renderBox)(box)),
     ...args.state.circles.map((circle) => _.curry(renderCircle)(circle)),
     renderBall,
-    transformOverlay,
     renderSpeed,
     renderDebug,
   ].forEach((fn) => {
-    args.context.save()
     fn(args)
-    args.context.restore()
+    args.context.resetTransform()
   })
 }
 
