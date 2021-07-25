@@ -30,8 +30,8 @@ export function updatePhysics({
   const { drag } = input
 
   if (isVyMax(drag)) {
-    const { v } = input.drag!
-    speed += v.y * (delta / 1000) * -1 * 2
+    const { v } = input.drag
+    speed += v.y * -1 / 20
     speed = Math.max(Math.min(speed, 1), 0)
   }
 
