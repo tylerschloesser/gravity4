@@ -1,7 +1,7 @@
 import { animationFrames, pipe } from 'rxjs'
 import { map, scan, withLatestFrom } from 'rxjs/operators'
 import { vec2 } from './math'
-import { newPhysics } from './physics'
+import { initPhysics } from './physics.init'
 import { newRender } from './render'
 import { Ball, Circle, Game, GameArgs, GameState } from './types'
 
@@ -57,7 +57,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
     speed: 1,
   }
 
-  const physics = await newPhysics(initialState)
+  const physics = await initPhysics(initialState)
   const render = await newRender()
 
   const state$ = animationFrames().pipe(
