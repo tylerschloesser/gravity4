@@ -172,13 +172,16 @@ function renderSpeed(args: RenderArgs) {
 
 type RenderFn = (args: RenderArgs) => void
 
-export function render(args: RenderArgs) {
+function renderInit(args: RenderArgs) {
   const { context, viewport } = args
   context.clearRect(0, 0, viewport.x, viewport.y)
 
   context.fillStyle = '#444'
   context.fillRect(0, 0, viewport.x, viewport.y)
+}
 
+export function render(args: RenderArgs) {
+  renderInit(args)
   renderBackground(args)
 
   args.state.boxes.forEach(curry(renderBox)(args))
