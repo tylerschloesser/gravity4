@@ -24,8 +24,6 @@ function renderBackground(args: RenderArgs) {
     context.lineTo(i * 10 * scale, 100 * scale * 2)
   }
   context.stroke()
-
-  context.resetTransform()
 }
 
 function renderBox(box: Box, args: RenderArgs) {
@@ -52,8 +50,6 @@ function renderBox(box: Box, args: RenderArgs) {
     box.size * scale,
     box.size * scale
   )
-
-  context.resetTransform()
 }
 
 function renderBall(args: RenderArgs) {
@@ -74,7 +70,6 @@ function renderBall(args: RenderArgs) {
   context.moveTo(0, 0)
   context.lineTo(state.ball.r * scale, 0)
   context.stroke()
-  context.resetTransform()
 }
 
 function renderCircle(circle: Circle, args: RenderArgs) {
@@ -103,9 +98,6 @@ function renderCircle(circle: Circle, args: RenderArgs) {
     context.lineTo((state.ball.p.x - p.x) * scale, (state.ball.p.y - p.y) * scale)
   }
   context.stroke()
-  
-
-  context.resetTransform()
 }
 
 function renderSpeed(args: RenderArgs) {
@@ -141,7 +133,10 @@ export function render(args: RenderArgs) {
     renderBall,
     renderSpeed,
     renderDebug,
-  ].forEach((renderFn) => renderFn(args))
+  ].forEach((renderFn) => {
+    renderFn(args)
+    args.context.resetTransform()
+  })
 }
 
 export async function newRender() {
