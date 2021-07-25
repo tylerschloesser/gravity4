@@ -1,4 +1,4 @@
-import { vec2 } from './math'
+import { normalizeVec2, rotateVec2, scaleVec2, vec2 } from './math'
 import { updateCamera } from './physics.camera'
 import { isVyMax } from './physics.util'
 import { GameState, Input } from './types'
@@ -24,10 +24,8 @@ export function updatePhysics({
     input,
     state,
   })
-  const grav = new box2d.b2Vec2(
-    -1 * Math.sin(camera.angle),
-    Math.cos(camera.angle)
-  )
+
+  let grav = rotateVec2(vec2(0, 1), camera.angle)
 
   let { speed } = state
   const { drag } = input
@@ -45,11 +43,14 @@ export function updatePhysics({
     maxVel *= 2
   }
 
-  grav.Normalize()
-  grav.op_mul(gravScale * -1)
+  grav = normalizeVec2(grav)
+  grav = scaleVec2(grav, gravScale * -1 * ballBody.GetMass())
 
-  grav.op_mul(ballBody.GetMass())
-  ballBody.ApplyForce(grav, ballBody.GetPosition(), true)
+  ballBody.ApplyForce(
+    new box2d.b2Vec2(grav.x, grav.y),
+    ballBody.GetPosition(),
+    true
+  )
 
   if (ballBody.GetLinearVelocity().Length() > maxVel) {
     // decelerate
