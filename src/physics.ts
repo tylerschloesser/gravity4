@@ -131,7 +131,7 @@ function updatePhysics({
 export async function newPhysics(state: GameState) {
   const box2d = await Box2DFactory()
 
-  const { b2BodyDef, b2_dynamicBody, b2PolygonShape, b2Vec2, b2World } = box2d
+  const { b2BodyDef, b2_dynamicBody, b2PolygonShape, b2World } = box2d
 
   const gravity = new box2d.b2Vec2(0, 0)
   const world = new b2World(gravity)
