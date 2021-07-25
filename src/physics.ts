@@ -36,10 +36,10 @@ export function updatePhysics({
   }
 
   let gravScale = 200
-  let maxVel = (gravScale / 3) * speed
+  let vmax = (gravScale / 3) * speed
   if (state.circles.some((circle) => isCircleHit(state, circle))) {
     gravScale *= 2
-    maxVel *= 2
+    vmax *= 2
   }
 
   const grav = _.pipe(
@@ -55,10 +55,10 @@ export function updatePhysics({
 
   let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
 
-  if (vec2.dist(v) > maxVel) {
+  if (vec2.dist(v) > vmax) {
     v = _.pipe(
       vec2.normalize,
-      vec2.scale(maxVel),
+      vec2.scale(vmax),
     )(v)
     ballBody.SetLinearVelocity(new box2d.b2Vec2(v.x, v.y))
   }
