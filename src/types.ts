@@ -45,7 +45,7 @@ export interface Ball {
   angle: number
 }
 
-interface Box {
+export interface Box {
   /**
    * Top left corner of the box. Optimized for canvas drawing.
    * Box2D uses the center of rectangles.

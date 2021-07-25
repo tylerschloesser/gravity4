@@ -1,4 +1,4 @@
-import { Circle, RenderArgs } from './types'
+import { Box, Circle, RenderArgs } from './types'
 import { isCircleHit } from './util'
 
 function renderBackground(args: RenderArgs) {
@@ -26,9 +26,10 @@ function renderBackground(args: RenderArgs) {
   context.resetTransform()
 }
 
-function renderBox(args: RenderArgs, i: number) {
+function renderBox(args: RenderArgs, box: Box) {
   const { context, viewport, state } = args
-  const box = state.boxes[i]
+
+  context.lineWidth = 3
 
   const scale = viewport.x / 100
 
@@ -56,6 +57,8 @@ function renderBox(args: RenderArgs, i: number) {
 function renderBall(args: RenderArgs) {
   const { context, viewport, state } = args
 
+  context.lineWidth = 3
+
   context.translate(viewport.x / 2, viewport.y / 2)
   const scale = viewport.x / 100
   context.strokeStyle = 'white'
@@ -74,6 +77,8 @@ function renderBall(args: RenderArgs) {
 
 function renderCircle(args: RenderArgs, circle: Circle) {
   const { context, viewport, state } = args
+
+  context.lineWidth = 3
 
   const scale = viewport.x / 100
 
@@ -153,6 +158,8 @@ function renderSpeed(args: RenderArgs) {
   context.strokeStyle = 'blue'
   context.strokeRect(0, 0, viewport.x, Math.min(viewport.x, viewport.y) / 20)
 
+  context.lineWidth = 3
+
   context.fillStyle = 'blue'
   context.fillRect(
     0,
@@ -161,6 +168,8 @@ function renderSpeed(args: RenderArgs) {
     Math.min(viewport.x, viewport.y) / 20
   )
 }
+
+type RenderFn = (args: RenderArgs) => void
 
 export function render(args: RenderArgs) {
   const { context, viewport } = args
@@ -171,10 +180,8 @@ export function render(args: RenderArgs) {
 
   renderBackground(args)
 
-  context.lineWidth = 3
-
-  args.state.boxes.forEach((_, i) => {
-    renderBox(args, i)
+  args.state.boxes.forEach((box) => {
+    renderBox(args, box)
   })
   args.state.circles.forEach((circle) => {
     renderCircle(args, circle)
