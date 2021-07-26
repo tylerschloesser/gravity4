@@ -36,14 +36,14 @@ export function updatePhysics({
 
   let gravScale = 1000 * 30
   let vmax = 66
-  if (state.circles.some((circle) => isCircleHit(state, circle))) {
+  const hit = state.circles.some((circle) => isCircleHit(state, circle))
+  if (hit) {
     gravScale *= 4
     vmax = Number.POSITIVE_INFINITY
   }
 
   const grav = _.pipe(
     vec2.rotate(camera.angle),
-    //vec2.scale(gravScale * -1 * ballBody.GetMass())
     vec2.scale(gravScale),
     vec2.scale(-1),
   )(vec2(0, 1))
