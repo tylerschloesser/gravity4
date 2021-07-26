@@ -20,7 +20,7 @@ export async function initPhysics(state: GameState) {
     bd.position.Set(state.ball.p.x, state.ball.p.y)
 
     ballBody = world.CreateBody(bd)
-    ballBody.CreateFixture(circle, 10)
+    ballBody.CreateFixture(circle, 1)
   }
 
   state.boxes.forEach((box) => {

@@ -34,8 +34,8 @@ export function updatePhysics({
     speed = Math.max(Math.min(speed, 1), 0)
   }
 
-  let gravScale = 200
-  let vmax = gravScale / 3
+  let gravScale = 1000 * 30
+  let vmax = 66
   if (state.circles.some((circle) => isCircleHit(state, circle))) {
     gravScale *= 4
     vmax = Number.POSITIVE_INFINITY
@@ -43,7 +43,9 @@ export function updatePhysics({
 
   const grav = _.pipe(
     vec2.rotate(camera.angle),
-    vec2.scale(gravScale * -1 * ballBody.GetMass())
+    //vec2.scale(gravScale * -1 * ballBody.GetMass())
+    vec2.scale(gravScale),
+    vec2.scale(-1),
   )(vec2(0, 1))
 
   let dampen = vec2()
@@ -52,7 +54,8 @@ export function updatePhysics({
     dampen = _.pipe(
       vec2.normalize,
       vec2.scale(vec2.dist(grav) * 1.2),
-      vec2.scale(-1)
+      vec2.scale(-1),
+      //vec2.scale(ballBody.GetMass()),
     )(v)
   }
 
