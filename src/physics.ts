@@ -59,9 +59,8 @@ export function updatePhysics({
   }
 
   const force = vec2.add(grav, dampen)
-  ballBody.ApplyForce(
+  ballBody.ApplyForceToCenter(
     new box2d.b2Vec2(force.x, force.y),
-    ballBody.GetPosition(),
     true
   )
 
