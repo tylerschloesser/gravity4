@@ -50,12 +50,11 @@ export function updatePhysics({
 
   let dampen = vec2()
   let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
-  if (vec2.dist(v) > vmax) {
+  if (!hit && vec2.dist(v) > vmax) {
     dampen = _.pipe(
       vec2.normalize,
       vec2.scale(vec2.dist(grav) * 1.2),
       vec2.scale(-1),
-      //vec2.scale(ballBody.GetMass()),
     )(v)
   }
 
