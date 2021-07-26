@@ -69,6 +69,12 @@ export interface GameState {
   speed: number
 }
 
+interface PhysicsUpdateFnArgs {
+  delta: number
+  input: Input
+  state: GameState
+}
+
 export interface Physics {
-  update: (args: { delta: number; input: Input; state: GameState }) => GameState
+  update: (args: PhysicsUpdateFnArgs) => GameState
 }
