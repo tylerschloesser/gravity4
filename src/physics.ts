@@ -36,10 +36,10 @@ export function updatePhysics({
   }
 
   let gravScale = 200
-  let vmax = (gravScale / 3) * speed
+  let vmax = (gravScale / 3)
   if (state.circles.some((circle) => isCircleHit(state, circle))) {
     gravScale *= 4
-    vmax *= 2
+    vmax = Number.POSITIVE_INFINITY
   }
 
   const grav = _.pipe(
@@ -67,7 +67,7 @@ export function updatePhysics({
 
   const velocityIterations = 10
   const positionIterations = 10
-  world.Step(delta / 1000, velocityIterations, positionIterations)
+  world.Step(delta / 1000 * speed, velocityIterations, positionIterations)
 
   const ballPosition = ballBody.GetPosition()
   const ballVelocity = ballBody.GetLinearVelocity()
