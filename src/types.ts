@@ -61,12 +61,17 @@ export interface Camera {
   av: number
 }
 
+export interface DebugState {
+  grav: Vec2
+}
+
 export interface GameState {
   ball: Ball
   boxes: Box[]
   circles: Circle[]
   camera: Camera
   speed: number
+  debug: DebugState
 }
 
 export interface PhysicsUpdateFnArgs {

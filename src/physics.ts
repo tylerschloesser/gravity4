@@ -38,14 +38,14 @@ export function updatePhysics({
   let vmax = 66
   const hit = state.circles.some((circle) => isCircleHit(state, circle))
   if (hit) {
-    gravScale *= 4
+    gravScale *= 2
     vmax = Number.POSITIVE_INFINITY
   }
 
   const grav = _.pipe(
     vec2.rotate(camera.angle),
     vec2.scale(gravScale),
-    vec2.scale(-1),
+    vec2.scale(-1)
   )(vec2(0, 1))
 
   let dampen = vec2()
@@ -54,18 +54,17 @@ export function updatePhysics({
     dampen = _.pipe(
       vec2.normalize,
       vec2.scale(vec2.dist(grav) * 1.2),
-      vec2.scale(-1),
+      vec2.scale(-1)
     )(v)
   }
 
   const force = vec2.add(grav, dampen)
-  ballBody.ApplyForceToCenter(
-    new box2d.b2Vec2(force.x, force.y),
-    true
-  )
+  ballBody.ApplyForceToCenter(new box2d.b2Vec2(force.x, force.y), true)
 
-  const velocityIterations = 4
-  const positionIterations = 4
+  //console.log('force', vec2.dist(force))
+
+  const velocityIterations = 8
+  const positionIterations = 3
   world.Step((delta / 1000) * speed, velocityIterations, positionIterations)
 
   const ballPosition = ballBody.GetPosition()
@@ -81,5 +80,8 @@ export function updatePhysics({
       angle: ballBody.GetAngle(),
     },
     camera,
+    debug: {
+      grav,
+    },
   }
 }

@@ -42,6 +42,8 @@ const DEBUG: [string, (args: RenderArgs) => string][] = [
   ['speed', (args) => args.state.speed.toFixed(3)],
   ['drag.v.x', (args) => args.input.drag.v.x.toFixed(2)],
   ['drag.v.y', (args) => args.input.drag.v.y.toFixed(2)],
+  ['grav.x', (args) => args.state.debug.grav.x.toFixed(2)],
+  ['grav.y', (args) => args.state.debug.grav.y.toFixed(2)],
 ]
 
 export function renderDebug(args: RenderArgs) {
