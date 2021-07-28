@@ -61,8 +61,6 @@ export function updatePhysics({
   const force = vec2.add(grav, dampen)
   ballBody.ApplyForceToCenter(new box2d.b2Vec2(force.x, force.y), true)
 
-  //console.log('force', vec2.dist(force))
-
   const velocityIterations = 8
   const positionIterations = 3
   world.Step((delta / 1000) * speed, velocityIterations, positionIterations)
