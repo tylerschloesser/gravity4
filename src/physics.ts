@@ -35,12 +35,12 @@ export function updatePhysics({
     speed = Math.max(Math.min(speed, 1), 0)
   }
 
-  let gravScale = 1000 * 10 * Math.pow(SCALE, 2)
-  let vmax = 66 * SCALE
+  let gravScale = 1000 * SCALE
+  let vmax = 50 * SCALE
   const hit = state.circles.some((circle) => isCircleHit(state, circle))
   if (hit) {
-    gravScale *= 1.2
-    vmax *= 2
+    gravScale /= 2
+    vmax = Number.POSITIVE_INFINITY
   }
 
   const grav = _.pipe(
