@@ -71,6 +71,7 @@ export interface GameState {
   circles: Circle[]
   camera: Camera
   speed: number
+  gravity: Vec2
   debug: DebugState
 }
 

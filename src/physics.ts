@@ -43,7 +43,7 @@ export function updatePhysics({
     vmax = Number.POSITIVE_INFINITY
   }
 
-  const grav = _.pipe(
+  const gravity = _.pipe(
     vec2.rotate(camera.angle),
     vec2.scale(gravScale),
     vec2.scale(-1)
@@ -54,12 +54,12 @@ export function updatePhysics({
   if (vec2.dist(v) > vmax) {
     dampen = _.pipe(
       vec2.normalize,
-      vec2.scale(vec2.dist(grav) * 1.2),
+      vec2.scale(vec2.dist(gravity) * 1.2),
       vec2.scale(-1)
     )(v)
   }
 
-  const force = vec2.add(grav, dampen)
+  const force = vec2.add(gravity, dampen)
   ballBody.ApplyForceToCenter(new box2d.b2Vec2(force.x, force.y), true)
 
   const velocityIterations = 8
@@ -72,6 +72,7 @@ export function updatePhysics({
   return {
     ...state,
     speed,
+    gravity,
     ball: {
       ...state.ball,
       p: vec2(ballPosition.x / SCALE, ballPosition.y / SCALE),

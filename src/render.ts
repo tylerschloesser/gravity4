@@ -60,6 +60,17 @@ function renderBall(args: RenderArgs) {
   context.moveTo(0, 0)
   context.lineTo(state.ball.r * scale, 0)
   context.stroke()
+
+  const { gravity } = args.state
+  context.rotate(-state.ball.angle)
+
+  context.rotate(-state.camera.angle)
+  context.rotate(Math.atan2(gravity.y, gravity.x))
+  context.strokeStyle = 'pink'
+  context.beginPath()
+  context.moveTo(0, 0)
+  context.lineTo(state.ball.r * scale, 0)
+  context.stroke()
 }
 
 function renderCircle(circle: Circle, args: RenderArgs) {
