@@ -1,6 +1,7 @@
 import * as _ from 'lodash/fp'
 import { vec2 } from './math'
 import { updateCamera } from './physics.camera'
+import { SCALE } from './physics.constants'
 import { isVyMax } from './physics.util'
 import { GameState, PhysicsUpdateFnArgs } from './types'
 import { isCircleHit } from './util'
@@ -34,12 +35,12 @@ export function updatePhysics({
     speed = Math.max(Math.min(speed, 1), 0)
   }
 
-  let gravScale = 1000 * 30
-  let vmax = 66
+  let gravScale = 1000 * 10 * Math.pow(SCALE, 2)
+  let vmax = 66 * SCALE
   const hit = state.circles.some((circle) => isCircleHit(state, circle))
   if (hit) {
-    gravScale *= 2
-    vmax = Number.POSITIVE_INFINITY
+    gravScale *= 1.2
+    vmax *= 2
   }
 
   const grav = _.pipe(
@@ -50,7 +51,7 @@ export function updatePhysics({
 
   let dampen = vec2()
   let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
-  if (!hit && vec2.dist(v) > vmax) {
+  if (vec2.dist(v) > vmax) {
     dampen = _.pipe(
       vec2.normalize,
       vec2.scale(vec2.dist(grav) * 1.2),
@@ -73,8 +74,8 @@ export function updatePhysics({
     speed,
     ball: {
       ...state.ball,
-      p: vec2(ballPosition.x, ballPosition.y),
-      v: vec2(ballVelocity.x, ballVelocity.y),
+      p: vec2(ballPosition.x / SCALE, ballPosition.y / SCALE),
+      v: vec2(ballVelocity.x / SCALE, ballVelocity.y / SCALE),
       angle: ballBody.GetAngle(),
     },
     camera,
