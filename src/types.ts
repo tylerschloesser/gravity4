@@ -62,7 +62,7 @@ export interface Camera {
 }
 
 export interface DebugState {
-  grav: Vec2
+  force: Vec2
 }
 
 export interface GameState {

@@ -56,7 +56,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
     camera: { angle: 0, av: 0 },
     speed: 1,
     debug: {
-      grav: vec2(),
+      force: vec2(),
     },
   }
 

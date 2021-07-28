@@ -79,7 +79,7 @@ export function updatePhysics({
     },
     camera,
     debug: {
-      grav,
+      force,
     },
   }
 }
