@@ -45,6 +45,8 @@ export function updatePhysics({
 
   const gravity = _.pipe(
     vec2.rotate(camera.angle),
+    // more rotation when in hit zone
+    vec2.rotate(hit ? -camera.av * 10 : 0),
     vec2.scale(gravScale),
     vec2.scale(-1)
   )(vec2(0, 1))
