@@ -145,7 +145,7 @@ export function render(args: RenderArgs) {
   })
 }
 
-export async function newRender() {
+export async function initRender() {
   await initRenderDebug()
   return render
 }

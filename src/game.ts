@@ -3,8 +3,8 @@ import { map, scan, withLatestFrom } from 'rxjs/operators'
 import { generateBall, generateBoxes, generateCircles } from './game.generate'
 import { vec2 } from './math'
 import { initPhysics } from './physics.init'
-import { newRender } from './render'
-import { Ball, Circle, Game, GameArgs, GameState } from './types'
+import { initRender } from './render'
+import { Game, GameArgs, GameState } from './types'
 
 const mapDelta = pipe(
   scan<{ elapsed: number }, { delta: number; prev: number }>(
@@ -39,7 +39,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
   }
 
   const physics = await initPhysics(initialState)
-  const render = await newRender()
+  const render = await initRender()
 
   const state$ = animationFrames().pipe(
     mapDelta,
