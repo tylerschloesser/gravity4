@@ -1,7 +1,7 @@
 import { vec2 } from './math'
 import { Ball, Circle, GameState } from './types'
 
-export async function generateBoxes() {
+export async function initBoxes() {
   const boxes: GameState['boxes'] = []
 
   const GRID_SIZE = 3
@@ -22,7 +22,7 @@ export async function generateBoxes() {
   return boxes
 }
 
-export async function generateCircles() {
+export async function initCircles() {
   const circles: Circle[] = [
     {
       p: {
@@ -35,6 +35,6 @@ export async function generateCircles() {
   return circles
 }
 
-export async function generateBall() {
+export async function initBall() {
   return <Ball>{ p: vec2(50, 20), v: vec2(), r: 7, angle: 0 }
 }

@@ -1,6 +1,6 @@
 import { animationFrames, pipe } from 'rxjs'
 import { map, scan, withLatestFrom } from 'rxjs/operators'
-import { generateBall, generateBoxes, generateCircles } from './game.generate'
+import { initBall, initBoxes, initCircles } from './game.generate'
 import { vec2 } from './math'
 import { initPhysics } from './physics.init'
 import { initRender } from './render'
@@ -22,9 +22,9 @@ const mapDelta = pipe(
 export async function newGame(init: GameArgs): Promise<Game> {
   const { context, viewport$, input$ } = init
 
-  const boxes = await generateBoxes()
-  const circles = await generateCircles()
-  const ball = await generateBall()
+  const boxes = await initBoxes()
+  const circles = await initCircles()
+  const ball = await initBall()
 
   const initialState: GameState = {
     ball,
