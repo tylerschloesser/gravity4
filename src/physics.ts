@@ -37,16 +37,25 @@ export function updatePhysics({
 
   let gravScale = 1000 * SCALE
   let vmax = 50 * SCALE
-  const hit = state.circles.some((circle) => isCircleHit(state, circle))
+  const hit = state.circles.find((circle) => isCircleHit(state, circle))
   if (hit) {
     gravScale /= 2
     vmax = Number.POSITIVE_INFINITY
   }
 
+  let hitAngle = 0
+  if (hit) {
+    const v = _.pipe(vec2.sub(state.ball.p), vec2.normalize)(hit.p)
+    hitAngle = Math.atan2(v.y, v.x)
+  }
+
+  // TODO unit test this ffs
   const gravity = _.pipe(
     vec2.rotate(camera.angle),
     // more rotation when in hit zone
-    vec2.rotate(hit ? -camera.av * 10 : 0),
+    // vec2.rotate(
+    //   hitAngle ? (camera.angle - hitAngle) * Math.min(Math.abs(drag.v.x), 1) : 0
+    // ),
     vec2.scale(gravScale),
     vec2.scale(-1)
   )(vec2(0, 1))
