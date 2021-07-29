@@ -24,11 +24,24 @@ export async function initBoxes() {
 
 export async function initCircles() {
   const circles: Circle[] = [
-    {
-      p: vec2(),
-      r: 55,
-    },
+    // {
+    //   p: vec2(),
+    //   r: 55,
+    // },
   ]
+
+  const GRID_SIZE = 5
+  const GAP = 10
+  const RADIUS = 55
+  for (let i = Math.ceil(GRID_SIZE / -2); i < Math.ceil(GRID_SIZE / 2); i++) {
+    for (let j = Math.ceil(GRID_SIZE / -2); j < Math.ceil(GRID_SIZE / 2); j++) {
+      circles.push({
+        p: vec2(i * RADIUS * 2 + i * GAP, j * RADIUS * 2 + j * GAP),
+        r: RADIUS,
+      })
+    }
+  }
+
   return circles
 }
 
