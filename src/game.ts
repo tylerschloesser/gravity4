@@ -12,11 +12,11 @@ const mapDelta = pipe(
       delta: elapsed - acc.prev,
       prev: elapsed,
     }),
-    { prev: 0, delta: 0 }
+    { prev: 0, delta: 0 },
   ),
   map(({ delta }) => delta),
   // don't jump in case of long frames, or perhaps alt/tab
-  map((delta) => Math.min(delta, (1 / 30) * 1000))
+  map((delta) => Math.min(delta, (1 / 30) * 1000)),
 )
 
 export async function newGame(init: GameArgs): Promise<Game> {
@@ -46,8 +46,8 @@ export async function newGame(init: GameArgs): Promise<Game> {
     withLatestFrom(input$),
     scan(
       (state, [delta, input]) => physics.update({ delta, input, state }),
-      initialState
-    )
+      initialState,
+    ),
   )
 
   state$
@@ -58,7 +58,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
         input,
         viewport,
         context,
-      }))
+      })),
     )
     .subscribe(render)
 

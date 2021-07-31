@@ -19,7 +19,7 @@ interface Pointer {
 }
 
 export async function newInput(
-  size$: Observable<Viewport>
+  size$: Observable<Viewport>,
 ): Promise<Observable<Input>> {
   const pointer$ = merge(
     merge(fromEvent<PointerEvent>(window, 'pointerleave')).pipe(mapTo(null)),
@@ -27,7 +27,7 @@ export async function newInput(
       fromEvent<PointerEvent>(window, 'pointerup'),
       fromEvent<PointerEvent>(window, 'pointermove'),
       fromEvent<PointerEvent>(window, 'pointerdown'),
-      fromEvent<PointerEvent>(window, 'pointerenter')
+      fromEvent<PointerEvent>(window, 'pointerenter'),
     ).pipe(
       map((e) => {
         let down = e.pressure > 0
@@ -46,17 +46,17 @@ export async function newInput(
           time: e.timeStamp,
           type: e.type, // for debugging
         }
-      })
-    )
+      }),
+    ),
   ).pipe(startWith<Pointer | null>(null))
 
   const key$ = merge(
     fromEvent<KeyboardEvent>(window, 'keydown').pipe(
-      map(({ key }) => ({ key, down: true }))
+      map(({ key }) => ({ key, down: true })),
     ),
     fromEvent<KeyboardEvent>(window, 'keyup').pipe(
-      map(({ key }) => ({ key, down: false }))
-    )
+      map(({ key }) => ({ key, down: false })),
+    ),
   ).pipe(
     scan((acc, { key, down }) => {
       if (key === ' ') {
@@ -64,7 +64,7 @@ export async function newInput(
       }
       return acc
     }, false),
-    startWith(false)
+    startWith(false),
   )
 
   // time window (in ms) to capture pointer events
@@ -79,7 +79,7 @@ export async function newInput(
             ...pointer,
             down: pointer.down || key,
           }
-        : null
+        : null,
     ),
 
     // clear input after 100ms of inactivity, otherwise if you
@@ -93,7 +93,7 @@ export async function newInput(
     scan<[Pointer | null, number], Pointer[]>((acc, [next, slide]) => {
       const now = performance.now()
       return [...(next ? [next] : []), ...acc].filter(
-        ({ time }) => time > now - slide
+        ({ time }) => time > now - slide,
       )
     }, []),
     withLatestFrom(size$),
@@ -134,6 +134,6 @@ export async function newInput(
         down: next.down,
         drag,
       }
-    })
+    }),
   )
 }

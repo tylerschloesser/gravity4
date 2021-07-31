@@ -18,7 +18,7 @@ expect.extend({
       return {
         message: () =>
           `expected ${vec2.toString(received)} not to equal ${vec2.toString(
-            actual
+            actual,
           )}`,
         pass: true,
       }

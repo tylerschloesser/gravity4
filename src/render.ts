@@ -29,7 +29,7 @@ function renderBox(box: Box, args: RenderArgs) {
 
   context.translate(
     box.p.x * scale + (box.size / 2) * scale,
-    box.p.y * scale + (box.size / 2) * scale
+    box.p.y * scale + (box.size / 2) * scale,
   )
 
   context.lineWidth = 3
@@ -38,7 +38,7 @@ function renderBox(box: Box, args: RenderArgs) {
     (-box.size * scale) / 2,
     (-box.size * scale) / 2,
     box.size * scale,
-    box.size * scale
+    box.size * scale,
   )
 }
 
@@ -91,7 +91,7 @@ function renderCircle(circle: Circle, args: RenderArgs) {
     context.moveTo(0, 0)
     context.lineTo(
       (state.ball.p.x - p.x) * scale,
-      (state.ball.p.y - p.y) * scale
+      (state.ball.p.y - p.y) * scale,
     )
   }
   context.stroke()
@@ -109,7 +109,7 @@ function renderSpeed(args: RenderArgs) {
     0,
     0,
     viewport.x * state.speed,
-    Math.min(viewport.x, viewport.y) / 20
+    Math.min(viewport.x, viewport.y) / 20,
   )
 }
 
