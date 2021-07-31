@@ -75,6 +75,18 @@ describe('physics', () => {
         maxSpeed: 1,
         expected: vec2(0, 0),
       },
+      {
+        ballVelocity: vec2(0, 2),
+        dampenSpeed: 1,
+        maxSpeed: 1,
+        expected: vec2(0, -1),
+      },
+      {
+        ballVelocity: vec2(4, 0),
+        dampenSpeed: 2,
+        maxSpeed: 3,
+        expected: vec2(-2, 0),
+      },
     ]
 
     testCases.forEach(({ expected, ...args }) => {
