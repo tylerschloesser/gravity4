@@ -12,6 +12,23 @@ interface UpdatePhysicsArgs extends PhysicsUpdateFnArgs {
   ballBody: Box2D.b2Body
 }
 
+export const computeGravity = ({
+  cameraAngle,
+  scale,
+}: {
+  cameraAngle: number
+  scale: number
+}) =>
+  _.pipe(
+    vec2.rotate(cameraAngle),
+    // more rotation when in hit zone
+    // vec2.rotate(
+    //   hitAngle ? (camera.angle - hitAngle) * Math.min(Math.abs(drag.v.x), 1) : 0
+    // ),
+    vec2.scale(scale),
+    vec2.scale(-1)
+  )(vec2(0, 1))
+
 export function updatePhysics({
   box2d,
   world,
@@ -50,15 +67,10 @@ export function updatePhysics({
   }
 
   // TODO unit test this ffs
-  const gravity = _.pipe(
-    vec2.rotate(camera.angle),
-    // more rotation when in hit zone
-    // vec2.rotate(
-    //   hitAngle ? (camera.angle - hitAngle) * Math.min(Math.abs(drag.v.x), 1) : 0
-    // ),
-    vec2.scale(gravScale),
-    vec2.scale(-1)
-  )(vec2(0, 1))
+  const gravity = computeGravity({
+    cameraAngle: camera.angle,
+    scale: gravScale,
+  })
 
   let dampen = vec2()
   let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
