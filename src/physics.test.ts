@@ -51,6 +51,11 @@ describe('physics', () => {
         scale: 1,
         expected: vec2(-0, 1),
       },
+      {
+        cameraAngle: Math.PI / 2,
+        scale: 1,
+        expected: vec2(1, 0),
+      },
     ]
 
     testCases.forEach(({ cameraAngle, scale, expected }) => {
