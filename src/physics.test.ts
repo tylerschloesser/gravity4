@@ -1,5 +1,5 @@
 import { vec2 } from './math'
-import { computeGravity } from './physics'
+import { computeDampen, computeGravity } from './physics'
 import { Vec2 } from './types'
 
 // TODO move this
@@ -64,6 +64,25 @@ describe('physics', () => {
         args
       )}`, () => {
         expect(computeGravity(args)).toEqualVec2(expected)
+      })
+    })
+  })
+
+  describe('computeDampen', () => {
+    const testCases = [
+      {
+        ballVelocity: vec2(0, 1),
+        dampenSpeed: 1,
+        maxSpeed: 1,
+        expected: vec2(0, 0),
+      },
+    ]
+
+    testCases.forEach(({ expected, ...args }) => {
+      it(`returns ${vec2.toString(expected)} given ${JSON.stringify(
+        args
+      )}`, () => {
+        expect(computeDampen(args)).toEqualVec2(expected)
       })
     })
   })

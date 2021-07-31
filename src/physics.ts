@@ -31,20 +31,20 @@ export const computeGravity = ({
 
 export const computeDampen = ({
   ballVelocity,
-  gravitySpeed,
+  dampenSpeed,
   maxSpeed,
 }: {
   ballVelocity: Vec2
-  gravitySpeed: number
+  dampenSpeed: number
   maxSpeed: number
 }) => {
   const ballSpeed = vec2.dist(ballVelocity)
-  if (ballSpeed < maxSpeed) {
+  if (ballSpeed <= maxSpeed) {
     return vec2()
   }
   return _.pipe(
     vec2.normalize,
-    vec2.scale(gravitySpeed * 1.2),
+    vec2.scale(dampenSpeed),
     vec2.scale(-1),
   )(ballVelocity)
 }
@@ -95,7 +95,7 @@ export function updatePhysics({
   let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
   let dampen = computeDampen({
     ballVelocity: v,
-    gravitySpeed: vec2.dist(gravity),
+    dampenSpeed: vec2.dist(gravity) * 1.2,
     maxSpeed: vmax,
   })
 
