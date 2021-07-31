@@ -17,11 +17,11 @@ describe('math', () => {
     })
 
     it('rotates by 90 degrees', () => {
-      expect(vec2.rotate(Math.PI / 2)(v)).toEqualVec2(vec2(1, 0))
+      expect(vec2.rotate(Math.PI / 2)(v)).toEqualVec2(vec2(-1, 0))
     })
 
     it('rotates by -90 degrees', () => {
-      expect(vec2.rotate(-Math.PI / 2)(v)).toEqualVec2(vec2(-1, 0))
+      expect(vec2.rotate(-Math.PI / 2)(v)).toEqualVec2(vec2(1, 0))
     })
 
     it('rotates by 180 degrees', () => {
