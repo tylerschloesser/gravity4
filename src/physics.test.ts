@@ -58,11 +58,10 @@ describe('physics', () => {
       },
     ]
 
-    testCases.forEach(({ cameraAngle, scale, expected }) => {
-      const args = { cameraAngle, scale }
-      it(`returns ${vec2.toString(expected)} given ${JSON.stringify(
-        args
-      )}`, () => {
+    testCases.forEach(({ expected, ...args }) => {
+      const expectedStr = vec2.toString(expected)
+      const argsStr = JSON.stringify(args)
+      it(`returns ${expectedStr} given ${argsStr}`, () => {
         expect(computeGravity(args)).toEqualVec2(expected)
       })
     })
@@ -79,9 +78,9 @@ describe('physics', () => {
     ]
 
     testCases.forEach(({ expected, ...args }) => {
-      it(`returns ${vec2.toString(expected)} given ${JSON.stringify(
-        args
-      )}`, () => {
+      const expectedStr = vec2.toString(expected)
+      const argsStr = JSON.stringify(args)
+      it(`returns ${expectedStr} given ${argsStr}`, () => {
         expect(computeDampen(args)).toEqualVec2(expected)
       })
     })
