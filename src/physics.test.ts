@@ -2,6 +2,7 @@ import { vec2 } from './math'
 import { computeGravity } from './physics'
 import { Vec2 } from './types'
 
+// TODO move this
 declare global {
   namespace jest {
     interface Matchers<R> {
@@ -10,7 +11,6 @@ declare global {
   }
 }
 
-// TODO move this
 expect.extend({
   toEqualVec2(received: Vec2, actual: Vec2) {
     if (

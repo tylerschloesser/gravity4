@@ -3,7 +3,7 @@ import { vec2 } from './math'
 import { updateCamera } from './physics.camera'
 import { SCALE } from './physics.constants'
 import { isVyMax } from './physics.util'
-import { GameState, PhysicsUpdateFnArgs } from './types'
+import { GameState, PhysicsUpdateFnArgs, Vec2 } from './types'
 import { isCircleHit } from './util'
 
 interface UpdatePhysicsArgs extends PhysicsUpdateFnArgs {
@@ -28,6 +28,26 @@ export const computeGravity = ({
     vec2.scale(scale),
     vec2.scale(-1)
   )(vec2(0, 1))
+
+export const computeDampen = ({
+  ballVelocity,
+  gravitySpeed,
+  maxSpeed,
+}: {
+  ballVelocity: Vec2
+  gravitySpeed: number
+  maxSpeed: number
+}) => {
+  const ballSpeed = vec2.dist(ballVelocity)
+  if (ballSpeed < maxSpeed) {
+    return vec2()
+  }
+  return _.pipe(
+    vec2.normalize,
+    vec2.scale(gravitySpeed * 1.2),
+    vec2.scale(-1),
+  )(ballVelocity)
+}
 
 export function updatePhysics({
   box2d,
@@ -72,15 +92,12 @@ export function updatePhysics({
     scale: gravScale,
   })
 
-  let dampen = vec2()
   let v = vec2(ballBody.GetLinearVelocity().x, ballBody.GetLinearVelocity().y)
-  if (vec2.dist(v) > vmax) {
-    dampen = _.pipe(
-      vec2.normalize,
-      vec2.scale(vec2.dist(gravity) * 1.2),
-      vec2.scale(-1)
-    )(v)
-  }
+  let dampen = computeDampen({
+    ballVelocity: v,
+    gravitySpeed: vec2.dist(gravity),
+    maxSpeed: vmax,
+  })
 
   const force = vec2.add(gravity, dampen)
   ballBody.ApplyForceToCenter(new box2d.b2Vec2(force.x, force.y), true)
