@@ -27,3 +27,5 @@ vec2.copy = ({ x, y }: Vec2) => vec2(x, y)
 vec2.add = (a: Vec2, b: Vec2) => vec2(a.x + b.x, a.y + b.y)
 
 vec2.sub = _.curry((b: Vec2, a: Vec2) => vec2(a.x - b.x, a.y - b.y))
+
+vec2.toString = ({ x, y }: Vec2) => `[${x},${y}]`
