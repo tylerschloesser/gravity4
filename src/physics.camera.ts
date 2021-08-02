@@ -38,5 +38,7 @@ export function updateCamera({
 
   angle += -av
 
+  angle = (angle + Math.PI * 2) % (Math.PI * 2)
+
   return { angle, av }
 }
