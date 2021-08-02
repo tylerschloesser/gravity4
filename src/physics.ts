@@ -91,14 +91,14 @@ export function updatePhysics({
     vmax = Number.POSITIVE_INFINITY
   }
 
-  const hitAngle = hit
-    ? computeHitAngle({
-        circlePosition: hit.p,
-        ballPosition: state.ball.p,
-      })
-    : null
+  let hitAngle = null
+  if (hit) {
+    hitAngle = computeHitAngle({
+      circlePosition: hit.p,
+      ballPosition: state.ball.p,
+    })
+  }
 
-  // TODO unit test this ffs
   const gravity = computeGravity({
     cameraAngle: camera.angle,
     scale: gravScale,
