@@ -56,9 +56,9 @@ export const computeHitAngle = ({
   circlePosition: Vec2
   ballPosition: Vec2
 }) =>
-  _.pipe(vec2.sub(ballPosition), vec2.normalize, ({ x, y }) =>
+  _.pipe(vec2.sub(circlePosition), vec2.normalize, ({ x, y }) =>
     Math.atan2(y, x),
-  )(circlePosition)
+  )(ballPosition)
 
 export function updatePhysics({
   box2d,
