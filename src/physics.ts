@@ -26,8 +26,7 @@ export const computeGravity = ({
     //   hitAngle ? (camera.angle - hitAngle) * Math.min(Math.abs(drag.v.x), 1) : 0
     // ),
     vec2.scale(scale),
-    vec2.scale(-1),
-  )(vec2(0, 1))
+  )(vec2(1, 0))
 
 export const computeDampen = ({
   ballVelocity,

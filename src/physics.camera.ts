@@ -17,7 +17,7 @@ export function updateCamera({
     const POW = 1
     const SCALE = 100
 
-    let dragX = drag.v.x * -1
+    let dragX = drag.v.x
 
     const dx =
       Math.sign(dragX) *

@@ -54,18 +54,17 @@ function renderBall(args: RenderArgs) {
   context.arc(0, 0, state.ball.r * scale, 0, 2 * Math.PI)
   context.stroke()
 
-  context.rotate(state.ball.angle)
   context.strokeStyle = 'green'
   context.beginPath()
   context.moveTo(0, 0)
-  context.lineTo(state.ball.r * scale, 0)
+  context.lineTo(0, -state.ball.r * scale)
   context.stroke()
 
   const { gravity } = args.state
-  context.rotate(-state.ball.angle)
+  //context.rotate(-state.ball.angle)
+  context.rotate(Math.PI * 2 - args.state.camera.angle - Math.PI / 2)
 
-  context.rotate(-state.camera.angle)
-  context.rotate(Math.atan2(gravity.y, gravity.x))
+  context.rotate(Math.PI * 2 - Math.atan2(gravity.y, gravity.x))
   context.strokeStyle = 'pink'
   context.beginPath()
   context.moveTo(0, 0)
@@ -125,7 +124,7 @@ function transformWorld(args: RenderArgs) {
   const { context, viewport, state } = args
   const scale = viewport.x / 100
   context.translate(viewport.x / 2, viewport.y / 2)
-  context.rotate(-args.state.camera.angle)
+  context.rotate(args.state.camera.angle - Math.PI * 2 + Math.PI / 2)
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
   return { scale }
 }
