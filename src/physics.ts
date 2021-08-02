@@ -49,6 +49,17 @@ export const computeDampen = ({
   )(ballVelocity)
 }
 
+export const computeHitAngle = ({
+  circlePosition,
+  ballPosition,
+}: {
+  circlePosition: Vec2
+  ballPosition: Vec2
+}) =>
+  _.pipe(vec2.sub(ballPosition), vec2.normalize, ({ x, y }) =>
+    Math.atan2(y, x),
+  )(circlePosition)
+
 export function updatePhysics({
   box2d,
   world,
@@ -80,11 +91,12 @@ export function updatePhysics({
     vmax = Number.POSITIVE_INFINITY
   }
 
-  let hitAngle = 0
-  if (hit) {
-    const v = _.pipe(vec2.sub(state.ball.p), vec2.normalize)(hit.p)
-    hitAngle = Math.atan2(v.y, v.x)
-  }
+  const hitAngle = hit
+    ? computeHitAngle({
+        circlePosition: hit.p,
+        ballPosition: state.ball.p,
+      })
+    : null
 
   // TODO unit test this ffs
   const gravity = computeGravity({

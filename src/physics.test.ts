@@ -1,5 +1,5 @@
 import { vec2 } from './math'
-import { computeDampen, computeGravity } from './physics'
+import { computeDampen, computeGravity, computeHitAngle } from './physics'
 
 describe('physics', () => {
   describe('computeGravity', () => {
@@ -62,6 +62,25 @@ describe('physics', () => {
       const argsStr = JSON.stringify(args)
       it(`returns ${expectedStr} given ${argsStr}`, () => {
         expect(computeDampen(args)).toEqualVec2(expected)
+      })
+    })
+  })
+
+  describe('computeHitAngle', () => {
+    const testCases = [
+      // TODO figure out what to do here
+      {
+        circlePosition: vec2(0, 1),
+        ballPosition: vec2(0, 1),
+        expected: NaN,
+      },
+    ]
+
+    testCases.forEach(({ expected, ...args }) => {
+      const expectedStr = expected.toString()
+      const argsStr = JSON.stringify(args)
+      it(`returns ${expectedStr} given ${argsStr}`, () => {
+        expect(computeHitAngle(args)).toEqual(expected)
       })
     })
   })
