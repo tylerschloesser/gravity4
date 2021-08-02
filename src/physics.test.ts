@@ -74,6 +74,31 @@ describe('physics', () => {
         ballPosition: vec2(0, 1),
         expected: NaN,
       },
+      {
+        circlePosition: vec2(0, 0),
+        ballPosition: vec2(-1, 0),
+        expected: 0,
+      },
+      {
+        circlePosition: vec2(0, 0),
+        ballPosition: vec2(0, 2),
+        expected: -Math.PI / 2,
+      },
+      {
+        circlePosition: vec2(2, 0),
+        ballPosition: vec2(3, 0),
+        expected: Math.PI,
+      },
+      {
+        circlePosition: vec2(0, 0),
+        ballPosition: vec2(0, -1),
+        expected: Math.PI / 2,
+      },
+      {
+        circlePosition: vec2(0, 0),
+        ballPosition: vec2(-1, -1),
+        expected: Math.PI / 4,
+      },
     ]
 
     testCases.forEach(({ expected, ...args }) => {
