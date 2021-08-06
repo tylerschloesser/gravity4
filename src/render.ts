@@ -1,7 +1,6 @@
 import * as _ from 'lodash/fp'
 import { initRenderDebug, renderDebug } from './render.debug'
 import { Box, Circle, RenderArgs } from './types'
-import { isCircleHit } from './util'
 
 function renderBackground(args: RenderArgs) {
   const { context } = args
@@ -95,7 +94,8 @@ function renderCircle(circle: Circle, args: RenderArgs) {
   // Canvas already has y axis in opposite direction (positive y axis faces down)
   context.translate(-p.x * scale, p.y * scale)
 
-  const hit = isCircleHit(state, circle)
+  let hit = circle.id === state.circleHitId
+
   context.strokeStyle = hit ? 'blue' : 'red'
   context.lineWidth = 3
   context.beginPath()

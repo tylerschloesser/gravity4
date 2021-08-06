@@ -3,8 +3,15 @@ import { vec2 } from './math'
 import { updateCamera } from './physics.camera'
 import { SCALE } from './physics.constants'
 import { isDragVyActive } from './physics.util'
-import { GameState, PhysicsUpdateFnArgs, Vec2 } from './types'
-import { isCircleHit } from './util'
+import { Ball, Circle, GameState, PhysicsUpdateFnArgs, Vec2 } from './types'
+
+function isCircleHit(ball: Ball, circle: Circle) {
+  const { p } = circle
+  const dx = p.x - ball.p.x
+  const dy = p.y - ball.p.y
+  const dist = Math.sqrt(dx * dx + dy * dy)
+  return Math.abs(dist - circle.r) < ball.r
+}
 
 interface UpdatePhysicsArgs extends PhysicsUpdateFnArgs {
   box2d: typeof Box2D & EmscriptenModule
@@ -48,6 +55,22 @@ export const computeDampen = ({
   )(ballVelocity)
 }
 
+function findCircleHit(state: GameState): Circle | null {
+  const { ball } = state
+  let cur: Circle | null = null
+  let max = 0
+  for (let circle of state.circles) {
+    if (isCircleHit(ball, circle)) {
+      const dist = vec2.dist2(ball.p, circle.p)
+      if (dist > max) {
+        cur = circle
+        max = dist
+      }
+    }
+  }
+  return cur
+}
+
 export const computeHitAngle = ({
   circlePosition,
   ballPosition,
@@ -84,7 +107,7 @@ export function updatePhysics({
 
   let gravScale = 1000 * SCALE
   let vmax = 50 * SCALE
-  const hit = state.circles.find((circle) => isCircleHit(state, circle))
+  const hit = findCircleHit(state)
   if (hit) {
     //gravScale /= 2
     vmax *= 2
@@ -134,5 +157,6 @@ export function updatePhysics({
     debug: {
       force,
     },
+    circleHitId: hit?.id ?? null,
   }
 }

@@ -22,6 +22,12 @@ vec2.scale = _.curry((scalar: number, { x, y }: Vec2) =>
 
 vec2.dist = ({ x, y }: Vec2) => Math.sqrt(x * x + y * y)
 
+vec2.dist2 = (a: Vec2, b: Vec2) => {
+  const dx = a.x - b.x
+  const dy = a.y - b.y
+  return Math.sqrt(dx * dx + dy * dy)
+}
+
 vec2.copy = ({ x, y }: Vec2) => vec2(x, y)
 
 // TODO refactor this so it can be curried
