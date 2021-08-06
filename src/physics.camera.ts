@@ -1,4 +1,4 @@
-import { isVyMax } from './physics.util'
+import { isDragVyActive } from './physics.util'
 import { Camera, GameState, Input } from './types'
 
 export function updateCamera({
@@ -13,7 +13,7 @@ export function updateCamera({
   const { drag } = input
   let { angle, av } = state.camera
 
-  if (input.down && !isVyMax(drag)) {
+  if (input.down && !isDragVyActive(drag)) {
     const POW = 1
     const SCALE = 100
 

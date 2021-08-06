@@ -2,7 +2,7 @@ import * as _ from 'lodash/fp'
 import { vec2 } from './math'
 import { updateCamera } from './physics.camera'
 import { SCALE } from './physics.constants'
-import { isVyMax } from './physics.util'
+import { isDragVyActive } from './physics.util'
 import { GameState, PhysicsUpdateFnArgs, Vec2 } from './types'
 import { isCircleHit } from './util'
 
@@ -76,7 +76,7 @@ export function updatePhysics({
   let { speed } = state
   const { drag } = input
 
-  if (isVyMax(drag)) {
+  if (isDragVyActive(drag)) {
     const { v } = input.drag
     speed += (v.y * -1) / 20
     speed = Math.max(Math.min(speed, 1), 0)
