@@ -34,6 +34,7 @@ export interface RenderArgs {
 }
 
 export interface Circle {
+  id: string
   p: Vec2
   r: number
 }

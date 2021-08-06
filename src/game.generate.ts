@@ -33,9 +33,11 @@ export async function initCircles() {
   const GRID_SIZE = 5
   const GAP = 55
   const RADIUS = 55
+  let id = 0
   for (let i = Math.ceil(GRID_SIZE / -2); i < Math.ceil(GRID_SIZE / 2); i++) {
     for (let j = Math.ceil(GRID_SIZE / -2); j < Math.ceil(GRID_SIZE / 2); j++) {
       circles.push({
+        id: `${id++}`,
         p: vec2(i * RADIUS * 2 + i * GAP, j * RADIUS * 2 + j * GAP),
         r: RADIUS,
       })
