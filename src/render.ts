@@ -6,8 +6,6 @@ function renderBackground(args: RenderArgs) {
   const { context } = args
   const { scale } = transformWorld(args)
 
-  //context.translate(-50 * scale, -50 * scale)
-
   context.lineWidth = 2
   context.strokeStyle = '#555'
   context.beginPath()
