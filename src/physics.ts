@@ -86,8 +86,8 @@ export function updatePhysics({
   let vmax = 50 * SCALE
   const hit = state.circles.find((circle) => isCircleHit(state, circle))
   if (hit) {
-    gravScale /= 2
-    vmax = Number.POSITIVE_INFINITY
+    //gravScale /= 2
+    vmax *= 2
   }
 
   let hitAngle = null
