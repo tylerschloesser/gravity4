@@ -31,7 +31,7 @@ export async function initCircles() {
   ]
 
   const GRID_SIZE = 5
-  const GAP = 10
+  const GAP = 55
   const RADIUS = 55
   for (let i = Math.ceil(GRID_SIZE / -2); i < Math.ceil(GRID_SIZE / 2); i++) {
     for (let j = Math.ceil(GRID_SIZE / -2); j < Math.ceil(GRID_SIZE / 2); j++) {
