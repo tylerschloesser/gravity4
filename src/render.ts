@@ -60,15 +60,15 @@ function renderBall(args: RenderArgs) {
   context.lineTo(0, -state.ball.r * scale)
   context.stroke()
 
-  // const { gravity } = args.state
-  // context.rotate(Math.PI * 2 - args.state.camera.angle - Math.PI / 2)
+  const { gravity } = args.state
+  context.rotate(Math.PI * 2 - args.state.camera.angle - Math.PI / 2)
 
-  // context.rotate(Math.PI * 2 - Math.atan2(gravity.y, gravity.x))
-  // context.strokeStyle = 'pink'
-  // context.beginPath()
-  // context.moveTo(0, 0)
-  // context.lineTo(state.ball.r * scale, 0)
-  // context.stroke()
+  context.rotate(Math.PI * 2 - Math.atan2(gravity.y, gravity.x))
+  context.strokeStyle = 'pink'
+  context.beginPath()
+  context.moveTo(0, 0)
+  context.lineTo(state.ball.r * scale, 0)
+  context.stroke()
 }
 
 function renderCircle(circle: Circle, args: RenderArgs) {
@@ -77,7 +77,7 @@ function renderCircle(circle: Circle, args: RenderArgs) {
   const { scale } = transformWorld(args)
 
   const { p, r } = circle
-  context.translate(p.x * scale, -p.y * scale)
+  context.translate(-p.x * scale, p.y * scale)
 
   const hit = isCircleHit(state, circle)
   context.strokeStyle = hit ? 'blue' : 'red'
@@ -88,8 +88,8 @@ function renderCircle(circle: Circle, args: RenderArgs) {
   if (hit) {
     context.moveTo(0, 0)
     context.lineTo(
-      (state.ball.p.x - p.x) * scale,
-      -(state.ball.p.y - p.y) * scale,
+      (-state.ball.p.x - -p.x) * scale,
+      (state.ball.p.y - p.y) * scale,
     )
   }
   context.stroke()
