@@ -1,6 +1,8 @@
 import * as _ from 'lodash/fp'
 import { initRenderDebug, renderDebug } from './render.debug'
-import { Box, Circle, RenderArgs } from './types'
+import { Box, Circle, RenderArgs, Viewport } from './types'
+
+const computeScale = (viewport: Viewport) => viewport.x / 100
 
 function renderBackground(args: RenderArgs) {
   const { context } = args
@@ -45,7 +47,7 @@ function renderBall(args: RenderArgs) {
   context.lineWidth = 3
 
   context.translate(viewport.x / 2, viewport.y / 2)
-  const scale = viewport.x / 200
+  const scale = computeScale(viewport)
   context.strokeStyle = 'white'
   context.beginPath()
   context.arc(0, 0, state.ball.r * scale, 0, 2 * Math.PI)
@@ -135,7 +137,7 @@ function renderInit(args: RenderArgs) {
 
 function transformWorld(args: RenderArgs) {
   const { context, viewport, state } = args
-  const scale = viewport.x / 200
+  const scale = computeScale(viewport)
   context.translate(viewport.x / 2, viewport.y / 2)
 
   // Camera angle is counterclockwise rotation. We want to rotate the world
