@@ -110,7 +110,7 @@ export function updatePhysics({
   const hit = findCircleHit(state)
   if (hit) {
     //gravScale /= 2
-    vmax *= 2
+    vmax *= 4
   }
 
   let hitAngle = null
@@ -121,7 +121,7 @@ export function updatePhysics({
     })
   }
 
-  const gravity = computeGravity({
+  let gravity = computeGravity({
     cameraAngle: camera.angle,
     scale: gravScale,
   })
@@ -133,7 +133,17 @@ export function updatePhysics({
     maxSpeed: vmax,
   })
 
-  const force = vec2.add(gravity, dampen)
+  if (hit) {
+    const pull = _.pipe(
+      vec2.sub(hit.p),
+      vec2.normalize,
+      vec2.scale(-gravScale),
+    )(state.ball.p)
+    gravity = vec2.add(gravity, pull)
+  }
+
+  const force = _.pipe(vec2.add(dampen))(gravity)
+
   ballBody.ApplyForceToCenter(new box2d.b2Vec2(force.x, force.y), true)
 
   const velocityIterations = 8

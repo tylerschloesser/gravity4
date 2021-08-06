@@ -30,8 +30,7 @@ vec2.dist2 = (a: Vec2, b: Vec2) => {
 
 vec2.copy = ({ x, y }: Vec2) => vec2(x, y)
 
-// TODO refactor this so it can be curried
-vec2.add = (a: Vec2, b: Vec2) => vec2(a.x + b.x, a.y + b.y)
+vec2.add = _.curry((a: Vec2, b: Vec2) => vec2(a.x + b.x, a.y + b.y))
 
 vec2.sub = _.curry((b: Vec2, a: Vec2) => vec2(a.x - b.x, a.y - b.y))
 
