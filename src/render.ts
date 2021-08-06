@@ -124,7 +124,7 @@ function transformWorld(args: RenderArgs) {
   const { context, viewport, state } = args
   const scale = viewport.x / 100
   context.translate(viewport.x / 2, viewport.y / 2)
-  context.rotate(args.state.camera.angle - Math.PI * 2 + Math.PI / 2)
+  context.rotate(-1 * args.state.camera.angle - Math.PI / 2)
   context.translate(-state.ball.p.x * scale, -state.ball.p.y * scale)
   return { scale }
 }
