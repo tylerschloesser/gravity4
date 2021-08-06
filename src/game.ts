@@ -32,7 +32,6 @@ export async function newGame(init: GameArgs): Promise<Game> {
     circles,
     // initial angle is counter clockwise 90 degrees, aka facing "up" the y axis
     camera: { angle: Math.PI / 2, av: 0 },
-    //camera: { angle: 0, av: 0 },
     speed: 0,
     gravity: vec2(),
     debug: {
