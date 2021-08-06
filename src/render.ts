@@ -77,6 +77,8 @@ function renderCircle(circle: Circle, args: RenderArgs) {
   const { scale } = transformWorld(args)
 
   const { p, r } = circle
+  // Translate in the opposite direction of the circle.
+  // Canvas already has y axis in opposite direction (positive y axis faces down)
   context.translate(-p.x * scale, p.y * scale)
 
   const hit = isCircleHit(state, circle)
