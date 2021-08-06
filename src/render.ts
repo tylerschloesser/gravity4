@@ -61,13 +61,27 @@ function renderBall(args: RenderArgs) {
   context.stroke()
 
   const { gravity } = args.state
-  context.rotate(Math.PI * 2 - args.state.camera.angle - Math.PI / 2)
 
-  context.rotate(Math.PI * 2 - Math.atan2(gravity.y, gravity.x))
-  context.strokeStyle = 'pink'
+  context.save()
+  context.rotate(args.state.camera.angle - Math.atan2(gravity.y, gravity.x))
+
+  context.lineWidth = 1
+  context.strokeStyle = 'black'
   context.beginPath()
   context.moveTo(0, 0)
-  context.lineTo(state.ball.r * scale, 0)
+  context.lineTo(0, -state.ball.r * scale)
+  context.stroke()
+
+  context.restore()
+
+  const { v } = args.state.ball
+  context.rotate(args.state.camera.angle - Math.atan2(v.y, v.x))
+
+  context.lineWidth = 3
+  context.strokeStyle = 'yellow'
+  context.beginPath()
+  context.moveTo(0, 0)
+  context.lineTo(0, -state.ball.r * scale)
   context.stroke()
 }
 
