@@ -36,6 +36,7 @@ export async function newGame(init: GameArgs): Promise<Game> {
     debug: {
       force: vec2(),
     },
+    circleHitId: null,
   }
 
   const physics = await initPhysics(initialState)

@@ -74,6 +74,7 @@ export interface GameState {
   speed: number
   gravity: Vec2
   debug: DebugState
+  circleHitId: string | null
 }
 
 export interface PhysicsUpdateFnArgs {
