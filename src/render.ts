@@ -48,7 +48,7 @@ function renderBall(args: RenderArgs) {
   context.lineWidth = 3
 
   context.translate(viewport.x / 2, viewport.y / 2)
-  const scale = viewport.x / 100
+  const scale = viewport.x / 200
   context.strokeStyle = 'white'
   context.beginPath()
   context.arc(0, 0, state.ball.r * scale, 0, 2 * Math.PI)
@@ -137,7 +137,7 @@ function renderInit(args: RenderArgs) {
 
 function transformWorld(args: RenderArgs) {
   const { context, viewport, state } = args
-  const scale = viewport.x / 100
+  const scale = viewport.x / 200
   context.translate(viewport.x / 2, viewport.y / 2)
 
   // Camera angle is counterclockwise rotation. We want to rotate the world
